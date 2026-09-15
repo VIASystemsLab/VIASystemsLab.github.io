@@ -1,0 +1,79 @@
+/* TEAM */
+
+	Principal investigator: Matteo Lissandrini
+	Role: Associate Professor in Computer Science
+	Contact: matteo.lissandrini [at] univr.it
+	ORCID: 0000-0001-7922-5998
+	From: Verona, Italy
+
+	The lab is part of the Department of Foreign Languages and Literatures,
+	University of Verona. New members are listed here as they join.
+
+
+/* THANKS */
+
+	European Union — ARMADA, grant agreement 101168951, and DataGEMS,
+	grant agreement 101188416, both under Horizon Europe.
+
+	Athena Research Center, Greece, and the DataGEMS consortium.
+	The ARMADA doctoral network: 8 organisations across 7 countries.
+
+	Paul D. Hunt, Frank Grießhammer and Adobe, for Source Sans and
+	Source Serif, released under the SIL Open Font Licence.
+
+	Yahoo and the Pure CSS contributors, for Pure CSS.
+
+
+/* SITE */
+
+	Last update: 2026/09/15
+	Language: English
+	Doctype: HTML5
+	Standards: HTML5, CSS3, JSON-LD 1.1, RDFa 1.1, Schema.org,
+	           IPTC Digital Source Type, Sitemaps 0.9
+	Components: Pure CSS 3.0.0, Source Serif 4, Source Sans 3
+	Software: hand-written HTML and CSS; Python 3 for the checks and the
+	          asset build; cwebp and librsvg for the images
+
+	No JavaScript. No cookies. No analytics. No third-party requests:
+	the fonts and stylesheets are served from this site's own repository.
+
+	Source: https://github.com/VIASystemsLab/VIASystemsLab.github.io
+
+
+/* GENERATIVE TOOLS */
+
+	This file is called humans.txt, so it should be equally clear about
+	the parts that were not made by hand.
+
+	Artwork
+	Images created with OpenAI's ChatGPT image generation tool. The designs
+	were generated using AI based on prompts developed for the VIA Systems
+	Lab, drawing inspiration from traditional Verona street plaques, Roman
+	and medieval architectural elements, and the concepts of stable
+	grounding, solid innovation, and lasting scientific knowledge. The final
+	logo concepts were iteratively refined through successive prompts to
+	simplify the design and adapt it for use as a stylized, monochrome logo
+	and circular avatar.
+
+	The emblem is declared in the page metadata with the IPTC digital source
+	type "compositeWithTrainedAlgorithmicMedia": model output combined with
+	human direction and editing.
+
+	Code
+	The markup, stylesheet, build tooling and documentation of this site
+	were drafted with Claude Opus 5 (claude-opus-5) and reviewed by the
+	authors, who remain responsible for what is published here. Commits
+	written by an agent rather than by hand carry a [BOT] marker in their
+	subject line, so the history distinguishes the two.
+
+	Content
+	The research descriptions, project summaries and publication records are
+	written and verified by the people named above. Every figure about a
+	funded project is taken from that project's public CORDIS record.
+
+	Not covered by any of the above
+	The University of Verona lockup, the emblem of the European Union and the
+	ARMADA project logo are the marks of their owners, reproduced as supplied
+	to acknowledge affiliation and funding. They were not generated, redrawn
+	or recoloured here. See img/logos/README.md.

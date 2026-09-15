@@ -1,0 +1,16 @@
+{
+  "name": "VIA Systems Lab",
+  "short_name": "VIA Lab",
+  "description": "Verona Intelligent Analytics Systems — a research lab at the University of Verona.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "lang": "en",
+  "background_color": "#f7f3eb",
+  "theme_color": "#22434f",
+  "icons": [
+    { "src": "icons/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "icons/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "icons/icon-512.png", "type": "image/png", "sizes": "512x512" }
+  ]
+}
