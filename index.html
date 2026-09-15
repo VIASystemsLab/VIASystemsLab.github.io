@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>VIA Systems Lab — Verona Intelligent Analytics Systems</title>
+<meta name="description" content="VIA Systems Lab (Verona Intelligent Analytics Systems) is a research lab at the University of Verona working on reliable, validated and interactive access to complex information spaces.">
+<link rel="canonical" href="https://viasystemslab.github.io/">
+
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f7f3eb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131e23" media="(prefers-color-scheme: dark)">
+
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="icons/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="site.webmanifest">
+<link rel="author" type="text/plain" href="humans.txt">
+
+<link rel="preload" href="fonts/source-sans-3-roman-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/source-serif-4-roman-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/pure.css">
+<link rel="stylesheet" href="css/grids-responsive.css">
+<link rel="stylesheet" href="css/custom.css">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VIA Systems Lab">
+<meta property="og:locale" content="en_GB">
+<meta property="og:url" content="https://viasystemslab.github.io/">
+<meta property="og:title" content="VIA Systems Lab — Verona Intelligent Analytics Systems">
+<meta property="og:description" content="A research lab at the University of Verona working on reliable, validated and interactive access to complex information spaces.">
+<meta property="og:image" content="https://viasystemslab.github.io/img/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="The VIA Systems Lab plaque: VIA SYSTEMS LAB, Verona Intelligent Analytics Systems.">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "org": "http://www.w3.org/ns/org#",
+    "iptcExt": "http://iptc.org/std/Iptc4xmpExt/2008-02-29/",
+    "digitalSourceType": {
+      "@id": "iptcExt:DigitalSourceType",
+      "@type": "@id"
+    }
+  },
+  "@graph": [
+    {
+      "@id": "https://viasystemslab.github.io/#website",
+      "@type": "WebSite",
+      "url": "https://viasystemslab.github.io/",
+      "name": "VIA Systems Lab",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://viasystemslab.github.io/#organization"
+      }
+    },
+    {
+      "@id": "https://viasystemslab.github.io/#webpage",
+      "@type": "WebPage",
+      "url": "https://viasystemslab.github.io/",
+      "name": "VIA Systems Lab — Verona Intelligent Analytics Systems",
+      "isPartOf": {
+        "@id": "https://viasystemslab.github.io/#website"
+      },
+      "about": {
+        "@id": "https://viasystemslab.github.io/#organization"
+      },
+      "inLanguage": "en",
+      "primaryImageOfPage": {
+        "@id": "https://viasystemslab.github.io/#emblem"
+      }
+    },
+    {
+      "@id": "https://viasystemslab.github.io/#organization",
+      "@type": "ResearchOrganization",
+      "name": "VIA Systems Lab",
+      "alternateName": "Verona Intelligent Analytics Systems",
+      "url": "https://viasystemslab.github.io/",
+      "description": "A research lab at the University of Verona working on systems for reliable, validated and interactive access to complex information spaces, with an emphasis on open data and digital archives.",
+      "parentOrganization": {
+        "@id": "https://ror.org/039bp8j42"
+      },
+      "location": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Verona",
+          "addressCountry": "IT"
+        }
+      },
+      "email": "matteo.lissandrini@univr.it",
+      "sameAs": [
+        "https://github.com/VIASystemsLab"
+      ],
+      "member": {
+        "@id": "https://orcid.org/0000-0001-7922-5998"
+      },
+      "knowsAbout": [
+        {
+          "@id": "https://viasystemslab.github.io/#theme-intelligent-data-analytics"
+        },
+        {
+          "@id": "https://viasystemslab.github.io/#theme-knowledge-graphs"
+        },
+        {
+          "@id": "https://viasystemslab.github.io/#theme-human-centered-analytics"
+        },
+        {
+          "@id": "https://viasystemslab.github.io/#theme-trustworthy-data-systems"
+        },
+        {
+          "@id": "https://viasystemslab.github.io/#theme-open-data-archives"
+        }
+      ],
+      "logo": {
+        "@id": "https://viasystemslab.github.io/#emblem"
+      },
+      "image": {
+        "@id": "https://viasystemslab.github.io/#emblem"
+      }
+    },
+    {
+      "@id": "https://ror.org/039bp8j42",
+      "@type": "CollegeOrUniversity",
+      "name": "University of Verona",
+      "alternateName": "Università degli Studi di Verona",
+      "url": "https://www.univr.it/",
+      "sameAs": [
+        "https://ror.org/039bp8j42",
+        "https://www.wikidata.org/wiki/Q2531629"
+      ]
+    },
+    {
+      "@id": "https://orcid.org/0000-0001-7922-5998",
+      "@type": "Person",
+      "name": "Matteo Lissandrini",
+      "givenName": "Matteo",
+      "familyName": "Lissandrini",
+      "jobTitle": "Associate Professor in Computer Science",
+      "url": "https://lissandrini.com/",
+      "email": "matteo.lissandrini@univr.it",
+      "affiliation": {
+        "@id": "https://ror.org/039bp8j42"
+      },
+      "worksFor": {
+        "@id": "https://ror.org/039bp8j42"
+      },
+      "memberOf": {
+        "@id": "https://viasystemslab.github.io/#organization"
+      },
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "ORCID",
+        "value": "0000-0001-7922-5998",
+        "url": "https://orcid.org/0000-0001-7922-5998"
+      },
+      "sameAs": [
+        "https://orcid.org/0000-0001-7922-5998",
+        "https://dblp.org/pid/139/1128.html",
+        "https://scholar.google.com/citations?user=TvHNVDgAAAAJ",
+        "https://lissandrini.com/",
+        "https://www.dlls.univr.it/?ent=persona&id=7657&lang=en"
+      ]
+    },
+    {
+      "@id": "https://viasystemslab.github.io/#research-themes",
+      "@type": "DefinedTermSet",
+      "name": "VIA Systems Lab research themes"
+    },
+    {
+      "@id": "https://viasystemslab.github.io/#theme-intelligent-data-analytics",
+      "@type": "DefinedTerm",
+      "name": "Intelligent data analytics",
+      "description": "Systems and algorithms that make large, heterogeneous data collections searchable, combinable and analysable.",
+      "inDefinedTermSet": {
+        "@id": "https://viasystemslab.github.io/#research-themes"
+      }
+    },
+    {
+      "@id": "https://viasystemslab.github.io/#theme-knowledge-graphs",
+      "@type": "DefinedTerm",
+      "name": "Knowledge graphs and data exploration",
+      "description": "Graph data management and exploratory search over entity-centric and semantically linked collections.",
+      "inDefinedTermSet": {
+        "@id": "https://viasystemslab.github.io/#research-themes"
+      }
+    },
+    {
+      "@id": "https://viasystemslab.github.io/#theme-human-centered-analytics",
+      "@type": "DefinedTerm",
+      "name": "Human-centered analytics",
+      "description": "Interactive and conversational interfaces that let people steer an analysis and correct it as it runs.",
+      "inDefinedTermSet": {
+        "@id": "https://viasystemslab.github.io/#research-themes"
+      }
+    },
+    {
+      "@id": "https://viasystemslab.github.io/#theme-trustworthy-data-systems",
+      "@type": "DefinedTerm",
+      "name": "Validated and trustworthy data systems",
+      "description": "Grounding, verification, explainability and evaluation built into analytical pipelines rather than added afterwards.",
+      "inDefinedTermSet": {
+        "@id": "https://viasystemslab.github.io/#research-themes"
+      }
+    },
+    {
+      "@id": "https://viasystemslab.github.io/#theme-open-data-archives",
+      "@type": "DefinedTerm",
+      "name": "Open data and digital archives",
+      "description": "FAIR and openly reusable data, with particular attention to digital archives and the digital humanities.",
+      "inDefinedTermSet": {
+        "@id": "https://viasystemslab.github.io/#research-themes"
+      }
+    },
+    {
+      "@id": "https://cordis.europa.eu/project/id/101168951",
+      "@type": "ResearchProject",
+      "name": "ARMADA",
+      "alternateName": "Reliable Conversational Domain-specific Data Exploration and Analysis",
+      "url": "https://armada-dn.eu/",
+      "mainEntityOfPage": "https://viasystemslab.github.io/projects.html#armada",
+      "startDate": "2025-03-01",
+      "endDate": "2029-02-28",
+      "parentOrganization": {
+        "@id": "https://ror.org/039bp8j42"
+      },
+      "member": {
+        "@id": "https://viasystemslab.github.io/#organization"
+      },
+      "sameAs": [
+        "https://cordis.europa.eu/project/id/101168951"
+      ],
+      "funding": {
+        "@type": "MonetaryGrant",
+        "identifier": "101168951",
+        "name": "Marie Skłodowska-Curie Actions Doctoral Networks (HORIZON-MSCA-2023-DN-01-01)",
+        "url": "https://cordis.europa.eu/project/id/101168951",
+        "funder": {
+          "@id": "https://ror.org/00k4n6c32"
+        }
+      }
+    },
+    {
+      "@id": "https://cordis.europa.eu/project/id/101188416",
+      "@type": "ResearchProject",
+      "name": "DataGEMS",
+      "alternateName": "Data Discovery Platform with Generalized Exploratory, Management, and Search Capabilities",
+      "url": "https://datagems.eu/",
+      "mainEntityOfPage": "https://viasystemslab.github.io/projects.html#datagems",
+      "startDate": "2025-01-01",
+      "endDate": "2027-12-31",
+      "member": {
+        "@id": "https://viasystemslab.github.io/#organization"
+      },
+      "sameAs": [
+        "https://cordis.europa.eu/project/id/101188416"
+      ],
+      "funding": {
+        "@type": "MonetaryGrant",
+        "identifier": "101188416",
+        "name": "Horizon Europe — Innovative and customizable services for EOSC Exchange (HORIZON-INFRA-2024-EOSC-01-05)",
+        "url": "https://cordis.europa.eu/project/id/101188416",
+        "funder": {
+          "@id": "https://ror.org/00k4n6c32"
+        }
+      }
+    },
+    {
+      "@id": "https://ror.org/00k4n6c32",
+      "@type": "Organization",
+      "name": "European Commission",
+      "url": "https://commission.europa.eu/",
+      "sameAs": [
+        "https://ror.org/00k4n6c32"
+      ]
+    },
+    {
+      "@id": "https://viasystemslab.github.io/#emblem",
+      "@type": "ImageObject",
+      "name": "VIA Systems Lab emblem",
+      "description": "A Roman arch framing a paved via that leads towards the Verona Arena, with the joints between the paving stones drawn as the edges of a data graph.",
+      "contentUrl": "https://viasystemslab.github.io/img/via-logo-pictorial-1080.webp",
+      "thumbnailUrl": "https://viasystemslab.github.io/img/via-logo-pictorial-480.webp",
+      "encodingFormat": "image/webp",
+      "width": 1039,
+      "height": 1080,
+      "creator": {
+        "@id": "https://viasystemslab.github.io/#organization"
+      },
+      "digitalSourceType": {
+        "@id": "http://cv.iptc.org/newscodes/digitalsourcetype/compositeWithTrainedAlgorithmicMedia"
+      },
+      "creditText": "Images created with OpenAI's ChatGPT image generation tool. The designs were generated using AI based on prompts developed for the VIA Systems Lab, drawing inspiration from traditional Verona street plaques, Roman and medieval architectural elements, and the concepts of stable grounding, solid innovation, and lasting scientific knowledge. The final logo concepts were iteratively refined through successive prompts to simplify the design and adapt it for use as a stylized, monochrome logo and circular avatar."
+    },
+    {
+      "@id": "https://github.com/VIASystemsLab/VIASystemsLab.github.io",
+      "@type": "SoftwareSourceCode",
+      "name": "VIA Systems Lab website",
+      "description": "The static HTML and CSS source of this site.",
+      "codeRepository": "https://github.com/VIASystemsLab/VIASystemsLab.github.io",
+      "programmingLanguage": [
+        "HTML",
+        "CSS"
+      ],
+      "runtimePlatform": "GitHub Pages",
+      "license": "https://github.com/VIASystemsLab/VIASystemsLab.github.io/blob/main/LICENSE",
+      "maintainer": {
+        "@id": "https://viasystemslab.github.io/#organization"
+      },
+      "about": {
+        "@id": "https://viasystemslab.github.io/#organization"
+      },
+      "creditText": "Markup, stylesheet, build tooling and documentation drafted with Claude Opus 5 (claude-opus-5) and reviewed by the authors, who remain responsible for what is published."
+    }
+  ]
+}
+</script>
+</head>
+
+<body id="top">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="masthead">
+  <div class="masthead__inner">
+    <a class="wordmark" href="#top">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" type="image/webp" srcset="img/via-logo-circle-w-240.webp">
+        <source media="(prefers-color-scheme: dark)" srcset="img/via-logo-circle-w-240.png">
+        <source type="image/webp" srcset="img/via-logo-circle-b-240.webp">
+        <img class="wordmark__seal" src="img/via-logo-circle-b-240.png" width="240" height="240" alt="" decoding="async">
+      </picture>
+      <span class="wordmark__text">
+        <span class="wordmark__name">VIA Systems Lab</span>
+        <span class="wordmark__sub">Verona Intelligent Analytics Systems</span>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <ul class="nav__list">
+        <li><a href="#about">About</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="publications.html">Publications</a></li>
+        <li><a href="#people">People</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================== Hero ============================== -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__grid shell pure-g">
+      <div class="hero__text pure-u-1 pure-u-md-1-2 pure-u-lg-13-24">
+        <h1 id="hero-title" class="hero__h1">
+          <span class="hero__name">VIA Systems Lab</span>
+          <span class="hero__expansion">Verona Intelligent Analytics Systems</span>
+        </h1>
+        <p class="hero__lead">
+          We design and study systems that make access to complex information
+          spaces <em>reliable, validated and interactive</em> — bridging foundations
+          in data management with human-centered analytics.
+        </p>
+        <p class="hero__actions">
+          <a class="pure-button button button--primary" href="#research">Explore research</a>
+          <a class="pure-button button button--ghost" href="https://github.com/VIASystemsLab">View open source</a>
+        </p>
+        <p class="hero__fact">
+          University of Verona · Department of Foreign Languages and Literatures · Verona, Italy
+        </p>
+      </div>
+
+      <figure class="hero__figure pure-u-1 pure-u-md-1-2 pure-u-lg-11-24">
+        <picture>
+          <source type="image/webp"
+                  srcset="img/via-logo-pictorial-480.webp 480w, img/via-logo-pictorial-720.webp 720w, img/via-logo-pictorial-1080.webp 1080w"
+                  sizes="(min-width: 64rem) 34vw, (min-width: 48rem) 42vw, 62vw">
+          <img src="img/via-logo-pictorial-480.png" width="1230" height="1278"
+               alt="The VIA Systems Lab emblem: a Roman arch framing a paved road that leads towards the Verona Arena, with the joints between the paving stones drawn as the edges of a data graph."
+               decoding="async" fetchpriority="high">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============================= About ============================== -->
+  <section id="about" class="section" aria-labelledby="about-title">
+    <div class="shell pure-g">
+      <header class="section__head pure-u-1 pure-u-md-5-6 pure-u-lg-2-3">
+        <p class="eyebrow"><span class="eyebrow__num">01</span> About</p>
+        <h2 id="about-title" class="section__title">About the lab</h2>
+      </header>
+
+      <div class="prose pure-u-1 pure-u-md-1-2 pure-u-lg-13-24">
+        <p class="prose__lead">
+          The <strong>VIA Systems Lab</strong> is a research lab at the University of
+          Verona working on intelligent analytics systems, information access, and
+          data-centric methods.
+        </p>
+        <p>
+          Our mission is to design and study systems that enable
+          <strong>reliable, validated and interactive access</strong> to complex
+          information spaces, bridging foundations in data management with
+          human-centered analytics. Among others, we specialise in open data and
+          digital archives for the digital humanities.
+        </p>
+        <p>
+          The lab is led by <a href="#people">Matteo Lissandrini</a>, Associate
+          Professor of Computer Science, whose research spans data exploration,
+          knowledge graphs, and intelligent analytical systems.
+        </p>
+      </div>
+
+      <aside class="glossary pure-u-1" aria-labelledby="glossary-title">
+        <h3 id="glossary-title" class="glossary__title">The meanings of <em>via</em></h3>
+        <p class="glossary__intro">
+          <em>Via</em> is the Latin for a road, and the name is an acronym several
+          times over. Each reading names something the lab actually works on.
+        </p>
+        <dl class="glossary__list">
+          <div class="glossary__item">
+            <dt><span class="glossary__vi">V</span>erifiable and <span class="glossary__vi">I</span>nterpretable <span class="glossary__vi">A</span>I</dt>
+            <dd>Trustworthy, grounded and explainable AI built on validated data and transparent analytical pipelines.</dd>
+          </div>
+          <div class="glossary__item">
+            <dt><span class="glossary__vi">V</span>ersatile <span class="glossary__vi">I</span>ntegration of digital <span class="glossary__vi">A</span>rchives</dt>
+            <dd>Heterogeneous data, data lakes and multimedia archives brought into unified, semantically rich analytics.</dd>
+          </div>
+          <div class="glossary__item">
+            <dt><span class="glossary__vi">V</span>erified <span class="glossary__vi">I</span>nformation <span class="glossary__vi">A</span>ccess</dt>
+            <dd>Correctness, grounding and trust in information retrieval and analytics.</dd>
+          </div>
+          <div class="glossary__item">
+            <dt><span class="glossary__vi">V</span>irtual <span class="glossary__vi">I</span>nterlinked <span class="glossary__vi">A</span>rchives</dt>
+            <dd>Interconnected digital archives designed through semantic and graph-based technologies.</dd>
+          </div>
+          <div class="glossary__item">
+            <dt><span class="glossary__vi">V</span>isual <span class="glossary__vi">I</span>nteraction with <span class="glossary__vi">A</span>rchives</dt>
+            <dd>Visual and interactive interfaces for effective exploration of digital archives.</dd>
+          </div>
+          <div class="glossary__item">
+            <dt><span class="glossary__vi">V</span>irtual <span class="glossary__vi">I</span>nterfaces for <span class="glossary__vi">A</span>nalysis</dt>
+            <dd>Interactive analytical environments for exploration and hypothesis testing.</dd>
+          </div>
+          <div class="glossary__item">
+            <dt><span class="glossary__vi">V</span>alidated <span class="glossary__vi">I</span>nformation <span class="glossary__vi">A</span>nalytics</dt>
+            <dd>Validation, evaluation and explainability embedded in analytics workflows by design.</dd>
+          </div>
+        </dl>
+      </aside>
+
+      <figure class="pullquote pure-u-1 pure-u-md-1-2 pure-u-lg-11-24">
+        <blockquote>
+          <p>What is a scientist after all? It is a curious person looking through a
+          keyhole, the keyhole of nature, trying to know what&rsquo;s going on.</p>
+        </blockquote>
+        <figcaption>Jacques-Yves Cousteau</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============================ Research ============================ -->
+  <section id="research" class="section" aria-labelledby="research-title">
+    <div class="shell pure-g">
+      <header class="section__head pure-u-1 pure-u-md-5-6 pure-u-lg-2-3">
+        <p class="eyebrow"><span class="eyebrow__num">02</span> Research</p>
+        <h2 id="research-title" class="section__title">Five themes, one question</h2>
+        <p class="section__standfirst">
+          How do you give a person a trustworthy answer over data that is large,
+          heterogeneous and incomplete — and let them check it?
+        </p>
+      </header>
+
+      <ol class="themes pure-g">
+        <li class="theme pure-u-1 pure-u-md-1-2 pure-u-lg-1-3" id="theme-intelligent-data-analytics">
+          <h3 class="theme__name">Intelligent data analytics</h3>
+          <p class="theme__desc">
+            Systems and algorithms that make large, heterogeneous data collections
+            searchable, combinable and analysable at the scale research actually produces.
+          </p>
+          <p class="theme__meta">
+            <span class="theme__methods">Query processing · Data discovery · Benchmarking</span>
+            <a class="theme__link" href="projects.html#datagems">DataGEMS</a>
+          </p>
+        </li>
+
+        <li class="theme pure-u-1 pure-u-md-1-2 pure-u-lg-1-3" id="theme-knowledge-graphs">
+          <h3 class="theme__name">Knowledge graphs and data exploration</h3>
+          <p class="theme__desc">
+            Graph data management and exploratory search over entity-centric,
+            semantically linked collections, where the useful question is often the
+            one you could not phrase up front.
+          </p>
+          <p class="theme__meta">
+            <span class="theme__methods">Graph DBMS · Entity search · Semantic integration</span>
+            <a class="theme__link" href="projects.html#datagems">DataGEMS</a>
+          </p>
+        </li>
+
+        <li class="theme pure-u-1 pure-u-md-1-2 pure-u-lg-1-3" id="theme-human-centered-analytics">
+          <h3 class="theme__name">Human-centered analytics</h3>
+          <p class="theme__desc">
+            Interactive and conversational interfaces that let a person steer an
+            analysis, see what it did, and correct it while it runs.
+          </p>
+          <p class="theme__meta">
+            <span class="theme__methods">Interactive interfaces · Conversational analysis · User studies</span>
+            <a class="theme__link" href="projects.html#armada">ARMADA</a>
+          </p>
+        </li>
+
+        <li class="theme pure-u-1 pure-u-md-1-2 pure-u-lg-1-3" id="theme-trustworthy-data-systems">
+          <h3 class="theme__name">Validated and trustworthy data systems</h3>
+          <p class="theme__desc">
+            Grounding, verification, explainability and evaluation designed into an
+            analytical pipeline rather than bolted onto it once the answers are already out.
+          </p>
+          <p class="theme__meta">
+            <span class="theme__methods">Grounding · Explainability · Evaluation</span>
+            <a class="theme__link" href="projects.html#armada">ARMADA</a>
+          </p>
+        </li>
+
+        <li class="theme pure-u-1 pure-u-md-1-2 pure-u-lg-1-3" id="theme-open-data-archives">
+          <h3 class="theme__name">Open data and digital archives</h3>
+          <p class="theme__desc">
+            FAIR and openly reusable data, with particular attention to digital
+            archives and the digital humanities — collections that were assembled by
+            scholars long before anyone called them a dataset.
+          </p>
+          <p class="theme__meta">
+            <span class="theme__methods">FAIR data · Digital humanities · Archive interlinking</span>
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ====================== Projects (highlights) ====================== -->
+  <section id="projects" class="section" aria-labelledby="projects-title">
+    <div class="shell pure-g">
+      <header class="section__head pure-u-1 pure-u-md-5-6 pure-u-lg-2-3">
+        <p class="eyebrow"><span class="eyebrow__num">03</span> Projects</p>
+        <h2 id="projects-title" class="section__title">Selected work</h2>
+        <p class="section__standfirst">
+          Two Horizon Europe projects currently fund the lab&rsquo;s work.
+        </p>
+      </header>
+
+      <!-- Every figure in these highlights is taken from the project's public
+           CORDIS record. Do not publish a number that is not there. -->
+      <ul class="highlights pure-g">
+        <li class="highlight pure-u-1 pure-u-md-1-2">
+          <p class="highlight__tags">
+            <span class="tag tag--active">Active</span>
+            <span class="tag tag--armada">ARMADA</span>
+          </p>
+          <h3 class="highlight__title"><a href="projects.html#armada">ARMADA</a></h3>
+          <p class="highlight__sub">Reliable Conversational Domain-specific Data Exploration and Analysis</p>
+          <p class="highlight__desc">
+            A doctoral network training fifteen researchers on what it takes for
+            a language model to be reliable when it assists analysis in a
+            sensitive domain.
+          </p>
+          <dl class="highlight__meta">
+            <div><dt>Role</dt><dd>Coordinator</dd></div>
+            <div><dt>Programme</dt><dd>MSCA Doctoral Networks</dd></div>
+            <div><dt>Runs</dt><dd><time datetime="2025-03-01">2025</time>–<time datetime="2029-02-28">2029</time></dd></div>
+          </dl>
+        </li>
+
+        <li class="highlight pure-u-1 pure-u-md-1-2">
+          <p class="highlight__tags">
+            <span class="tag tag--active">Active</span>
+            <span class="tag tag--datagems">DataGEMS</span>
+          </p>
+          <h3 class="highlight__title"><a href="projects.html#datagems">DataGEMS</a></h3>
+          <p class="highlight__sub">Data Discovery Platform with Generalized Exploratory, Management, and Search Capabilities</p>
+          <p class="highlight__desc">
+            A dataset discovery ecosystem that profiles heterogeneous data and
+            guides people while they find, analyse and combine it.
+          </p>
+          <dl class="highlight__meta">
+            <div><dt>Role</dt><dd>Partner</dd></div>
+            <div><dt>Programme</dt><dd>Horizon Europe, EOSC Exchange</dd></div>
+            <div><dt>Runs</dt><dd><time datetime="2025-01-01">2025</time>–<time datetime="2027-12-31">2027</time></dd></div>
+          </dl>
+        </li>
+      </ul>
+
+      <p class="cta-row pure-u-1">
+        <a class="pure-button button button--solid" href="projects.html">All projects</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================= People ============================= -->
+  <section id="people" class="section" aria-labelledby="people-title">
+    <div class="shell pure-g">
+      <header class="section__head pure-u-1 pure-u-md-5-6 pure-u-lg-2-3">
+        <p class="eyebrow"><span class="eyebrow__num">04</span> People</p>
+        <h2 id="people-title" class="section__title">People and affiliation</h2>
+        <p class="section__standfirst">
+          The lab works with doctoral candidates, postdoctoral researchers and
+          collaborators in Verona and across the ARMADA and DataGEMS consortia.
+        </p>
+      </header>
+
+      <div class="peoplegroup pure-u-1">
+        <h3 class="peoplegroup__title">Principal investigator</h3>
+        <ul class="people pure-g">
+          <li class="person person--lead pure-u-1 pure-u-md-1-2 pure-u-lg-1-3"
+              vocab="https://schema.org/" typeof="Person"
+              resource="https://orcid.org/0000-0001-7922-5998">
+            <h4 class="person__name">
+              <a property="url" href="https://lissandrini.com/"><span property="name">Matteo Lissandrini</span></a>
+            </h4>
+            <p class="person__title" property="jobTitle">Associate Professor in Computer Science</p>
+            <p class="person__affil"
+               property="affiliation" typeof="CollegeOrUniversity" resource="https://ror.org/039bp8j42">
+              Department of Foreign Languages and Literatures,
+              <a property="url" href="https://www.univr.it/"><span property="name">University of Verona</span></a>
+            </p>
+            <p class="person__bio">
+              Data exploration, intelligent data management systems and knowledge
+              graphs. Coordinator of ARMADA.
+            </p>
+            <p class="person__ids">
+              <a property="sameAs" class="link-ext" href="https://orcid.org/0000-0001-7922-5998">ORCID 0000-0001-7922-5998</a>
+              <a property="sameAs" class="link-ext" href="https://dblp.org/pid/139/1128.html">DBLP</a>
+              <a property="sameAs" class="link-ext" href="https://scholar.google.com/citations?user=TvHNVDgAAAAJ">Scholar</a>
+              <a property="email" href="mailto:matteo.lissandrini@univr.it">Email</a>
+            </p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="peoplegroup pure-u-1">
+        <h3 class="peoplegroup__title">Members</h3>
+        <ul class="people pure-g">
+          <li class="person is-pending pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+            <h4 class="person__name">Doctoral candidate</h4>
+            <p class="person__title">To be announced</p>
+            <p class="person__affil">University of Verona</p>
+            <p class="person__bio">
+              Recruited through the ARMADA doctoral network. The name, topic and
+              profile links are published once the appointment is confirmed.
+            </p>
+          </li>
+          <li class="person is-pending pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+            <h4 class="person__name">Postdoctoral researcher</h4>
+            <p class="person__title">To be announced</p>
+            <p class="person__affil">University of Verona</p>
+            <p class="person__bio">
+              Position associated with DataGEMS. Details are published once the
+              appointment is confirmed.
+            </p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="peoplegroup pure-u-1">
+        <h3 class="peoplegroup__title">External members</h3>
+        <ul class="people pure-g">
+          <li class="person is-pending pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+            <h4 class="person__name">External member</h4>
+            <p class="person__title">To be announced</p>
+            <p class="person__affil">Affiliation to be confirmed</p>
+            <p class="person__bio">
+              Researchers who work with the lab from another institution and are
+              listed here with their agreement.
+            </p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="peoplegroup pure-u-1">
+        <h3 class="peoplegroup__title">Collaborators</h3>
+        <ul class="people pure-g">
+          <li class="person is-pending pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+            <h4 class="person__name">Collaborator</h4>
+            <p class="person__title">To be announced</p>
+            <p class="person__affil">Affiliation to be confirmed</p>
+            <p class="person__bio">
+              Colleagues in the ARMADA and DataGEMS consortia and beyond, listed
+              here with their agreement once a shared output exists.
+            </p>
+          </li>
+        </ul>
+      </div>
+
+      <!--
+        Adding a person
+        ===============
+        Copy a <li class="person">, drop the is-pending class, and fill in the
+        name, title, affiliation and profile links. Put it in the group it
+        belongs to: Members are appointed at the University of Verona, External
+        members work with the lab from another institution, Collaborators are
+        named on a shared output.
+
+        Then, for a member of the lab, add the matching Person node to the
+        JSON-LD graph in <head> and list it under the organisation's "member".
+        Use the person's ORCID URL as the @id and as the RDFa `resource`, so
+        the visible record and the structured data describe one entity rather
+        than two. See docs/METADATA.md.
+
+        Publish a name, a photograph or an email address only with that
+        person's agreement.
+      -->
+
+      <aside class="joinbox pure-u-1 pure-u-md-2-5 pure-u-lg-2-5">
+        <h3 class="joinbox__title">Working with the lab</h3>
+        <p>
+          Doctoral candidates, postdoctoral researchers and thesis students work
+          with the lab through the University of Verona and through the ARMADA
+          doctoral network. Recruitment and secondment calls are announced on the
+          project sites.
+        </p>
+        <p class="joinbox__links">
+          <a class="link-ext" href="https://armada-dn.eu/">ARMADA network</a>
+          <a class="link-ext" href="https://www.univr.it/">University of Verona</a>
+          <a href="mailto:matteo.lissandrini@univr.it">Write to the lab</a>
+        </p>
+      </aside>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================== Footer ============================== -->
+<footer id="contact" class="footer" vocab="https://schema.org/" typeof="ResearchOrganization" resource="https://viasystemslab.github.io/#organization">
+  <div class="shell pure-g">
+
+    <div class="footer__col pure-u-1 pure-u-md-1-3">
+      <h2 class="footer__title">Contact</h2>
+      <address class="footer__body">
+        <a property="email" href="mailto:matteo.lissandrini@univr.it">matteo.lissandrini@univr.it</a><br>
+        <span property="parentOrganization" typeof="CollegeOrUniversity" resource="https://ror.org/039bp8j42">
+          <span property="name">University of Verona</span><br>
+          Department of Foreign Languages and Literatures<br>
+          <span property="address" typeof="PostalAddress"><span property="addressLocality">Verona</span>, <span property="addressCountry">Italy</span></span>
+        </span>
+      </address>
+    </div>
+
+    <div class="footer__col pure-u-1 pure-u-md-1-3">
+      <h2 class="footer__title">This site</h2>
+      <ul class="footer__body footer__list">
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="publications.html">Publications</a></li>
+        <li><a class="link-ext" property="sameAs" href="https://github.com/VIASystemsLab">Source on GitHub</a></li>
+        <li><a href="humans.txt">humans.txt</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col pure-u-1 pure-u-md-1-3">
+      <h2 class="footer__title">Funding</h2>
+      <div class="footer__body">
+        <p class="footer__euflag">
+          <picture>
+            <source type="image/webp" srcset="img/eu-flag-192.webp">
+            <img src="img/eu-flag-192.png" width="237" height="158"
+                 alt="Flag of the European Union" loading="lazy" decoding="async">
+          </picture>
+          <span>Funded by the<br>European Union</span>
+        </p>
+        <ul class="footer__list">
+          <li>ARMADA &mdash; 101168951</li>
+          <li>DataGEMS &mdash; 101188416</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__marks pure-u-1">
+      <!-- The footer band is dark in both colour schemes, so the white cut is
+           always the right one and there is nothing to switch on. -->
+      <picture class="footer__plaque">
+        <source type="image/webp" srcset="img/via-logo-horizontal-w-280.webp 280w, img/via-logo-horizontal-w-560.webp 560w" sizes="11rem">
+        <img src="img/via-logo-horizontal-w-280.png"
+             srcset="img/via-logo-horizontal-w-280.png 280w, img/via-logo-horizontal-w-560.png 560w"
+             sizes="11rem" width="1672" height="941"
+             alt="VIA Systems Lab" loading="lazy" decoding="async">
+      </picture>
+      <picture class="footer__univr">
+        <source type="image/webp" srcset="img/univr-dlls-480.webp 480w, img/univr-dlls-960.webp 960w" sizes="13rem">
+        <img src="img/univr-dlls-480.png"
+             srcset="img/univr-dlls-480.png 480w, img/univr-dlls-960.png 960w"
+             sizes="13rem" width="2362" height="472"
+             alt="University of Verona, Department of Foreign Languages and Literatures"
+             loading="lazy" decoding="async">
+      </picture>
+    </div>
+
+    <div class="footer__fine pure-u-1">
+      <p>
+        <strong>Provenance.</strong> The lab emblem was created with OpenAI&rsquo;s
+        ChatGPT image generation tool and refined by hand; this site&rsquo;s markup,
+        styles and tooling were drafted with Claude Opus 5 and reviewed by the
+        authors. Full statement in <a href="humans.txt">humans.txt</a>.
+      </p>
+      <p>
+        <strong>Funding disclaimer.</strong> Views and opinions expressed are
+        those of the authors only and do not necessarily reflect those of the
+        European Union or the granting authority. Neither the European Union nor
+        the granting authority can be held responsible for them.
+      </p>
+      <p>
+        <strong>Colophon.</strong> Set in Source Serif 4 and Source Sans 3 under
+        the SIL Open Font Licence, on Pure CSS 3.0.0. No cookies, no analytics,
+        no third-party requests; readable without JavaScript.
+      </p>
+      <p>
+        <strong>Accessibility.</strong> If you find a problem,
+        <a href="mailto:matteo.lissandrini@univr.it">tell us</a> and we will fix
+        it. Content &copy; VIA Systems Lab, University of Verona.
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>

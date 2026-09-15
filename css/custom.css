@@ -1,0 +1,1648 @@
+/*
+ * VIA Systems Lab — site stylesheet
+ * ---------------------------------
+ * Layered on top of Pure CSS 3.0.0, which provides the reset, buttons, forms,
+ * tables and — since the layout rework — the grid. This file defines no grid
+ * of its own; see docs/DESIGN-GUIDE.md.
+ *
+ * Contents
+ *   1. Tokens                     8. About: prose, glossary, pull quote
+ *   2. Base                       9. Projects
+ *   3. Layout shell              10. People
+ *   4. Common components         11. Publications
+ *   5. Masthead and navigation   12. Open practice
+ *   6. Hero                      13. Footer
+ *   7. Sections and themes       14. Motion, print
+ *                                15. Sub-pages and highlights
+ *
+ * Layout is Pure's grid: .pure-g rows and .pure-u-* units, at Pure's own
+ * breakpoints, so widths live in the markup where Pure puts them:
+ *   base    below 48em — one column
+ *   md      48em and up — units take effect
+ *   lg      64em and up — the widest measure
+ *
+ * Blocks that sit side by side share a top edge. Nothing is staggered.
+ *
+ * The palette is sampled from the lab emblem: travertine, petrol, terracotta
+ * and ink. Every text pair below meets WCAG AA; body text on paper is 13.3:1.
+ */
+
+/* ========================================================================
+   1. Tokens
+   ===================================================================== */
+
+:root {
+  /* Colour ------------------------------------------------------------ */
+  /* --page-paper is the page background as a fixed value. --paper is the
+     *current* surface and is re-pointed inside the dark bands, so anything
+     that needs the real page colour regardless of context — the text on a
+     filled button, for instance — must use --page-paper. */
+  --page-paper:     #f7f3eb;
+  --paper:          var(--page-paper);  /* warm near-white reading surface  */
+  --field:          #ede5d7;  /* travertine band for secondary sections */
+  --ink:            #1b2a31;  /* body text                    13.3:1    */
+  --ink-soft:       #4a5b63;  /* metadata and secondary text   6.4:1    */
+  --petrol:         #22434f;  /* brand blue-green, used as a surface    */
+  --petrol-deep:    #16303a;
+  --accent-2:       #22434f;  /* petrol used as *ink*          9.6:1    */
+  --signal:         #9c4f38;  /* terracotta: links, emphasis   5.3:1    */
+  --signal-strong:  #7e3e2c;  /* hover                         7.3:1    */
+  --rule:           #c6b9a4;  /* hairlines and dividers (decorative)    */
+
+  /* Project tags are filled, so they need an explicit foreground that is
+     correct in both colour schemes rather than inheriting a surface token. */
+  --tag-armada-bg:   #9c4f38;
+  --tag-armada-fg:   #f7f3eb;
+  --tag-datagems-bg: #22434f;
+  --tag-datagems-fg: #f7f3eb;
+
+  /* Inverse context (hero, footer) ------------------------------------ */
+  --inverse-bg:     #22434f;
+  --inverse-text:   #f1ebe0;  /* on --inverse-bg               8.9:1    */
+  --inverse-soft:   #bccad0;  /* on --inverse-bg               6.3:1    */
+  --inverse-signal: #eba98f;  /* on --inverse-bg               5.4:1    */
+  --inverse-rule:   rgb(241 235 224 / 0.28);
+
+  /* Typography -------------------------------------------------------- */
+  --font-text:  'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-mono:  ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --step--2: clamp(0.72rem, 0.70rem + 0.10vw, 0.78rem);
+  --step--1: clamp(0.82rem, 0.79rem + 0.15vw, 0.90rem);
+  --step-0:  clamp(1.00rem, 0.96rem + 0.20vw, 1.10rem);
+  --step-1:  clamp(1.16rem, 1.09rem + 0.35vw, 1.34rem);
+  --step-2:  clamp(1.38rem, 1.24rem + 0.70vw, 1.78rem);
+  --step-3:  clamp(1.65rem, 1.40rem + 1.20vw, 2.40rem);
+  --step-4:  clamp(2.00rem, 1.60rem + 2.00vw, 3.20rem);
+  --step-5:  clamp(2.35rem, 1.70rem + 3.10vw, 4.20rem);
+
+  /* Space and measure -------------------------------------------------- */
+  --shell-max:   82rem;
+  --gutter:      clamp(1.15rem, 4vw, 3rem);
+  --col-gap:     clamp(1rem, 2vw, 2rem);
+  /* Each Pure unit carries half a gutter of padding on both sides, so the row
+     itself is one --col-gap wider than the content measure. These two express
+     that, and keep the width calculation to a single subtraction. */
+  --shell-edge:  calc(var(--gutter) - (var(--col-gap) / 2));
+  --shell-outer: calc(var(--shell-max) + var(--col-gap));
+  --row-gap:     clamp(2rem, 4vw, 3.5rem);
+  --section-pad: clamp(3rem, 7vw, 6.5rem);
+  --measure:     38rem;
+
+  /* How far each dark band overlaps the section beneath it. These live here,
+     not on .hero and .pagehead, because the section that follows reads them
+     too — and a sibling inherits nothing from the element before it. */
+  --hero-skew:     clamp(3rem, 10vw, 8rem);
+  --pagehead-skew: clamp(2rem, 5vw, 4rem);
+
+  /* Icons -------------------------------------------------------------- */
+  --icon-ext: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6 2h8v8h-2V5.4L4.4 13 3 11.6 10.6 4H6z'/%3E%3C/svg%3E");
+
+  /* Focus -------------------------------------------------------------- */
+  --focus: var(--signal);
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-paper:     #131e23;
+    --field:          #1b2a31;
+    --ink:            #e9e3d7;  /* 13.3:1 on paper */
+    --ink-soft:       #a4b1b7;  /*  7.7:1 on paper */
+    --petrol:         #0e181c;
+    --petrol-deep:    #0a1215;
+    --accent-2:       #8fb6c4;  /*  7.8:1 on paper */
+    --signal:         #e2977d;  /*  7.2:1 on paper */
+    --signal-strong:  #f0b79e;
+    --rule:           #33474f;
+
+    --tag-armada-bg:   #e2977d;
+    --tag-armada-fg:   #131e23;
+    --tag-datagems-bg: #8fb6c4;
+    --tag-datagems-fg: #131e23;
+
+    --inverse-bg:     #0e181c;
+    --inverse-text:   #e9e3d7;
+    --inverse-soft:   #a4b1b7;
+    --inverse-signal: #e2977d;
+    --inverse-rule:   rgb(233 227 215 / 0.22);
+  }
+}
+
+/* ========================================================================
+   2. Base
+   ===================================================================== */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 1rem;
+}
+
+/* The masthead only becomes sticky at 48rem, so only then does an anchor
+   target need to clear it. */
+@media screen and (min-width: 48em) {
+  html { scroll-padding-top: 5.25rem; }
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--step-0);
+  line-height: 1.62;
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  text-wrap: balance;
+  margin: 0;
+}
+
+p { margin: 0 0 1em; }
+p:last-child { margin-bottom: 0; }
+
+ul, ol, dl, dd { margin: 0; padding: 0; }
+li { list-style: none; }
+
+img, picture, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+em { font-style: italic; }
+strong { font-weight: 600; }
+
+a {
+  color: var(--signal);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  transition: color 120ms ease, text-decoration-color 120ms ease;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--signal-strong);
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* Pure sets its own font stack on form controls; keep them in family. */
+input, select, textarea, button { font-family: inherit; }
+
+::selection {
+  background: color-mix(in srgb, var(--signal) 24%, transparent);
+}
+
+.skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: -100%;
+  z-index: 100;
+  padding: 0.7rem 1.1rem;
+  background: var(--petrol);
+  color: var(--inverse-text);
+  font-size: var(--step--1);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+  color: var(--inverse-text);
+}
+
+/* ========================================================================
+   3. Layout shell — Pure's grid, with gutters
+   ===================================================================== */
+
+/*
+ * Composition uses Pure's own grid: `.pure-g` for the row and `.pure-u-*`
+ * unit classes for the widths, at Pure's `md` (48em) and `lg` (64em)
+ * breakpoints. Nothing here re-implements a grid; this layer only does the
+ * two things Pure deliberately leaves to the page:
+ *
+ *   1. centres the row and caps its measure (.shell)
+ *   2. adds gutters, which Pure omits so that units stay exact percentages
+ *
+ * Gutters are half-gutter padding on each unit. On its own that would inset
+ * the first and last columns from the page edge, so the shell is made exactly
+ * one gutter wider to compensate: content lands on --gutter at both edges and
+ * the widest content measure is still --shell-max.
+ *
+ * Deliberately no negative margins. `.shell` is itself a `.pure-g`, so a
+ * negative `margin-inline` on the row would override the `auto` that centres
+ * it — equal specificity, and the row rule is read last. Widening is the
+ * version that cannot silently un-centre the page.
+ *
+ * --col-gap never exceeds 2 * --gutter, so the shell cannot outgrow the
+ * viewport and nothing scrolls sideways.
+ */
+
+.shell {
+  width: min(100% - (2 * var(--shell-edge)), var(--shell-outer));
+  margin-inline: auto;
+}
+
+.pure-g { row-gap: var(--row-gap); }
+
+.pure-g > [class*="pure-u"] {
+  padding-inline: calc(var(--col-gap) / 2);
+}
+
+/* A list that is itself a row of units still has to fill its parent unit. */
+.themes,
+.highlights,
+.openlist,
+.pubs,
+.project {
+  width: 100%;
+}
+
+/* ========================================================================
+   4. Common components
+   ===================================================================== */
+
+/* Eyebrow: section number and label ----------------------------------- */
+
+.eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin: 0 0 0.9rem;
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.eyebrow__num {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--signal);
+}
+
+.eyebrow__num::after {
+  content: "";
+  display: inline-block;
+  width: 2.2rem;
+  margin-left: 0.7rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: 0.3em;
+}
+
+/* External links ------------------------------------------------------ */
+
+/* Drawn as a masked shape rather than a text glyph: an empty `content` is
+   not announced by screen readers, and it inherits the link colour. */
+.link-ext::after {
+  content: "";
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  margin-left: 0.32em;
+}
+
+@supports ((-webkit-mask: url("")) or (mask: url(""))) {
+  .link-ext::after {
+    background-color: currentColor;
+    opacity: 0.75;
+    -webkit-mask: var(--icon-ext) center / contain no-repeat;
+    mask: var(--icon-ext) center / contain no-repeat;
+  }
+}
+
+/* Tags: output kind, project, status ----------------------------------- */
+
+.tag {
+  display: inline-block;
+  padding: 0.2em 0.62em 0.24em;
+  border: 1px solid var(--rule);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* Kind of output. Each is distinguished by colour *and* by border style,
+   so the distinction survives greyscale and colour-vision deficiency. */
+.tag--vision     { color: var(--signal); border-color: var(--signal); border-width: 1px 1px 3px; }
+.tag--journal    { color: var(--accent-2); border-color: var(--accent-2); border-style: solid; border-width: 2px; }
+.tag--conference { color: var(--accent-2); border-color: var(--accent-2); border-style: solid; }
+.tag--demo       { color: var(--accent-2); border-color: var(--accent-2); border-style: dashed; }
+.tag--poster     { color: var(--ink-soft); border-style: dotted; border-color: var(--ink-soft); }
+.tag--dataset    { color: var(--ink-soft); border-style: double; border-width: 3px; }
+.tag--software   { color: var(--ink-soft); border-style: double; border-width: 3px; font-family: var(--font-mono); }
+
+/* Funding project: filled, so a publication's project reads at a glance. */
+.tag--armada   { background: var(--tag-armada-bg);   border-color: var(--tag-armada-bg);   color: var(--tag-armada-fg); }
+.tag--datagems { background: var(--tag-datagems-bg); border-color: var(--tag-datagems-bg); color: var(--tag-datagems-fg); }
+.tag--active   { background: transparent; border-color: var(--accent-2); color: var(--accent-2); }
+
+.tag--venue {
+  border-color: transparent;
+  padding-inline: 0;
+  color: var(--ink-soft);
+}
+
+.tag--pending {
+  border-style: dashed;
+  border-color: var(--ink-soft);
+  color: var(--ink-soft);
+  font-style: italic;
+  letter-spacing: 0.06em;
+  text-transform: none;
+}
+
+/* Buttons -------------------------------------------------------------- */
+
+.button {
+  border-radius: 1px;
+  padding: 0.72em 1.5em;
+  font-family: var(--font-text);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: none;
+  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.button--primary {
+  background: var(--inverse-signal);
+  border: 1px solid var(--inverse-signal);
+  color: var(--petrol-deep);
+}
+
+.button--primary:hover,
+.button--primary:focus-visible {
+  background: var(--inverse-text);
+  border-color: var(--inverse-text);
+  color: var(--petrol-deep);
+}
+
+.button--ghost {
+  background: transparent;
+  border: 1px solid var(--inverse-rule);
+  color: var(--inverse-text);
+}
+
+.button--ghost:hover,
+.button--ghost:focus-visible {
+  background: color-mix(in srgb, var(--inverse-text) 14%, transparent);
+  border-color: var(--inverse-text);
+  color: var(--inverse-text);
+}
+
+/* ========================================================================
+   5. Masthead and navigation
+   ===================================================================== */
+
+.masthead {
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+}
+
+@media screen and (min-width: 48em) {
+  .masthead {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: saturate(140%) blur(6px);
+  }
+}
+
+.masthead__inner {
+  width: min(100% - (2 * var(--gutter)), var(--shell-max));
+  margin-inline: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem 1.5rem;
+  padding-block: 0.6rem;
+}
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.wordmark__seal {
+  width: 2.3rem;
+  height: 2.3rem;
+  flex: none;
+}
+
+.wordmark__text { display: block; }
+
+.wordmark__name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.wordmark__sub {
+  display: none;
+  font-size: var(--step--2);
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+@media screen and (min-width: 48em) {
+  .wordmark__sub { display: block; }
+}
+
+.wordmark:hover .wordmark__name,
+.wordmark:focus-visible .wordmark__name { color: var(--signal); }
+
+/*
+ * The navigation is a plain wrapping list at every width: no disclosure, no
+ * script, nothing to open. Six short labels wrap onto two lines at 320px and
+ * onto one from 48rem.
+ */
+.nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.15rem;
+}
+
+.nav__list a {
+  display: inline-block;
+  padding: 0.3rem 0;
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.nav__list a:hover,
+.nav__list a:focus-visible {
+  color: var(--signal);
+  border-bottom-color: var(--signal);
+}
+
+/* ========================================================================
+   6. Hero
+   ===================================================================== */
+
+.hero {
+  /* Inverse context: every component token flips, so nothing below needs to
+     know it is sitting on a dark band. */
+  --paper: var(--inverse-bg);
+  --ink: var(--inverse-text);
+  --ink-soft: var(--inverse-soft);
+  --signal: var(--inverse-signal);
+  --signal-strong: var(--inverse-text);
+  --rule: var(--inverse-rule);
+  --focus: var(--inverse-signal);
+
+  --skew: var(--hero-skew);
+
+  position: relative;
+  z-index: 1;
+  color: var(--inverse-text);
+  padding-block: clamp(2rem, 5vw, 4rem) clamp(4rem, 11vw, 9rem);
+
+  /* The band overlaps the section below it by exactly --skew, so what shows
+     through the diagonal is that section itself. See .hero::before. */
+  margin-bottom: calc(-1 * var(--skew));
+}
+
+/*
+ * The diagonal, done honestly.
+ *
+ * It used to be a triangle painted over the band in var(--page-paper), to
+ * imitate the page showing through. That only looked right while the section
+ * below happened to be paper-coloured: reordering the sections, or tinting one
+ * with --field, left a mismatched wedge sitting on it, and nothing in the CSS
+ * said the two had to agree.
+ *
+ * So nothing is imitated now. The dark band is its own layer and is *clipped*
+ * on the diagonal; the band's element is pulled down over the following
+ * section by the same amount. What shows through the cut is that section's
+ * real background, whatever colour it has been given, with no coupling to
+ * maintain and nothing to keep in step.
+ *
+ * The band is deepest on the left and rises to the right.
+ */
+.hero::before,
+.pagehead::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--inverse-bg);
+  background-image:
+    radial-gradient(120% 90% at 78% 10%, rgb(52 94 110 / 0.55), transparent 62%),
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f1ebe0' fill-opacity='0.055' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='2.5'/%3E%3Ccircle cx='23' cy='23' r='1.6'/%3E%3C/g%3E%3C/svg%3E");
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--skew)), 0 100%);
+}
+
+/*
+ * The section underneath gets its padding back, so its content still clears
+ * the band it is now tucked beneath. These read the root tokens rather than
+ * --skew: a sibling inherits nothing from the element before it, so var(--skew)
+ * here would resolve to nothing and the padding would collapse to zero.
+ */
+.hero + .section {
+  padding-top: calc(var(--section-pad) + var(--hero-skew));
+}
+
+.pagehead + .section {
+  padding-top: calc(var(--section-pad) + var(--pagehead-skew));
+}
+
+.hero__grid { position: relative; z-index: 1; align-items: center; }
+
+/* Width comes from the pure-u-* classes on the element. Below md the unit is
+   full width, so the emblem is capped and centred here instead. */
+.hero__figure {
+  margin: 0 auto 1.25rem;
+  max-width: min(15rem, 62%);
+}
+
+@media screen and (min-width: 48em) {
+  .hero__figure { max-width: none; margin: 0; }
+}
+
+.hero__figure img {
+  width: 100%;
+  filter: drop-shadow(0 12px 28px rgb(6 16 20 / 0.45));
+}
+
+.hero__h1 { margin: 0 0 1rem; }
+
+.hero__name {
+  display: block;
+  font-size: var(--step-5);
+  font-weight: 600;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  line-height: 1.02;
+}
+
+.hero__expansion {
+  display: block;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 2px solid var(--inverse-signal);
+  max-width: 22ch;
+  font-family: var(--font-text);
+  font-size: var(--step-0);
+  font-weight: 400;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--inverse-soft);
+}
+
+.hero__lead {
+  max-width: 34rem;
+  margin-bottom: 1.6rem;
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: var(--inverse-text);
+}
+
+.hero__lead em {
+  font-style: italic;
+  color: var(--inverse-signal);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.6rem;
+}
+
+.hero__fact {
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  color: var(--inverse-soft);
+}
+
+
+@media screen and (min-width: 64em) {
+  .hero__grid { align-items: flex-end; }
+  .hero__figure {
+    /* The emblem hangs past the bottom of its row and crosses the diagonal:
+       this is the "pull" of the page. It is a margin on an ordinary Pure unit,
+       not absolute positioning, so it still reflows, wraps and zooms. The
+       hero's bottom padding is always larger than this offset, so the emblem
+       cannot reach the section below however the text grows. The offset is
+       kept under the wedge height too, so the emblem crosses the diagonal
+       rather than clearing it. */
+    margin-bottom: clamp(-6.5rem, -6vw, -2rem);
+  }
+  .hero__text {
+    padding-bottom: clamp(0.5rem, 2vw, 2rem);
+  }
+}
+
+/* ========================================================================
+   7. Sections and research themes
+   ===================================================================== */
+
+.section {
+  padding-block: var(--section-pad);
+}
+
+/*
+ * Sections alternate between the page surface and the travertine band.
+ *
+ * The rhythm is positional on purpose. It used to be keyed to named sections —
+ * .section--about, .section--people — which meant the tint belonged to the
+ * *content* rather than to its place on the page. Reorder the sections and the
+ * pattern became arbitrary: two tinted bands could end up adjacent, and the
+ * band under the hero changed colour without anything saying it had. Now
+ * nothing has to be kept in step; a section is tinted because of where it
+ * sits, and moving it re-tints it automatically.
+ *
+ * The hero and the page header are <section> elements too, so they count as
+ * the first item and the alternation starts beneath them.
+ */
+.section:nth-of-type(even) { background: var(--field); }
+
+.section__head { margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
+
+.section__title {
+  font-size: var(--step-4);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.6rem;
+}
+
+.section__standfirst {
+  max-width: 44ch;
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+
+
+/*
+ * Research themes.
+ *
+ * A plain grid: three across, then two. The widths come from pure-u-md-1-2
+ * and pure-u-lg-1-3; the only thing added here is centring, which pushes the
+ * short second row to the middle instead of leaving it hanging on the left.
+ * A full row has no spare space, so centring does nothing to it.
+ */
+
+.themes {
+  row-gap: clamp(1.75rem, 3.5vw, 3rem);
+  justify-content: center;
+}
+
+
+.theme {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
+}
+
+.theme__name {
+  font-size: var(--step-2);
+  margin-bottom: 0.45rem;
+}
+
+.theme__desc {
+  max-width: 46ch;
+  margin-bottom: 0.7rem;
+  color: var(--ink);
+}
+
+.theme__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1.1rem;
+  margin: 0;
+  font-size: var(--step--1);
+}
+
+.theme__methods {
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+.theme__link {
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: var(--step--2);
+}
+
+/* ========================================================================
+   8. About: prose, glossary, pull quote
+   ===================================================================== */
+
+.prose { max-width: var(--measure); }
+
+.prose__lead {
+  font-size: var(--step-1);
+  line-height: 1.5;
+}
+
+.prose p + p { margin-top: 0; }
+
+.pullquote {
+  margin: 0;
+  padding-left: clamp(1.75rem, 4vw, 3rem);
+  position: relative;
+}
+
+.pullquote::before {
+  content: "\201C";
+  position: absolute;
+  left: -0.05em;
+  top: -0.25em;
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 9vw, 7rem);
+  line-height: 1;
+  color: var(--rule);
+}
+
+.pullquote blockquote {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: 1.35;
+  font-style: italic;
+  text-wrap: pretty;
+}
+
+.pullquote figcaption {
+  margin-top: 0.9rem;
+  font-size: var(--step--1);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.glossary { border-top: 1px solid var(--rule); padding-top: 1.75rem; }
+
+.glossary__title {
+  font-size: var(--step-2);
+  margin-bottom: 0.5rem;
+}
+
+.glossary__intro {
+  max-width: 48ch;
+  margin-bottom: 1.5rem;
+  color: var(--ink-soft);
+}
+
+.glossary__item {
+  break-inside: avoid;
+  margin-bottom: 1.35rem;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--rule);
+}
+
+.glossary__item:last-child { margin-bottom: 0; }
+
+.glossary__list dt {
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.15rem;
+}
+
+.glossary__vi { color: var(--signal); }
+
+.glossary__list dd {
+  font-size: var(--step--1);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 46ch;
+}
+
+@media screen and (min-width: 48em) {
+  .pullquote { align-self: center; }
+  .glossary  { column-count: 2; column-gap: clamp(2rem, 4vw, 4rem); }
+  .glossary__title,
+  .glossary__intro { column-span: all; }
+}
+
+/* Seven short definitions read better in three columns once there is room. */
+@media screen and (min-width: 64em) {
+  .glossary { column-count: 3; }
+}
+
+
+/* ========================================================================
+   9. Projects
+   ===================================================================== */
+
+.project {
+  row-gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 3px solid var(--accent-2);
+}
+
+.project__status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.9rem;
+}
+
+.project__title {
+  font-size: var(--step-3);
+  margin-bottom: 0.8rem;
+}
+
+.project__title a { color: inherit; text-decoration: none; }
+.project__title a:hover,
+.project__title a:focus-visible {
+  color: var(--signal);
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.project__subtitle {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-text);
+  font-size: var(--step-0);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.project__desc {
+  max-width: 54ch;
+  margin-bottom: 1.1rem;
+}
+
+/*
+ * The rail is the useful part of a project record: where it lives, who
+ * recorded it, and the handful of facts worth quoting. It gets a field of its
+ * own so it reads as a reference panel rather than as leftover margin, and
+ * both records use the same one — a project page is a place to look something
+ * up, not a place to be surprised by the layout.
+ */
+/* Tinted relative to whatever is behind it, rather than filled with a named
+   surface colour: the rail has to read on both the page surface and the
+   travertine band, and it must not care which one it landed on. */
+.project__rail {
+  padding-block: 1.25rem;
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  align-self: flex-start;
+}
+
+.project__logo {
+  margin: 0 0 1.25rem;
+}
+
+/* The three links are the first thing in the rail and the most likely reason
+   anyone opened the page. */
+.project__links {
+  margin: 0 0 1.25rem;
+  font-size: var(--step--1);
+}
+
+.project__links li { border-top: 1px solid var(--rule); }
+.project__links li:last-child { border-bottom: 1px solid var(--rule); }
+
+.project__links a {
+  display: block;
+  padding: 0.65rem 0;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.project__links a:hover,
+.project__links a:focus-visible {
+  color: var(--signal-strong);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.project__meta {
+  display: grid;
+  gap: 0.85rem;
+  align-content: start;
+  font-size: var(--step--1);
+}
+
+.project__meta > div {
+  padding-left: 0.85rem;
+  border-left: 1px solid var(--rule);
+}
+
+.project__meta dt {
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 0.1rem;
+}
+
+.project__meta dd {
+  margin: 0;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+
+
+/* ========================================================================
+   10. People
+   ===================================================================== */
+
+/*
+ * A roster, not a profile page. Each person is a compact card carrying only
+ * what a reader needs to identify them and find their work: name, title,
+ * affiliation, one line of subject, and their own identifiers. The principal
+ * investigator's card is marked, not enlarged, so the list stays even as it
+ * grows past the five slots it ships with.
+ */
+
+.peoplegroup { margin-bottom: 0.5rem; }
+
+.peoplegroup__title {
+  font-size: var(--step--1);
+  font-family: var(--font-text);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.people { row-gap: clamp(1.5rem, 3vw, 2.25rem); width: 100%; }
+
+.person {
+  padding-top: 0.9rem;
+  border-top: 3px solid var(--rule);
+}
+
+/* The lead card is distinguished by the accent on its rule, not by size. */
+.person--lead { border-top-color: var(--signal); }
+
+.person__name {
+  font-size: var(--step-1);
+  margin-bottom: 0.25rem;
+}
+
+.person__name a { color: inherit; text-decoration: none; }
+.person__name a:hover,
+.person__name a:focus-visible { color: var(--signal); text-decoration: underline; }
+
+.person__title {
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.15rem;
+}
+
+.person__affil {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  margin-bottom: 0.6rem;
+}
+
+.person__bio {
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 40ch;
+  margin-bottom: 0.7rem;
+}
+
+.person__ids {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+}
+
+/* A slot waiting for a real person. Visibly provisional, so an empty roster
+   never reads as a finished one. */
+.person.is-pending {
+  border-top-style: dashed;
+  border-top-width: 2px;
+}
+
+.person.is-pending .person__name {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.joinbox {
+  padding: 1.5rem;
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent-2);
+}
+
+.joinbox__title {
+  font-size: var(--step-1);
+  margin-bottom: 0.7rem;
+}
+
+.joinbox p {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.joinbox__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  font-weight: 600;
+}
+
+/* Width comes from pure-u-md-2-5. The box hugs its content rather than
+   stretching to the roster's height. */
+@media screen and (min-width: 48em) {
+  .joinbox { align-self: flex-start; }
+}
+
+/* ========================================================================
+   11. Publications
+   ===================================================================== */
+
+.pubnote {
+  padding: 1rem 1.25rem;
+  border-left: 3px solid var(--signal);
+  background: transparent;
+  background: color-mix(in srgb, var(--signal) 7%, transparent);
+  font-size: var(--step--1);
+  line-height: 1.55;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.6rem;
+  margin: 0;
+}
+
+.legend__label {
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.legend__label:not(:first-child) { margin-left: 0.9rem; }
+
+.pubs { display: grid; gap: 1.4rem; }
+
+.pub {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
+}
+
+.pub__tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.6rem;
+  margin-bottom: 0.55rem;
+}
+
+.pub__title {
+  font-size: var(--step-1);
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.pub__title a { color: inherit; }
+.pub__title a:hover,
+.pub__title a:focus-visible { color: var(--signal); }
+
+.pub__detail {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  max-width: 62ch;
+}
+
+.pub.is-pending .pub__title,
+.pub.is-forthcoming .pub__title {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+
+
+/* A one-paragraph aside, where a whole section would be out of proportion. */
+.smallnote {
+  padding-left: 1.1rem;
+  border-left: 3px solid var(--accent-2);
+  font-size: var(--step--1);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.smallnote strong { color: var(--ink); }
+
+/* ========================================================================
+   12. Open practice
+   ===================================================================== */
+
+.openlist { row-gap: clamp(1.5rem, 3vw, 2.25rem); }
+
+.openitem {
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+
+.openitem__title {
+  font-size: var(--step-1);
+  margin-bottom: 0.4rem;
+}
+
+.openitem p {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  line-height: 1.55;
+  max-width: 34ch;
+}
+
+/* Thirds come from pure-u-md-1-3; the slight cascade is the only addition. */
+@media screen and (min-width: 48em) {
+  .openitem:nth-child(2) { margin-top: 0.9rem; }
+  .openitem:nth-child(3) { margin-top: 1.8rem; }
+}
+
+/* ========================================================================
+   13. Footer
+   ===================================================================== */
+
+.footer {
+  --paper: var(--inverse-bg);
+  --ink: var(--inverse-text);
+  --ink-soft: var(--inverse-soft);
+  --signal: var(--inverse-signal);
+  --signal-strong: var(--inverse-text);
+  --rule: var(--inverse-rule);
+  --focus: var(--inverse-signal);
+
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  padding-block: clamp(2rem, 4vw, 3.25rem);
+}
+
+/*
+ * Three columns of the same shape — a rule, a label, a short list — then the
+ * marks, then the fine print. Nothing here is offset, staggered or sized by
+ * eye: a footer is the part of a page a reader scans for a fact, so it is
+ * built to be predictable rather than interesting.
+ */
+
+.footer .shell { row-gap: clamp(1.4rem, 2.5vw, 2rem); }
+
+.footer__title {
+  font-size: var(--step--2);
+  font-family: var(--font-text);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--inverse-soft);
+  margin: 0 0 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--inverse-rule);
+}
+
+.footer p,
+.footer address,
+.footer li {
+  font-size: var(--step--1);
+  line-height: 1.6;
+  font-style: normal;
+}
+
+.footer__list {
+  display: grid;
+  gap: 0.35rem;
+}
+
+/* The EU emblem keeps its own blue field and its 3:2 proportions, and is never
+   inverted or tinted. The wording beside it is live text, not part of an
+   image, so it stays selectable, translatable and legible when zoomed. */
+.footer__euflag {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.8rem;
+}
+
+.footer__euflag picture {
+  flex: none;
+  width: 3.5rem;
+}
+
+.footer__euflag img {
+  width: 100%;
+  height: auto;
+}
+
+.footer__euflag span {
+  font-size: var(--step--2);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--inverse-text);
+}
+
+/*
+ * Both institutional marks on one baseline, at one size. The university lockup
+ * is black line art on transparency, so it is inverted to read on the dark
+ * footer — the one adjustment a monochrome mark allows. The lab plaque has a
+ * white cut of its own and needs no filter.
+ */
+.footer__marks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem 2.5rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--inverse-rule);
+}
+
+/* Both marks are <picture> elements sized by a class, and the image inside
+   simply fills whatever the picture is. Nothing depends on intrinsic widths
+   or on how a flex item measures its contents. */
+.footer__marks picture {
+  display: block;
+  flex: none;
+}
+
+.footer__marks img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.footer__plaque { width: min(11rem, 100%); }
+.footer__univr { width: min(13rem, 100%); filter: invert(1); }
+
+/*
+ * The fine print: provenance, the funding disclaimer, the colophon and the
+ * accessibility contact. All four are required or promised somewhere else in
+ * the site, so none of them is dropped — they are set small, in two columns,
+ * and got out of the way.
+ */
+.footer__fine {
+  font-size: var(--step--2);
+  line-height: 1.55;
+  color: var(--inverse-soft);
+}
+
+.footer__fine p {
+  font-size: inherit;
+  margin-bottom: 0.7rem;
+  break-inside: avoid;
+}
+
+.footer__fine p:last-child { margin-bottom: 0; }
+.footer__fine strong { color: var(--inverse-text); font-weight: 600; }
+
+@media screen and (min-width: 48em) {
+  .footer__fine {
+    column-count: 2;
+    column-gap: clamp(2rem, 4vw, 3.5rem);
+  }
+}
+
+/*
+ * ARMADA supplies flat monochrome cuts of its mark, white and black. The white
+ * one is used as supplied on a dark page and inverted on a light one, which
+ * produces exactly the black cut the project also supplies. Inverting is the
+ * one adjustment a monochrome mark allows; a full-colour mark would need its
+ * own rule instead.
+ */
+.project__logo img {
+  width: min(11rem, 100%);
+  height: auto;
+  filter: invert(1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .project__logo img { filter: none; }
+}
+
+
+
+
+/* ========================================================================
+   15. Sub-pages: page header, breadcrumb, highlights, call to action
+   ===================================================================== */
+
+/*
+ * Projects and publications each have their own page. The index keeps only
+ * the highlights, so these components exist to open a sub-page with the same
+ * inverse band as the hero, at about a third of its height.
+ */
+
+.pagehead {
+  --paper: var(--inverse-bg);
+  --ink: var(--inverse-text);
+  --ink-soft: var(--inverse-soft);
+  --signal: var(--inverse-signal);
+  --signal-strong: var(--inverse-text);
+  --rule: var(--inverse-rule);
+  --focus: var(--inverse-signal);
+
+  /* Shallower than the hero's, because there is no emblem crossing it. */
+  --skew: var(--pagehead-skew);
+
+  position: relative;
+  z-index: 1;
+  color: var(--inverse-text);
+  padding-block: clamp(1.75rem, 4vw, 3rem) clamp(3rem, 7vw, 5.5rem);
+  margin-bottom: calc(-1 * var(--skew));
+}
+
+.pagehead::before {
+  background-image:
+    radial-gradient(120% 120% at 85% 0%, rgb(52 94 110 / 0.5), transparent 62%),
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f1ebe0' fill-opacity='0.055' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='2.5'/%3E%3Ccircle cx='23' cy='23' r='1.6'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.pagehead .shell { position: relative; z-index: 1; }
+
+.pagehead__h1 {
+  font-size: var(--step-4);
+  letter-spacing: 0.01em;
+  margin-bottom: 0.9rem;
+}
+
+.pagehead__lead {
+  max-width: 52ch;
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: var(--inverse-text);
+}
+
+.pagehead__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+
+
+/* Breadcrumb ------------------------------------------------------------ */
+
+.crumbs { margin-bottom: 1rem; }
+
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--inverse-soft);
+}
+
+.crumbs li + li::before {
+  content: "/";
+  margin-right: 0.5rem;
+  opacity: 0.6;
+}
+
+.crumbs a { color: var(--inverse-soft); }
+.crumbs a:hover,
+.crumbs a:focus-visible { color: var(--inverse-signal); }
+
+/* Project highlights on the index --------------------------------------- */
+
+/*
+ * Two records, offset from each other rather than set side by side in equal
+ * boxes, so the index keeps the same diagonal rhythm as the rest of the page.
+ */
+
+.highlights { row-gap: clamp(1.75rem, 4vw, 2.75rem); }
+
+.highlight {
+  padding-top: 1.1rem;
+  border-top: 3px solid var(--accent-2);
+}
+
+.highlight__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.8rem;
+}
+
+.highlight__title {
+  font-size: var(--step-2);
+  margin-bottom: 0.3rem;
+}
+
+.highlight__title a { color: inherit; text-decoration: none; }
+.highlight__title a:hover,
+.highlight__title a:focus-visible {
+  color: var(--signal);
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.highlight__sub {
+  font-size: var(--step--1);
+  line-height: 1.4;
+  color: var(--ink-soft);
+  margin-bottom: 0.7rem;
+}
+
+.highlight__desc {
+  max-width: 44ch;
+  margin-bottom: 1rem;
+}
+
+.highlight__meta {
+  display: grid;
+  gap: 0.6rem;
+  font-size: var(--step--1);
+}
+
+.highlight__meta > div {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--rule);
+}
+
+.highlight__meta dt {
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.highlight__meta dd { margin: 0; overflow-wrap: anywhere; }
+
+/* Halves come from pure-u-md-1-2. Nothing is offset: two records side by side
+   are read as a pair, and a staggered top edge just looks like a mistake. */
+
+
+/* Publication groups ----------------------------------------------------- */
+
+.pubgroup { display: grid; gap: 1.25rem; }
+
+.pubgroup__title {
+  font-size: var(--step-2);
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent-2);
+}
+
+
+
+/* Project cross-references ----------------------------------------------- */
+
+.project__related {
+  margin-top: 1rem;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+/* Call to action rows ----------------------------------------------------- */
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+/* On a light surface the hero button colours would be unreadable, so the
+   two solid/outline variants below are the light-surface equivalents. */
+.button--solid {
+  background: var(--accent-2);
+  border: 1px solid var(--accent-2);
+  color: var(--page-paper);
+}
+
+.button--solid:hover,
+.button--solid:focus-visible {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: var(--page-paper);
+}
+
+.button--outline {
+  background: transparent;
+  border: 1px solid var(--accent-2);
+  color: var(--accent-2);
+}
+
+.button--outline:hover,
+.button--outline:focus-visible {
+  background: var(--accent-2);
+  color: var(--page-paper);
+}
+
+/* Current page in the navigation ------------------------------------------ */
+
+.nav__list a[aria-current="page"] {
+  color: var(--ink);
+  border-bottom-color: var(--signal);
+}
+
+/* ========================================================================
+   14. Motion and print
+   ===================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+
+  /*
+   * One reveal, and only where the browser can do it without script. Guarded
+   * by @supports, so a browser that cannot animate on scroll never sees the
+   * zero-opacity start state and the content is simply there.
+   */
+  @supports (animation-timeline: view()) {
+    .theme,
+    .project,
+    .person,
+    .joinbox,
+    .glossary__item,
+    .openitem,
+    .highlight,
+    .pub {
+      animation: rise-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(1.25rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media print {
+  .masthead, .hero::before, .pagehead::before, .button { display: none; }
+  body { background: #fff; color: #000; font-size: 11pt; }
+  .hero, .pagehead { background: none; color: #000; padding-block: 0 1rem; margin-bottom: 0; }
+  .hero__figure { display: none; }
+  .section, .footer { background: none; color: #000; padding-block: 1rem; }
+  a { color: #000; text-decoration: underline; }
+  .link-ext::after { content: " (" attr(href) ")"; font-size: 0.8em; opacity: 1; }
+  .theme, .project, .person, .pub, .openitem { break-inside: avoid; }
+}
