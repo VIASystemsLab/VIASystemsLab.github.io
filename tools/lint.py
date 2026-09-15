@@ -1,0 +1,631 @@
+#!/usr/bin/env python3
+"""Static checks for the VIA Systems Lab website.
+
+The site has no build step and no test suite, so this script is the only thing
+standing between a typo and a broken public page. It uses the standard library
+only, so it runs from a git hook without anything installed.
+
+    python3 tools/lint.py            # structure, links, metadata, CSS
+    python3 tools/lint.py --external # also resolve every outbound URL (slow)
+
+Exit code is 0 when every check passes and 1 otherwise. Warnings never fail the
+run; they are printed so that a human can judge them.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import sys
+from urllib.parse import urldefrag, urlparse
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Every .html file at the root is part of the published site and is linted.
+EXCLUDED_PAGES: set[str] = set()
+
+SITE_ORIGIN = "https://viasystemslab.github.io"
+
+# Namespaces are identified by an http: IRI by definition and must not be
+# "fixed" to https:, which would change the identifier.
+ALLOWED_HTTP_PREFIXES = (
+    "http://purl.org/",
+    "http://xmlns.com/",
+    "http://www.w3.org/",
+    "http://iptc.org/",
+    "http://cv.iptc.org/",
+)
+
+# An @id pointing into a controlled vocabulary is supposed to leave the page
+# graph: the term is defined by whoever publishes the vocabulary, not by us.
+CONTROLLED_VOCABULARIES = (
+    "http://cv.iptc.org/newscodes/",
+    "http://purl.org/dc/",
+    "https://schema.org/",
+)
+
+errors: list[str] = []
+warnings: list[str] = []
+
+
+def fail(page: str, msg: str) -> None:
+    errors.append(f"{page}: {msg}")
+
+
+def warn(page: str, msg: str) -> None:
+    warnings.append(f"{page}: {msg}")
+
+
+def strip_comments(html: str) -> str:
+    """Remove HTML comments so that markup templates inside them are not linted."""
+    return re.sub(r"<!--.*?-->", "", html, flags=re.S)
+
+
+def pages() -> list[str]:
+    found = [
+        f
+        for f in sorted(os.listdir(ROOT))
+        if f.endswith(".html") and f not in EXCLUDED_PAGES
+    ]
+    if not found:
+        fail("repository", "no HTML pages found")
+    return found
+
+
+def page_ids(name: str) -> set[str]:
+    with open(os.path.join(ROOT, name), encoding="utf-8") as fh:
+        return set(re.findall(r'\sid="([^"]+)"', strip_comments(fh.read())))
+
+
+# --------------------------------------------------------------------------
+# Per-page checks
+# --------------------------------------------------------------------------
+
+
+def check_head(name: str, html: str) -> None:
+    if not re.search(r'<html lang="[a-z]{2}(-[A-Z]{2})?"', html):
+        fail(name, "<html> is missing a lang attribute")
+    if '<meta name="viewport"' not in html:
+        fail(name, "missing viewport meta")
+    if not re.search(r"<title>.+</title>", html):
+        fail(name, "missing or empty <title>")
+    if not re.search(r'<meta name="description" content=".{20,}?">', html):
+        fail(name, "missing or too-short meta description")
+
+    expected = f"{SITE_ORIGIN}/" if name == "index.html" else f"{SITE_ORIGIN}/{name}"
+    canonical = re.search(r'<link rel="canonical" href="([^"]+)"', html)
+    if not canonical:
+        fail(name, "missing canonical link")
+    elif canonical.group(1) != expected:
+        fail(name, f"canonical is {canonical.group(1)}, expected {expected}")
+
+    og_url = re.search(r'<meta property="og:url" content="([^"]+)"', html)
+    if og_url and canonical and og_url.group(1) != canonical.group(1):
+        fail(name, "og:url does not match the canonical URL")
+
+    for sheet in (
+        "css/fonts.css",
+        "css/pure.css",
+        "css/grids-responsive.css",
+        "css/custom.css",
+    ):
+        if f'href="{sheet}"' not in html:
+            fail(name, f"does not link {sheet}")
+
+    if 'rel="author" type="text/plain" href="humans.txt"' not in html:
+        fail(name, "does not link humans.txt (see https://humanstxt.org)")
+
+    # The site declares AI provenance in its structured data; the same claim has
+    # to be legible to a person, or the declaration is only for machines. This
+    # checks the words, not a class name, so the footer can be restyled freely.
+    visible = re.sub(r"<script.*?</script>", "", html, flags=re.S)
+    visible = re.sub(r"<[^>]+>", " ", visible)
+    for needle, what in (
+        ("ChatGPT", "the tool that generated the artwork"),
+        ("Claude", "the tool that drafted the code"),
+        ("humans.txt", "a link to the full statement"),
+    ):
+        if needle not in visible:
+            fail(name, f"the visible provenance note does not name {what} ({needle!r})")
+
+
+def check_structure(name: str, html: str) -> None:
+    ids = re.findall(r'\sid="([^"]+)"', html)
+    dupes = sorted({i for i in ids if ids.count(i) > 1})
+    if dupes:
+        fail(name, f"duplicate id attributes: {', '.join(dupes)}")
+
+    idset = set(ids)
+    for attr in ("aria-labelledby", "aria-describedby"):
+        for match in re.findall(rf'{attr}="([^"]+)"', html):
+            for target in match.split():
+                if target not in idset:
+                    fail(name, f"{attr} points at missing id #{target}")
+
+    heads = [
+        (int(m.group(1)), " ".join(re.sub(r"<[^>]+>", "", m.group(2)).split()))
+        for m in re.finditer(r"<h([1-6])[^>]*>(.*?)</h\1>", html, re.S)
+    ]
+    h1s = [t for level, t in heads if level == 1]
+    if len(h1s) != 1:
+        fail(name, f"expected exactly one h1, found {len(h1s)}")
+    previous = 0
+    for level, text in heads:
+        if previous and level > previous + 1:
+            fail(name, f"heading level jumps h{previous} to h{level} at {text!r}")
+        previous = level
+
+    if 'href="#main"' not in html:
+        fail(name, "missing skip link to #main")
+    if 'id="main"' not in idset and "main" not in idset:
+        fail(name, "missing an element with id=main")
+
+    # Surface colours are positional, not per-section. A modifier like
+    # section--about ties a background to a named piece of content, which is
+    # what made the band under the hero change colour when the sections were
+    # reordered. See the note above .section:nth-of-type in css/custom.css.
+    for modifier in sorted(set(re.findall(r"\bsection--[a-z-]+\b", html))):
+        fail(
+            name,
+            f"{modifier} keys a surface to a named section; the band rhythm is "
+            "positional (.section:nth-of-type) — drop the modifier",
+        )
+
+    for tag in re.findall(r"<img\b[^>]*>", html):
+        src = re.search(r'src="([^"]+)"', tag)
+        where = src.group(1) if src else tag[:40]
+        if "alt=" not in tag:
+            fail(name, f"<img> without alt: {where}")
+        if "width=" not in tag or "height=" not in tag:
+            fail(name, f"<img> without width/height (causes layout shift): {where}")
+
+
+def local_targets(html: str) -> set[str]:
+    """Collect local file references from href/src/srcset only.
+
+    meta content is deliberately excluded: it holds prose and keywords, not paths.
+    """
+    found: set[str] = set()
+    for attr in ("href", "src"):
+        for value in re.findall(rf'\b{attr}="([^"]+)"', html):
+            found.add(value)
+    for value in re.findall(r'\bsrcset="([^"]+)"', html):
+        for candidate in value.split(","):
+            token = candidate.strip().split(" ")[0]
+            if token:
+                found.add(token)
+    return found
+
+
+def check_links(name: str, html: str, all_ids: dict[str, set[str]]) -> None:
+    for target in sorted(local_targets(html)):
+        if target.startswith(("http://", "https://", "mailto:", "data:", "tel:")):
+            continue
+        path, fragment = urldefrag(target)
+        if not path:
+            if fragment and fragment not in all_ids[name]:
+                fail(name, f"dangling in-page anchor #{fragment}")
+            continue
+        if not os.path.exists(os.path.join(ROOT, path)):
+            fail(name, f"link target does not exist: {path}")
+            continue
+        if fragment and path.endswith(".html"):
+            if path in all_ids and fragment not in all_ids[path]:
+                fail(name, f"link {path}#{fragment} points at an id that {path} lacks")
+
+    for url in re.findall(r'href="(http://[^"]+)"', html):
+        if not url.startswith(ALLOWED_HTTP_PREFIXES):
+            fail(name, f"insecure http link: {url}")
+
+
+def check_jsonld(name: str, html_with_comments: str, site_ids: set[str]) -> None:
+    blocks = re.findall(
+        r'<script type="application/ld\+json">(.*?)</script>',
+        html_with_comments,
+        re.S,
+    )
+    if not blocks:
+        fail(name, "no JSON-LD block")
+        return
+    for block in blocks:
+        try:
+            data = json.loads(block)
+        except json.JSONDecodeError as exc:
+            fail(name, f"JSON-LD does not parse: {exc}")
+            continue
+
+        graph = data.get("@graph")
+        if not isinstance(graph, list):
+            fail(name, "JSON-LD has no @graph array")
+            continue
+
+        defined = [node.get("@id") for node in graph]
+        if None in defined:
+            fail(name, "every node in @graph needs a stable @id")
+        dupes = sorted({i for i in defined if i and defined.count(i) > 1})
+        if dupes:
+            fail(name, f"duplicate @id in @graph: {', '.join(dupes)}")
+
+        refs: set[str] = set()
+
+        def collect(node: object) -> None:
+            if isinstance(node, dict):
+                if set(node) == {"@id"}:
+                    refs.add(node["@id"])
+                else:
+                    for value in node.values():
+                        collect(value)
+            elif isinstance(node, list):
+                for item in node:
+                    collect(item)
+
+        collect(graph)
+        for ref in sorted(refs):
+            if ref in defined or ref in site_ids:
+                continue
+            if ref.startswith(CONTROLLED_VOCABULARIES):
+                continue
+            if urlparse(ref).scheme in ("http", "https"):
+                warn(name, f"@id reference resolved outside the page graph: {ref}")
+            else:
+                fail(name, f"@id reference is neither defined nor a URL: {ref}")
+
+        # A claim in structured data that the page does not show is a claim a
+        # reader cannot check. Identity claims — an ORCID iD, an email address —
+        # must be visible; a DOI or a grant number is only warned about, since
+        # those are commonly reached through the link rather than printed.
+        visible = strip_comments(html_with_comments)
+        visible = re.sub(
+            r'<script type="application/ld\+json">.*?</script>', "", visible, flags=re.S
+        )
+
+        literals: set[str] = set()
+
+        def collect_literals(node: object) -> None:
+            if isinstance(node, dict):
+                # A bare {"@id": ...} is a reference to something described
+                # elsewhere, not a claim made by this page. Pointing at a
+                # person does not oblige the page to print their ORCID.
+                if set(node) == {"@id"}:
+                    return
+                for value in node.values():
+                    collect_literals(value)
+            elif isinstance(node, list):
+                for item in node:
+                    collect_literals(item)
+            elif isinstance(node, str):
+                literals.add(node)
+
+        collect_literals(graph)
+
+        orcid = re.compile(r"\b\d{4}-\d{4}-\d{4}-\d{3}[\dX]\b")
+        email = re.compile(r"\b[\w.+-]+@[\w-]+\.[\w.-]+\b")
+        doi = re.compile(r"\b10\.\d{4,9}/\S+\b")
+
+        for literal in sorted(literals):
+            for pattern, kind, hard in (
+                (orcid, "ORCID iD", True),
+                (email, "email address", True),
+                (doi, "DOI", False),
+            ):
+                found = pattern.search(literal)
+                if not found:
+                    continue
+                if found.group(0) in visible:
+                    continue
+                message = (
+                    f"JSON-LD asserts the {kind} {found.group(0)} but the page "
+                    "never shows it, so a reader cannot check it"
+                )
+                (fail if hard else warn)(name, message)
+                break
+
+
+# --------------------------------------------------------------------------
+# Repository-wide checks
+# --------------------------------------------------------------------------
+
+
+def collect_site_ids(names: list[str]) -> set[str]:
+    """Every @id defined anywhere in the site, so cross-page references resolve."""
+    found: set[str] = set()
+    for name in names:
+        with open(os.path.join(ROOT, name), encoding="utf-8") as fh:
+            html = fh.read()
+        for block in re.findall(
+            r'<script type="application/ld\+json">(.*?)</script>', html, re.S
+        ):
+            try:
+                graph = json.loads(block).get("@graph", [])
+            except json.JSONDecodeError:
+                continue
+            for node in graph:
+                if isinstance(node, dict) and node.get("@id"):
+                    found.add(node["@id"])
+    return found
+
+
+def check_css() -> None:
+    path = os.path.join(ROOT, "css", "custom.css")
+    with open(path, encoding="utf-8") as fh:
+        css = fh.read()
+
+    stripped = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    if stripped.count("{") != stripped.count("}"):
+        fail("css/custom.css", f"unbalanced braces: {stripped.count('{')} open, {stripped.count('}')} close")
+
+    declared = set(re.findall(r"(?:^|[;{])\s*(--[a-zA-Z0-9-]+)\s*:", stripped, re.M))
+    used = set(re.findall(r"var\(\s*(--[a-zA-Z0-9-]+)", stripped))
+    undefined = sorted(used - declared)
+    if undefined:
+        fail("css/custom.css", f"var() references undeclared custom properties: {', '.join(undefined)}")
+
+    unused = sorted(declared - used)
+    if unused:
+        warn("css/custom.css", f"declared but never used: {', '.join(unused)}")
+
+    for sheet in ("css/custom.css", "css/fonts.css"):
+        with open(os.path.join(ROOT, sheet), encoding="utf-8") as fh:
+            body = fh.read()
+        for url in re.findall(r"url\(\s*['\"]?([^'\")]+)", body):
+            if url.startswith(("data:", "http", "#")):
+                continue
+            target = os.path.normpath(os.path.join(ROOT, os.path.dirname(sheet), url))
+            if not os.path.exists(target):
+                fail(sheet, f"url() target does not exist: {url}")
+
+
+def check_humans() -> None:
+    """humans.txt, per https://humanstxt.org, plus this site's own additions."""
+    path = os.path.join(ROOT, "humans.txt")
+    if not os.path.exists(path):
+        fail("humans.txt", "missing (see https://humanstxt.org)")
+        return
+    with open(path, encoding="utf-8") as fh:
+        text = fh.read()
+    for section in ("/* TEAM */", "/* THANKS */", "/* SITE */", "/* GENERATIVE TOOLS */"):
+        if section not in text:
+            fail("humans.txt", f"missing the {section} section")
+
+
+def check_generated_assets(names: list[str]) -> None:
+    """Every generated image should be reachable from a page or a stylesheet.
+
+    An orphan is not broken, but it is dead weight in the repository and a sign
+    that a reference was renamed or removed without the build being updated.
+    Matching is a plain substring search rather than attribute parsing, because
+    some of these are referenced from meta content and from CSS url().
+    """
+    haystack = ""
+    for name in names:
+        with open(os.path.join(ROOT, name), encoding="utf-8") as fh:
+            haystack += fh.read()
+    for sheet in ("css/custom.css", "css/fonts.css"):
+        with open(os.path.join(ROOT, sheet), encoding="utf-8") as fh:
+            haystack += fh.read()
+    with open(os.path.join(ROOT, "site.webmanifest"), encoding="utf-8") as fh:
+        haystack += fh.read()
+
+    generated = os.path.join(ROOT, "img")
+    for filename in sorted(os.listdir(generated)):
+        if os.path.isdir(os.path.join(generated, filename)):
+            continue  # img/original and img/logos hold sources, not output
+        if filename not in haystack:
+            warn(
+                "img",
+                f"{filename} is generated but nothing references it; "
+                "drop it from tools/build_assets.py or start using it",
+            )
+
+
+def _relative_luminance(hex_colour: str) -> float:
+    def channel(value: int) -> float:
+        v = value / 255
+        return v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4
+
+    h = hex_colour.lstrip("#")
+    r, g, b = (int(h[i:i + 2], 16) for i in (0, 2, 4))
+    return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
+
+
+def contrast(a: str, b: str) -> float:
+    high, low = sorted((_relative_luminance(a), _relative_luminance(b)), reverse=True)
+    return (high + 0.05) / (low + 0.05)
+
+
+def check_contrast_comments() -> None:
+    """Each colour token documents its contrast ratio. Verify the arithmetic.
+
+    A stale ratio is worse than none: it is exactly the number someone will
+    quote in an accessibility statement without re-deriving it. The comment
+    says which background the pair is measured against, so this reads that
+    rather than guessing.
+    """
+    with open(os.path.join(ROOT, "css", "custom.css"), encoding="utf-8") as fh:
+        css = fh.read()
+
+    dark_at = css.index("@media (prefers-color-scheme: dark)")
+    blocks = {"light": css[css.index(":root {"):dark_at], "dark": css[dark_at:dark_at + 2000]}
+
+    for scheme, block in blocks.items():
+        def value(token: str) -> str | None:
+            found = re.search(rf"{re.escape(token)}:\s*(#[0-9a-f]{{6}})", block)
+            return found.group(1) if found else None
+
+        for token, colour, comment in re.findall(
+            r"(--[a-z0-9-]+):\s*(#[0-9a-f]{6});\s*/\*(.*?)\*/", block
+        ):
+            claimed = re.search(r"([0-9]+\.[0-9])\s*:\s*1", comment)
+            if not claimed:
+                continue
+            background = value("--inverse-bg") if "--inverse-bg" in comment else value("--page-paper")
+            if not background:
+                continue
+            actual = contrast(colour, background)
+            if abs(actual - float(claimed.group(1))) >= 0.06:
+                fail(
+                    "css/custom.css",
+                    f"{scheme} {token} is documented at {claimed.group(1)}:1 on "
+                    f"{background} but measures {actual:.2f}:1",
+                )
+            elif actual < 4.5:
+                fail(
+                    "css/custom.css",
+                    f"{scheme} {token} is {actual:.2f}:1 on {background}, below WCAG AA",
+                )
+
+
+def check_design_guide() -> None:
+    """Every colour the design guide quotes must be the one the CSS declares.
+
+    Documentation drifts from code silently, and a palette table that is subtly
+    wrong is worse than no table: someone will copy a value out of it. Only the
+    hex values are checked, because they are the part that is mechanically
+    checkable — the prose still needs a human.
+    """
+    guide_path = os.path.join(ROOT, "docs", "DESIGN-GUIDE.md")
+    if not os.path.exists(guide_path):
+        fail("docs/DESIGN-GUIDE.md", "missing")
+        return
+    with open(guide_path, encoding="utf-8") as fh:
+        guide = fh.read()
+    with open(os.path.join(ROOT, "css", "custom.css"), encoding="utf-8") as fh:
+        css = fh.read()
+
+    # Only the light-scheme block: that is what the guide's table documents.
+    root = css[css.index(":root {"):css.index("@media (prefers-color-scheme: dark)")]
+
+    for token, quoted in re.findall(r"\| `(--[a-z0-9-]+)` \| `(#[0-9a-f]{6})` \|", guide):
+        declared = re.search(rf"{re.escape(token)}:\s*(#[0-9a-f]{{6}})", root)
+        if not declared:
+            fail("docs/DESIGN-GUIDE.md", f"documents {token}, which css/custom.css does not declare")
+        elif declared.group(1) != quoted:
+            fail(
+                "docs/DESIGN-GUIDE.md",
+                f"says {token} is {quoted} but css/custom.css declares {declared.group(1)}",
+            )
+
+
+def check_sitemap(names: list[str]) -> None:
+    path = os.path.join(ROOT, "sitemap.xml")
+    if not os.path.exists(path):
+        fail("sitemap.xml", "missing")
+        return
+    with open(path, encoding="utf-8") as fh:
+        listed = set(re.findall(r"<loc>([^<]+)</loc>", fh.read()))
+    expected = {
+        f"{SITE_ORIGIN}/" if n == "index.html" else f"{SITE_ORIGIN}/{n}" for n in names
+    }
+    for missing in sorted(expected - listed):
+        fail("sitemap.xml", f"does not list {missing} (run: python3 tools/build_assets.py --sitemap)")
+    for extra in sorted(listed - expected):
+        fail("sitemap.xml", f"lists {extra}, which is not a page in this repository")
+
+
+def check_external(names: list[str]) -> None:
+    import urllib.error
+    import urllib.request
+
+    urls: set[str] = set()
+    for name in names:
+        with open(os.path.join(ROOT, name), encoding="utf-8") as fh:
+            html = strip_comments(fh.read())
+        urls |= set(re.findall(r'href="(https?://[^"]+)"', html))
+
+    for url in sorted(urls):
+        # This site's own URLs are checked against the working tree by
+        # check_links. Asking the network about them only reports whether the
+        # last deploy has happened yet, which is not a defect in the source.
+        if url.startswith(SITE_ORIGIN):
+            continue
+
+        clean = url.replace("&amp;", "&")
+
+        def request(method: str) -> int:
+            req = urllib.request.Request(
+                clean,
+                headers={
+                    "User-Agent": (
+                        "Mozilla/5.0 (compatible; via-systems-lab-linkcheck/1.0; "
+                        "+https://viasystemslab.github.io/)"
+                    )
+                },
+                method=method,
+            )
+            with urllib.request.urlopen(req, timeout=25) as response:
+                return response.status
+
+        try:
+            code = request("HEAD")
+            # Plenty of servers refuse HEAD but serve the page perfectly well.
+            if code >= 400:
+                code = request("GET")
+        except urllib.error.HTTPError as exc:
+            if exc.code in (403, 405, 501, 503):
+                try:
+                    code = request("GET")
+                except Exception:
+                    code = exc.code
+            else:
+                code = exc.code
+        except Exception as exc:  # network trouble is not a content defect
+            warn("external", f"{url} could not be checked: {exc}")
+            continue
+
+        # 403, 429 and 503 mean "this server will not answer a script", not
+        # "this link is broken" — several university and publisher sites refuse
+        # any non-browser request. Report them, but do not fail a build over a
+        # link that works perfectly well for a reader.
+        if code in (403, 429, 503):
+            warn("external", f"{url} refused an automated request (HTTP {code}); check it by hand")
+        elif code >= 400:
+            fail("external", f"{url} returned HTTP {code}")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--external",
+        action="store_true",
+        help="also resolve every outbound URL (needs network access)",
+    )
+    args = parser.parse_args()
+
+    names = pages()
+    all_ids = {name: page_ids(name) for name in names}
+    site_ids = collect_site_ids(names)
+
+    for name in names:
+        with open(os.path.join(ROOT, name), encoding="utf-8") as fh:
+            raw = fh.read()
+        html = strip_comments(raw)
+        check_head(name, html)
+        check_structure(name, html)
+        check_links(name, html, all_ids)
+        check_jsonld(name, raw, site_ids)
+
+    check_css()
+    check_humans()
+    check_contrast_comments()
+    check_design_guide()
+    check_generated_assets(names)
+    check_sitemap(names)
+    if args.external:
+        check_external(names)
+
+    print(f"checked {len(names)} page(s): {', '.join(names)}")
+    for message in warnings:
+        print(f"  warning  {message}")
+    for message in errors:
+        print(f"  ERROR    {message}")
+    if errors:
+        print(f"\n{len(errors)} error(s)")
+        return 1
+    print(f"\nno errors ({len(warnings)} warning(s))")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

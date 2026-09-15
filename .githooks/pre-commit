@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# Static checks before a commit is created.
+#
+# Enable once per clone:
+#     git config core.hooksPath .githooks
+#
+# The checks run against the working tree, not against the staged snapshot.
+# For a site with no build step that is the useful behaviour: it catches a
+# broken link or a missing asset while you can still see what you were doing.
+# If you are committing a subset of your changes on purpose and the hook
+# complains about the part you did not stage, use --no-verify knowingly.
+
+set -e
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "pre-commit: python3 not found, skipping static checks" >&2
+    exit 0
+fi
+
+echo "pre-commit: running static checks"
+python3 tools/lint.py
+
+# Derived images and icons are generated, never edited by hand. This catches
+# the case where the artwork in img/original/ changed but nothing was rebuilt.
+if [ -f assets.lock.json ]; then
+    python3 tools/build_assets.py --check
+fi

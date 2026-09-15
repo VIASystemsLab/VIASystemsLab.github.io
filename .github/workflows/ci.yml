@@ -1,0 +1,77 @@
+name: CI
+
+# The site has no build step, so CI is entirely about validation: the markup
+# has to parse, the links have to resolve, the metadata has to agree with the
+# page, and the committed images have to match the artwork they came from.
+#
+# Deployment is not here on purpose. This repository is an organisation GitHub
+# Pages site served straight from the default branch; publishing is the
+# repository's own setting, not a workflow.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Mondays, 06:17 UTC. Only the outbound link check runs on this trigger:
+    # external links rot without anyone touching the repository.
+    - cron: "17 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Structure, links and metadata
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run the site linter
+        run: python3 tools/lint.py
+
+  markup:
+    name: HTML validity (Nu Html Checker)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Fetch the validator and verify its checksum
+        run: |
+          base=https://github.com/validator/validator/releases/download/latest
+          curl -sSLo vnu.jar "$base/vnu.jar"
+          curl -sSLo vnu.jar.sha1 "$base/vnu.jar.sha1"
+          sha1sum -c vnu.jar.sha1
+      - name: Validate every published page
+        # via.html is the superseded first draft and is not part of the site.
+        run: java -jar vnu.jar --errors-only index.html projects.html publications.html
+
+  assets:
+    name: Derived assets are current
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify the artifacts match their sources
+        # No image tools are installed here: --check only compares hashes of
+        # the sources in img/original against assets.lock.json.
+        run: python3 tools/build_assets.py --check
+
+  links:
+    name: Outbound links still resolve
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Resolve every outbound URL
+        run: python3 tools/lint.py --external

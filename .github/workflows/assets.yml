@@ -1,0 +1,59 @@
+name: Assets
+
+# Every image the site serves is derived from the artwork in img/original and
+# from icons/favicon.svg. When one of those sources changes, the derivatives
+# are rebuilt here and committed back, so nobody has to remember to run the
+# build script and nobody has to install cwebp to change a logo.
+#
+# The push below is made with GITHUB_TOKEN, and GitHub does not start new
+# workflow runs for commits pushed with that token, so this cannot loop.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "img/original/**"
+      - "icons/favicon.svg"
+      - "tools/build_assets.py"
+
+permissions:
+  contents: write
+
+concurrency:
+  # A second push while a rebuild is in flight would race on the same commit.
+  group: assets-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    name: Rebuild derived images and icons
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the image tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends webp librsvg2-bin imagemagick
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Rebuild every derived asset
+        run: python3 tools/build_assets.py
+
+      - name: Commit the result if anything changed
+        run: |
+          if git diff --quiet; then
+            echo "Derived assets were already current; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add img icons sitemap.xml assets.lock.json
+          git commit -m "build(assets): regenerate derived images and icons [BOT]"
+          git push
+
+      - name: Re-run the linter against the rebuilt site
+        run: python3 tools/lint.py
