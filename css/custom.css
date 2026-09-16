@@ -77,7 +77,11 @@
      to a lighter oxblood over --inverse-bg. It was a literal teal from the
      palette before this one, which no longer belongs anywhere on the page. */
   --inverse-bloom:  color-mix(in srgb, var(--signal) 42%, transparent);
-  --graph-ink:      #bcc7c4;  /* the node figure on a band (decorative) */
+  /* The node figure on a band, decorative and never text. Derived rather
+     than picked, so the page has one cool hue: the signal cyan, halved into
+     the soft cream. That lands on #9bc6c7, 7.4:1 on the band, which is where
+     the figure was tuned to sit. */
+  --graph-ink:      color-mix(in srgb, var(--inverse-signal) 50%, var(--inverse-soft));
 
   /* Typography -------------------------------------------------------- */
   --font-text:  'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -137,6 +141,14 @@
      first line. */
   --hero-overhang: 0rem;
   --hero-reserve:  max(0rem, var(--hero-overhang) + 2rem - var(--section-pad));
+
+  /* Texture ------------------------------------------------------------ */
+
+  /* Grain for the dark bands: fractal noise, desaturated, laid on at 6%%.
+     It gives the band a tooth instead of a flat field, and being grey it
+     carries no colour of its own, so it survives a palette change. The tile
+     stitches, so nothing seams where it repeats. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='0.06'/%3E%3C/svg%3E");
 
   /* Icons -------------------------------------------------------------- */
   --icon-ext: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6 2h8v8h-2V5.4L4.4 13 3 11.6 10.6 4H6z'/%3E%3C/svg%3E");
@@ -637,11 +649,9 @@ input, select, textarea, button { font-family: inherit; }
   inset: 0;
   z-index: -1;
   background-color: var(--inverse-bg);
-  /* The dots are a data URI, which cannot read a custom property, so the
-     %23f4eadf in it is a copy of --inverse-text. Change one, change both. */
   background-image:
     radial-gradient(120% 90% at 78% 10%, var(--inverse-bloom), transparent 62%),
-    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f4eadf' fill-opacity='0.055' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='2.5'/%3E%3Ccircle cx='23' cy='23' r='1.6'/%3E%3C/g%3E%3C/svg%3E");
+    var(--grain);
   /* Two knobs, doing two different things. --skew tilts the bottom edge: it
      is how much higher the right end finishes than the left. --band-lift
      raises both ends together, and defaults to 0, which leaves the left end
@@ -860,6 +870,10 @@ input, select, textarea, button { font-family: inherit; }
 .section__title {
   font-size: var(--step-4);
   letter-spacing: -0.01em;
+  /* The one cool colour the page has, on the one heading level that marks
+     its structure. 5.5:1 on paper and 4.8:1 on travertine, both well past
+     what this size needs. */
+  color: var(--accent-2);
   margin-bottom: 0.6rem;
 }
 
@@ -928,11 +942,12 @@ input, select, textarea, button { font-family: inherit; }
    8. About: prose, glossary, pull quote
    ===================================================================== */
 
-/* Prose is capped at a measure. Its unit is wide on purpose, so that the
-   block fills its row rather than sitting in half of it, but a unit is a
-   column width and a measure is a line length, and past about 80 characters
-   the eye loses the start of the next line. */
-.prose { max-width: var(--measure); }
+/* The measure cap is on .main-prose, the body of a page that is mostly text.
+   A unit is a column width and a measure is a line length, and past about 80
+   characters the eye loses the start of the next line. Prose that shares its
+   row with other blocks is not capped: it is already as wide as its unit lets
+   it be, and capping it too leaves it sitting in half of its column. */
+.main-prose { max-width: var(--measure); }
 
 /* The indent belongs to the narrow unit this element takes at the large
    breakpoint. Below that it is a full-width or near-full-width unit, and a
@@ -1569,7 +1584,7 @@ input, select, textarea, button { font-family: inherit; }
 .pagehead::before {
   background-image:
     radial-gradient(120% 120% at 85% 0%, var(--inverse-bloom), transparent 62%),
-    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f4eadf' fill-opacity='0.055' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='2.5'/%3E%3Ccircle cx='23' cy='23' r='1.6'/%3E%3C/g%3E%3C/svg%3E");
+    var(--grain);
 }
 
 .pagehead .shell { position: relative; z-index: 1; }
