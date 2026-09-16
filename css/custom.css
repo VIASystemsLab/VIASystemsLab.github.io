@@ -178,13 +178,25 @@
     --hero-overlap:   0px;
     --hero-band-lift: clamp(7rem, 38vw, 11rem);
   }
+
+  /* The lift leaves a strip of hero below the diagonal. It was showing the
+     page surface, a lighter tone than the travertine section that starts
+     immediately under it, so the emblem's lower half sat on a pale band
+     between two darker ones. Travertine here runs the two together.
+
+     This is a background on .hero, which paints before its own ::before:
+     inside a stacking context the element's background comes first and
+     negative z-index children after it, so the band still covers this. It
+     stays below the md breakpoint because from there the overlap returns,
+     and what shows through the diagonal is meant to be the section itself. */
+  .hero { background: var(--field); }
 }
 
 /* The emblem overhangs only once there is room for it beside the text. */
 @media screen and (min-width: 64em) {
   :root {
     --hero-overhang: clamp(3.5rem, 11vw, 12rem);
-    --hero-reserve:  clamp(0rem, 3vw, 3.5rem);
+    --hero-reserve:  clamp(0rem, 1.5vw, 2rem);
   }
 }
 
