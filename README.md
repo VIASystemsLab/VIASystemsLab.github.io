@@ -183,10 +183,16 @@ The tag classes are:
 
 ```
 tag--journal  tag--conference  tag--workshop  tag--demo  tag--poster
-tag--dataset  tag--software                 (project outputs)
 tag--armada   tag--datagems                 (funding project)
 tag--venue                                  (venue label)
+tag--dataset  tag--software                 (data or code the paper carries)
 ```
+
+The last two are links, not labels, and they sit in their own
+`<p class="pub__artifacts">` row rather than in `pub__tags`. That row says what
+the entry *is*, and a **Data** tag beside **Conference** reads as an answer to
+that question instead of a pointer. They are optional; most entries have
+neither.
 
 Types are distinguished by border style as well as by colour, so they still
 read in greyscale and to a colour-blind reader. Keep that property if you add a

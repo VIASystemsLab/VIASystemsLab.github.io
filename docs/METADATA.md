@@ -268,10 +268,29 @@ Every date, grant number and figure comes from the project's CORDIS record.
    ```
 
 3. Reference it from the page's `CollectionPage` via `mainEntity`.
+4. **Optionally**, point at the data or the code behind it. Add `isBasedOn` to
+   the article and a node for each artefact: a `Dataset`, or a
+   `SoftwareSourceCode` with `codeRepository`. Add the matching
+   `<p class="pub__artifacts">` row to the visible entry, so the page shows
+   what the graph claims.
 
-Use `Dataset` for data and `SoftwareSourceCode` (with `codeRepository`) for
-tools. `funding` is what links an output back to the grant that paid for it —
-it is the property EU reporting cares about, so do not omit it.
+Neither artefact is an entry in its own right. This page lists peer-reviewed
+publications, and a dataset is not peer reviewed; it hangs off the paper it
+belongs to. Where a project publishes data or code wholesale rather than
+alongside a paper, that lives in the project's own repository and the project
+record on `projects.html` links it.
+
+`isBasedOn` is a compromise. schema.org has no precise "is supplemented by"
+relation, so it is the closest core property for material the work rests on.
+Where the exact [DataCite relation](https://datacite-metadata-schema.readthedocs.io/en/4.6/appendices/appendix-1/relationType/)
+matters, `dcterms` is listed in §3 as available and gets declared on the page
+the first time a term from it is used.
+
+A dataset with a DOI uses that DOI as its `@id`, which is what makes it
+citable. **A repository URL is not a persistent identifier.** It will rot, so
+reach for it only where there is nothing better: archive a release, get a DOI,
+use that. `funding` goes on both. It is what links an output back to the grant
+that paid for it, which is the property EU reporting reads, so do not omit it.
 
 ---
 

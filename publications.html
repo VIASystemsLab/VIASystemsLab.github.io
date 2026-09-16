@@ -206,15 +206,57 @@
     "name": "Verified title",
     "author": [ { "@id": "https://orcid.org/0000-0001-7922-5998" } ],
     "datePublished": "2026",
-    "publication": { "@type": "PublicationEvent", "name": "EDBT 2026" },
-    "identifier": "https://doi.org/10.0000/xxxxx",
+    "isPartOf": { "@type": "PublicationEvent", "name": "EDBT 2026" },
+    "identifier": "10.0000/xxxxx",
     "url": "https://doi.org/10.0000/xxxxx",
     "funding": { "@id": "https://cordis.europa.eu/project/id/101168951" },
     "creativeWorkStatus": "Published"
   }
 
-  Use "Dataset" for data and "SoftwareSourceCode" for tools and repositories,
-  with "codeRepository" pointing at the GitHub URL.
+  Data and code behind a paper, optionally
+  ---------------------------------------
+  A paper may point at the dataset or the repository behind it. Neither is an
+  entry in its own right: this page lists peer-reviewed papers, and an
+  artefact hangs off the paper it belongs to. Add "isBasedOn" to the article
+  and a node for each artefact.
+
+  schema.org has no precise "is supplemented by" relation, so "isBasedOn" is
+  the closest core property for material the work rests on. Where the exact
+  DataCite relation matters, dcterms is documented in docs/METADATA.md as
+  available and gets declared on this page the first time it is used.
+
+    "isBasedOn": [
+      { "@id": "https://doi.org/10.0000/data" },
+      { "@id": "https://github.com/org/repo" }
+    ]
+
+  {
+    "@id": "https://doi.org/10.0000/data",
+    "@type": "Dataset",
+    "name": "Verified dataset title",
+    "creator": [ { "@id": "https://orcid.org/0000-0001-7922-5998" } ],
+    "datePublished": "2026",
+    "identifier": "10.0000/data",
+    "url": "https://doi.org/10.0000/data",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "funding": { "@id": "https://cordis.europa.eu/project/id/101168951" }
+  }
+
+  {
+    "@id": "https://github.com/org/repo",
+    "@type": "SoftwareSourceCode",
+    "name": "Name of the tool",
+    "codeRepository": "https://github.com/org/repo",
+    "programmingLanguage": "Python",
+    "license": "https://opensource.org/license/mit",
+    "funding": { "@id": "https://cordis.europa.eu/project/id/101168951" }
+  }
+
+  A dataset with a DOI uses that DOI as its @id, which is what makes it
+  citable. A repository URL is not a persistent identifier and will rot, so
+  reach for it only when there is nothing better: archive a release, get a
+  DOI, use that instead. Keep "funding" on both. It is what ties an output
+  back to the grant that paid for it, and it is what EU reporting reads.
 -->
 </head>
 
@@ -295,6 +337,11 @@
           <span class="tag tag--armada">ARMADA</span>
           <span class="tag tag--datagems">DataGEMS</span>
         </p>
+        <p class="legend__row">
+          <span class="legend__label">Carries</span>
+          <span class="tag tag--dataset">Data</span>
+          <span class="tag tag--software">Code</span>
+        </p>
       </div>
 
       <div class="pubgroup pure-u-1 pure-u-md-11-12 pure-u-lg-3-4">
@@ -352,6 +399,12 @@
         that funded it. A vision paper at a conference is tagged Conference and
         filed under Vision; the two are not the same axis.
 
+        A paper that has a dataset or a repository of its own gets a second
+        row, <p class="pub__artifacts">, holding one tag-shaped link each. It
+        is optional and most entries will not have it. Keep it out of
+        pub__tags: that row says what the entry is, and DATA beside CONFERENCE
+        reads as an answer to that question instead of a pointer.
+
         Add the matching ScholarlyArticle to the JSON-LD graph, with the DOI as
         @id and a funding reference to the project. See docs/METADATA.md.
 
@@ -367,6 +420,10 @@
             <span class="pub__venue">Proceedings of the VLDB Endowment</span>,
             <time datetime="2026">2026</time>.
             <a class="link-ext" href="https://doi.org/10.0000/xxxxx">doi:10.0000/xxxxx</a>
+          </p>
+          <p class="pub__artifacts">
+            <a class="tag tag--dataset" href="https://doi.org/10.0000/data">Data</a>
+            <a class="tag tag--software" href="https://github.com/org/repo">Code</a>
           </p>
         </li>
       -->

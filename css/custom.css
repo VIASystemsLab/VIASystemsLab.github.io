@@ -1376,6 +1376,37 @@ input, select, textarea, button { font-family: inherit; }
   max-width: 62ch;
 }
 
+/*
+ * Optional pointers to the data and the code behind a paper.
+ *
+ * Its own row, not .pub__tags. Those tags answer what the entry *is*: a
+ * conference paper, at EDBT, funded by ARMADA. "Carries data" is a different
+ * question, and a DATA tag sitting next to CONFERENCE would read as an answer
+ * to the first one, which is the axis confusion the README warns about for
+ * groups and tags.
+ *
+ * Tag-shaped links rather than plain ones, because the thing a reader wants is
+ * to scan a column of entries for the ones with code. A tag can be scanned; a
+ * sentence has to be read.
+ */
+.pub__artifacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.6rem;
+  margin-top: 0.55rem;
+}
+
+/* A tag that is also a link keeps the tag's own colour: the modifier class
+   outranks the `a` element selector, so only the underline has to go. The
+   border already marks it as a target. */
+a.tag { text-decoration: none; }
+
+a.tag:hover,
+a.tag:focus-visible {
+  color: var(--ink);
+  border-color: currentColor;
+}
+
 
 
 /*
