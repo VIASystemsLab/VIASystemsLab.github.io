@@ -26,7 +26,7 @@
 
 /* SITE */
 
-	Last update: 2026/09/15
+	Last update: 2026/09/16
 	Language: English
 	Doctype: HTML5
 	Standards: HTML5, CSS3, JSON-LD 1.1, RDFa 1.1, Schema.org,
@@ -74,6 +74,6 @@
 
 	Not covered by any of the above
 	The University of Verona lockup, the emblem of the European Union and the
-	ARMADA project logo are the marks of their owners, reproduced as supplied
-	to acknowledge affiliation and funding. They were not generated, redrawn
-	or recoloured here. See img/logos/README.md.
+	ARMADA and DataGEMS project logos are the marks of their owners, reproduced
+	as supplied to acknowledge affiliation and funding. They were not
+	generated, redrawn or recoloured here. See img/logos/README.md.

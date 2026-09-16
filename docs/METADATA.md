@@ -281,10 +281,10 @@ If you add an image, declare its source type. If you replace the emblem with
 something drawn by a person, change the value — do not leave the old one.
 
 **The third-party marks are excluded from all of this.** The University of
-Verona lockup, the EU emblem and the ARMADA logo were supplied by their owners
-and are reproduced unaltered. They carry no `digitalSourceType`, and the
-provenance note is worded so it cannot be read as covering them. See
-`img/logos/README.md`.
+Verona lockup, the EU emblem and the ARMADA and DataGEMS logos were supplied
+by their owners and are reproduced unaltered. They carry no
+`digitalSourceType`, and the provenance note is worded so it cannot be read as
+covering them. See `img/logos/README.md`.
 
 The code has its own acknowledgement: `creditText` on the `SoftwareSourceCode`
 node, the `/* GENERATIVE TOOLS */` section of `humans.txt`, and a `[BOT]`

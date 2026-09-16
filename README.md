@@ -34,7 +34,7 @@ python3 tools/lint.py
 | `index.html` | The homepage, in navigation order: hero, about, research themes, project highlights, people, footer. |
 | `projects.html` | Every project, in full. The homepage carries highlights only. |
 | `publications.html` | Every peer-reviewed paper, grouped by the kind of contribution. Data and software are published with the project that produced them, not listed here. |
-| `ai-statement.html` | The lab's statement on AI and scientific research: principles, example guidelines, and the sources it adapts, including how the document itself was written. Linked from About, from the publications practice section and from the open-practice notes. |
+| `ai-statement.html` | The lab's statement on AI and scientific research: principles, example guidelines, and the sources it adapts, including how the document itself was written. Linked from the About section, from the open-science pledge on the publications page, and from the footer of every page. |
 | `img/original/` | The lab's master artwork. Edited by hand. |
 | `img/logos/` | Third-party marks — the university, the EU emblem, partner projects. Reproduced as supplied: read [`img/logos/README.md`](img/logos/README.md) before touching them. |
 
@@ -104,11 +104,21 @@ tint one.** Tying a colour to a named piece of content is what once left a
 mismatched wedge under the hero when the sections were reordered; the linter now
 rejects those modifiers.
 
-For the same reason, a panel that sits *inside* a section — the project rail,
-the "working with the lab" box — is tinted with
-`color-mix(in srgb, var(--ink) 5%, transparent)` rather than filled with
-`var(--paper)` or `var(--field)`. It then reads correctly whichever surface it
-lands on, in either colour scheme.
+For the same reason, a panel that sits *inside* a section never names a surface
+in its own rule. Two treatments are sanctioned, and the choice is how much the
+panel has to separate from the page:
+
+- **Tint what it lands on** — `color-mix(in srgb, var(--ink) 5%, transparent)`,
+  as `.project__rail` does. Enough for a subordinate column inside a record.
+- **Swap to the opposite surface** — `.note` reads `var(--note-bg)`, which is
+  re-pointed inside `.section:nth-of-type(even)` next to the section tint. A
+  block set aside from the argument of its section has to read as a distinct
+  panel, and a 5% wash does not carry that.
+
+Both are positional: the value is set by the same selector that tints the
+section, so moving a section re-surfaces its panels. What is forbidden is
+`var(--paper)` or `var(--field)` in a component rule, which has to be kept in
+step by hand.
 
 ### Adding a section
 
@@ -117,7 +127,7 @@ lands on, in either colour scheme.
 2. Put a `<div class="shell pure-g">` inside it.
 3. Give each child a `pure-u-*` class for each breakpoint you care about.
 4. If it should be reachable from the menu, add it to the navigation in **all
-   three** pages, in the same order everywhere, and keep the page's own section
+   four** pages, in the same order everywhere, and keep the page's own section
    order matching that navigation.
 
 ## Editing content
@@ -250,8 +260,9 @@ what stops a reader downloading `latin-ext` they will never see.
 
 ## Images and icons
 
-Everything in `img/` except `img/original/`, and every PNG in `icons/`, is
-generated. After changing the artwork or `icons/favicon.svg`:
+Everything in `img/` except `img/original/` and `img/logos/`, and every PNG
+in `icons/`, is generated. After changing the artwork, a partner logo or
+`icons/favicon.svg`:
 
 ```sh
 python3 tools/build_assets.py
@@ -387,8 +398,8 @@ page, in `humans.txt`, and in the page metadata.
 - **The content** — research descriptions, project summaries, publication
   records — is written and verified by people.
 - **Third-party marks are not covered by any of that.** The University of
-  Verona lockup, the EU emblem and the ARMADA logo belong to their owners and
-  are reproduced as supplied. If you touch them, read
+  Verona lockup, the EU emblem and the ARMADA and DataGEMS logos belong to
+  their owners and are reproduced as supplied. If you touch them, read
   [`img/logos/README.md`](img/logos/README.md) first: the EU emblem in
   particular must keep its own blue field and its 3:2 proportions, and must
   never be inverted or tinted.

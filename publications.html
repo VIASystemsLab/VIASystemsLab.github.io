@@ -331,7 +331,8 @@
         This page lists peer-reviewed publications that have a resolving DOI.
         Nothing else goes here: no preprints, no work in preparation, no entry
         whose DOI is still to come. Data and software are published with the
-        project that produced them, and are listed on projects.html.
+        project that produced them; each project record on projects.html links
+        the repository that holds them.
 
         Resolve the DOI first and check the title, authors, year and venue
         against what it resolves to. tools/lint.py fails the build if an entry
@@ -462,8 +463,8 @@
     </div>
 
     <div class="footer__marks pure-u-1">
-      <!-- The footer band is dark in both colour schemes, so the white cut is
-           always the right one and there is nothing to switch on. -->
+      <!-- The footer band is dark, so the white cut is the right one and
+           there is nothing to switch on. -->
       <picture class="footer__plaque">
         <source type="image/webp" srcset="img/via-logo-horizontal-w-280.webp 280w, img/via-logo-horizontal-w-560.webp 560w" sizes="11rem">
         <img src="img/via-logo-horizontal-w-280.png"

@@ -394,15 +394,18 @@
         instance, is an unrelated personal account; the real one is
         github.com/datagems-eosc.
 
-        Status tags available: tag--active tag--maintained tag--archived
-        tag--experimental tag--completed
+        The only status tag styled is tag--active. A new status needs its own
+        rule in css/custom.css, and has to differ by border style as well as by
+        colour so that it still reads in greyscale.
 
         If the project supplies a logo, put the source in img/logos/, add it to
         PARTNER_LOGOS in tools/build_assets.py, rebuild, and add a
-        <p class="project__logo"> block like ARMADA's. A flat monochrome cut
-        works in both colour schemes, because .project__logo inverts it. A
-        full-colour mark does not: give it its own rule rather than letting the
-        invert mangle its colours. A project without a supplied logo has none.
+        <p class="project__logo"> block like ARMADA's. The projects supply
+        white cuts and the page is always light, so .project__logo inverts
+        them, which is the one adjustment a flat monochrome mark allows. A
+        full-colour mark does not survive that: give it its own rule rather
+        than letting the invert mangle its colours. A project without a
+        supplied logo has none.
       -->
     </div>
   </section>
@@ -485,8 +488,8 @@
     </div>
 
     <div class="footer__marks pure-u-1">
-      <!-- The footer band is dark in both colour schemes, so the white cut is
-           always the right one and there is nothing to switch on. -->
+      <!-- The footer band is dark, so the white cut is the right one and
+           there is nothing to switch on. -->
       <picture class="footer__plaque">
         <source type="image/webp" srcset="img/via-logo-horizontal-w-280.webp 280w, img/via-logo-horizontal-w-560.webp 560w" sizes="11rem">
         <img src="img/via-logo-horizontal-w-280.png"
