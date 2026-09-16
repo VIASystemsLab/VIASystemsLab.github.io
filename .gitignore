@@ -5,3 +5,6 @@
 CLAUDE.md
 .claude
 .temp
+
+# Per-person commit identity; see .gitidentity.example
+.gitidentity

@@ -62,6 +62,7 @@ python3 tools/lint.py
 | `tools/build_assets.py` | Regenerates every derived image, icon and the sitemap. |
 | `assets.lock.json` | Hashes of the artwork the generated files came from. CI compares against it. |
 | `.githooks/` | Optional pre-commit and commit-msg hooks. |
+| `.gitidentity.example` | Template for the per-person commit identity and signing key. |
 | `.github/workflows/` | CI validation, and the job that rebuilds derived images when artwork changes. |
 
 ## Layout
@@ -294,6 +295,34 @@ to check the commit message format:
 ```sh
 git config core.hooksPath .githooks
 ```
+
+### Commit identity
+
+Entries in the history are attributed explicitly and signed, rather than
+picking up whatever global git identity happens to be configured on the
+machine. Set yours up once per clone:
+
+```sh
+cp .gitidentity.example .gitidentity
+$EDITOR .gitidentity                              # your name, address, key id
+git config --local include.path ../.gitidentity
+```
+
+`.gitidentity` is a git config file that `.git/config` includes, so git reads
+it natively — there is no script in between. It is gitignored, because it is a
+per-person setting: cloning the repository must not hand you somebody else's
+address or signing key.
+
+Check that it took:
+
+```sh
+git config --get user.email
+git log -1 --show-signature
+```
+
+A signed entry reports `Good signature`. If signing fails, fix it rather than
+going ahead unsigned — a misattributed or unsigned entry cannot be corrected
+without rewriting history.
 
 Commit messages follow `<type>(<scope>): <subject>`, imperative, lowercase,
 no trailing full stop, 72 characters or fewer:
