@@ -4,13 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>VIA Systems Lab — Verona Intelligent Analytics Systems</title>
+<title>VIA Systems Lab · Verona Intelligent Analytics Systems</title>
 <meta name="description" content="VIA Systems Lab (Verona Intelligent Analytics Systems) is a research lab at the University of Verona working on reliable, validated and interactive access to complex information spaces.">
 <link rel="canonical" href="https://viasystemslab.github.io/">
 
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#f7f3eb" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#131e23" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f6f1e8">
 
 <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
@@ -31,7 +30,7 @@
 <meta property="og:site_name" content="VIA Systems Lab">
 <meta property="og:locale" content="en_GB">
 <meta property="og:url" content="https://viasystemslab.github.io/">
-<meta property="og:title" content="VIA Systems Lab — Verona Intelligent Analytics Systems">
+<meta property="og:title" content="VIA Systems Lab · Verona Intelligent Analytics Systems">
 <meta property="og:description" content="A research lab at the University of Verona working on reliable, validated and interactive access to complex information spaces.">
 <meta property="og:image" content="https://viasystemslab.github.io/img/og-card.png">
 <meta property="og:image:width" content="1200">
@@ -289,11 +288,11 @@
       "@type": "ImageObject",
       "name": "VIA Systems Lab emblem",
       "description": "A Roman arch framing a paved via that leads towards the Verona Arena, with the joints between the paving stones drawn as the edges of a data graph.",
-      "contentUrl": "https://viasystemslab.github.io/img/via-logo-pictorial-1080.webp",
-      "thumbnailUrl": "https://viasystemslab.github.io/img/via-logo-pictorial-480.webp",
+      "contentUrl": "https://viasystemslab.github.io/img/via-logo-pictorial-w-1080.webp",
+      "thumbnailUrl": "https://viasystemslab.github.io/img/via-logo-pictorial-w-480.webp",
       "encodingFormat": "image/webp",
-      "width": 1039,
-      "height": 1080,
+      "width": 1080,
+      "height": 997,
       "creator": {
         "@id": "https://viasystemslab.github.io/#organization"
       },
@@ -335,8 +334,6 @@
   <div class="masthead__inner">
     <a class="wordmark" href="#top">
       <picture>
-        <source media="(prefers-color-scheme: dark)" type="image/webp" srcset="img/via-logo-circle-w-240.webp">
-        <source media="(prefers-color-scheme: dark)" srcset="img/via-logo-circle-w-240.png">
         <source type="image/webp" srcset="img/via-logo-circle-b-240.webp">
         <img class="wordmark__seal" src="img/via-logo-circle-b-240.png" width="240" height="240" alt="" decoding="async">
       </picture>
@@ -363,6 +360,18 @@
 
   <!-- ============================== Hero ============================== -->
   <section class="hero" aria-labelledby="hero-title">
+      <!--
+        The lab's node-and-link figure. Geometry only: every colour, weight and
+        opacity is in css/custom.css under .graph, so this can be retuned or
+        reused on another band without touching markup.
+      -->
+      <div class="graph hero__graph" aria-hidden="true">
+        <svg viewBox="0 0 900 380" preserveAspectRatio="xMaxYMid slice" focusable="false">
+          <path class="graph__edges" d="M118 292L206 208 M206 208L298 322 M206 208L352 138 M352 138L447 243 M447 243L298 322 M447 243L563 330 M352 138L515 96 M515 96L408 44 M408 44L246 58 M246 58L206 208 M447 243L596 246 M596 246L638 186 M638 186L515 96 M638 186L771 121 M771 121L874 64 M638 186L740 200 M740 200L702 288 M702 288L563 330 M771 121L828 232 M828 232L702 288 M740 200L828 232 M828 232L862 320 M862 320L798 300 M798 300L702 288 M515 96L690 58 M690 58L771 121 M828 232L900 160 M900 160L874 64 M563 330L500 350 M500 350L660 348 M660 348L702 288 M408 44L330 8 M330 8L246 58 M690 58L612 14 M612 14L515 96 M874 64L806 6 M806 6L690 58 M500 350L392 374 M392 374L298 322 M660 348L716 376 M716 376L798 300 M862 320L884 366 M884 366L716 376 M298 322L236 368 M236 368L500 350 M206 208L166 140 M166 140L352 138 M272 240L298 322 M272 240L206 208 M470 120L515 96 M470 120L352 138 M540 200L447 243 M540 200L638 186 M610 300L660 348 M610 300L596 246 M760 340L798 300 M760 340L702 288 M840 140L771 121 M840 140L828 232 M118 292L236 368 M246 58L330 8 M596 246L500 350 M900 160L862 320 M612 14L638 186 M884 366L900 160"/>
+          <g class="graph__halo"><circle cx="118" cy="292" r="6.66"/><circle cx="206" cy="208" r="4.91"/><circle cx="298" cy="322" r="7.83"/><circle cx="352" cy="138" r="5.38"/><circle cx="447" cy="243" r="8.65"/><circle cx="515" cy="96" r="4.91"/><circle cx="563" cy="330" r="5.61"/><circle cx="638" cy="186" r="7.25"/><circle cx="702" cy="288" r="5.14"/><circle cx="771" cy="121" r="6.31"/><circle cx="828" cy="232" r="4.91"/><circle cx="874" cy="64" r="5.61"/><circle cx="246" cy="58" r="4.44"/><circle cx="408" cy="44" r="4.91"/><circle cx="596" cy="246" r="4.44"/><circle cx="740" cy="200" r="4.21"/><circle cx="862" cy="320" r="6.08"/><circle cx="690" cy="58" r="4.68"/><circle cx="798" cy="300" r="4.44"/><circle cx="900" cy="160" r="5.14"/><circle cx="500" cy="350" r="4.68"/><circle cx="660" cy="348" r="4.91"/><circle cx="330" cy="8" r="5.38"/><circle cx="612" cy="14" r="4.44"/><circle cx="806" cy="6" r="4.91"/><circle cx="392" cy="374" r="5.14"/><circle cx="716" cy="376" r="4.68"/><circle cx="884" cy="366" r="5.38"/><circle cx="236" cy="368" r="4.44"/><circle cx="166" cy="140" r="4.68"/><circle cx="272" cy="240" r="5.14"/><circle cx="470" cy="120" r="4.44"/><circle cx="540" cy="200" r="5.38"/><circle cx="610" cy="300" r="4.21"/><circle cx="760" cy="340" r="4.91"/><circle cx="840" cy="140" r="4.44"/></g>
+          <g class="graph__nodes"><circle cx="118" cy="292" r="5.26"/><circle cx="206" cy="208" r="3.51"/><circle cx="298" cy="322" r="6.43"/><circle cx="352" cy="138" r="3.98"/><circle cx="447" cy="243" r="7.25"/><circle cx="515" cy="96" r="3.51"/><circle cx="563" cy="330" r="4.21"/><circle cx="638" cy="186" r="5.85"/><circle cx="702" cy="288" r="3.74"/><circle cx="771" cy="121" r="4.91"/><circle cx="828" cy="232" r="3.51"/><circle cx="874" cy="64" r="4.21"/><circle cx="246" cy="58" r="3.04"/><circle cx="408" cy="44" r="3.51"/><circle cx="596" cy="246" r="3.04"/><circle cx="740" cy="200" r="2.81"/><circle cx="862" cy="320" r="4.68"/><circle cx="690" cy="58" r="3.28"/><circle cx="798" cy="300" r="3.04"/><circle cx="900" cy="160" r="3.74"/><circle cx="500" cy="350" r="3.28"/><circle cx="660" cy="348" r="3.51"/><circle cx="330" cy="8" r="3.98"/><circle cx="612" cy="14" r="3.04"/><circle cx="806" cy="6" r="3.51"/><circle cx="392" cy="374" r="3.74"/><circle cx="716" cy="376" r="3.28"/><circle cx="884" cy="366" r="3.98"/><circle cx="236" cy="368" r="3.04"/><circle cx="166" cy="140" r="3.28"/><circle cx="272" cy="240" r="3.74"/><circle cx="470" cy="120" r="3.04"/><circle cx="540" cy="200" r="3.98"/><circle cx="610" cy="300" r="2.81"/><circle cx="760" cy="340" r="3.51"/><circle cx="840" cy="140" r="3.04"/></g>
+        </svg>
+      </div>
     <div class="hero__grid shell pure-g">
       <div class="hero__text pure-u-1 pure-u-md-1-2 pure-u-lg-13-24">
         <h1 id="hero-title" class="hero__h1">
@@ -371,12 +380,12 @@
         </h1>
         <p class="hero__lead">
           We design and study systems that make access to complex information
-          spaces <em>reliable, validated and interactive</em> — bridging foundations
+          spaces <em>reliable, validated and interactive</em>, bridging foundations
           in data management with human-centered analytics.
         </p>
         <p class="hero__actions">
           <a class="pure-button button button--primary" href="#research">Explore research</a>
-          <a class="pure-button button button--ghost" href="https://github.com/VIASystemsLab">View open source</a>
+          <a class="pure-button button button--ghost" href="projects.html#outputs">Open source</a>
         </p>
         <p class="hero__fact">
           University of Verona · Department of Foreign Languages and Literatures · Verona, Italy
@@ -384,11 +393,23 @@
       </div>
 
       <figure class="hero__figure pure-u-1 pure-u-md-1-2 pure-u-lg-11-24">
+        <!--
+          Two cuts of the same emblem, differing only in the tagline colour.
+          Below Pure's md breakpoint the band's diagonal crosses above the
+          tagline and leaves it on the page surface, so the black cut is the
+          one that reads; from 48em up the emblem sits wholly on the dark band
+          and the white cut does. Both are built by tools/build_assets.py.
+        -->
         <picture>
+          <source type="image/webp" media="(max-width: 47.99em)"
+                  srcset="img/via-logo-pictorial-b-480.webp 480w, img/via-logo-pictorial-b-720.webp 720w, img/via-logo-pictorial-b-1080.webp 1080w"
+                  sizes="78vw">
+          <source media="(max-width: 47.99em)"
+                  srcset="img/via-logo-pictorial-b-480.png">
           <source type="image/webp"
-                  srcset="img/via-logo-pictorial-480.webp 480w, img/via-logo-pictorial-720.webp 720w, img/via-logo-pictorial-1080.webp 1080w"
-                  sizes="(min-width: 64rem) 34vw, (min-width: 48rem) 42vw, 62vw">
-          <img src="img/via-logo-pictorial-480.png" width="1230" height="1278"
+                  srcset="img/via-logo-pictorial-b-480.webp 480w, img/via-logo-pictorial-b-720.webp 720w, img/via-logo-pictorial-b-1080.webp 1080w"
+                  sizes="(min-width: 64rem) 34vw, 42vw">
+          <img src="img/via-logo-pictorial-b-480.png" width="1305" height="1205"
                alt="The VIA Systems Lab emblem: a Roman arch framing a paved road that leads towards the Verona Arena, with the joints between the paving stones drawn as the edges of a data graph."
                decoding="async" fetchpriority="high">
         </picture>
@@ -421,6 +442,10 @@
           The lab is led by <a href="#people">Matteo Lissandrini</a>, Associate
           Professor of Computer Science, whose research spans data exploration,
           knowledge graphs, and intelligent analytical systems.
+        </p>
+        <p>
+          How we use, and decline to use, AI tools in that work is set out in our
+          <a href="ai-statement.html">statement on AI and scientific research</a>.
         </p>
       </div>
 
@@ -480,7 +505,7 @@
         <h2 id="research-title" class="section__title">Five themes, one question</h2>
         <p class="section__standfirst">
           How do you give a person a trustworthy answer over data that is large,
-          heterogeneous and incomplete — and let them check it?
+          heterogeneous and incomplete, and let them check it?
         </p>
       </header>
 
@@ -538,7 +563,7 @@
           <h3 class="theme__name">Open data and digital archives</h3>
           <p class="theme__desc">
             FAIR and openly reusable data, with particular attention to digital
-            archives and the digital humanities — collections that were assembled by
+            archives and the digital humanities: collections that were assembled by
             scholars long before anyone called them a dataset.
           </p>
           <p class="theme__meta">
@@ -721,15 +746,15 @@
         person's agreement.
       -->
 
-      <aside class="joinbox pure-u-1 pure-u-md-2-5 pure-u-lg-2-5">
-        <h3 class="joinbox__title">Working with the lab</h3>
+      <aside class="note pure-u-1 pure-u-md-2-5 pure-u-lg-2-5">
+        <h3 class="note__title">Working with the lab</h3>
         <p>
           Doctoral candidates, postdoctoral researchers and thesis students work
           with the lab through the University of Verona and through the ARMADA
           doctoral network. Recruitment and secondment calls are announced on the
           project sites.
         </p>
-        <p class="joinbox__links">
+        <p class="note__links">
           <a class="link-ext" href="https://armada-dn.eu/">ARMADA network</a>
           <a class="link-ext" href="https://www.univr.it/">University of Verona</a>
           <a href="mailto:matteo.lissandrini@univr.it">Write to the lab</a>
@@ -761,7 +786,8 @@
       <ul class="footer__body footer__list">
         <li><a href="projects.html">Projects</a></li>
         <li><a href="publications.html">Publications</a></li>
-        <li><a class="link-ext" property="sameAs" href="https://github.com/VIASystemsLab">Source on GitHub</a></li>
+        <li><a href="ai-statement.html">AI statement</a></li>
+        <li><a class="link-ext" href="https://github.com/VIASystemsLab/VIASystemsLab.github.io">Source on GitHub</a></li>
         <li><a href="humans.txt">humans.txt</a></li>
       </ul>
     </div>
@@ -778,8 +804,8 @@
           <span>Funded by the<br>European Union</span>
         </p>
         <ul class="footer__list">
-          <li>ARMADA &mdash; 101168951</li>
-          <li>DataGEMS &mdash; 101188416</li>
+          <li>ARMADA, grant 101168951</li>
+          <li>DataGEMS, grant 101188416</li>
         </ul>
       </div>
     </div>

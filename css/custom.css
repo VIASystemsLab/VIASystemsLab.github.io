@@ -23,8 +23,13 @@
  *
  * Blocks that sit side by side share a top edge. Nothing is staggered.
  *
- * The palette is sampled from the lab emblem: travertine, petrol, terracotta
- * and ink. Every text pair below meets WCAG AA; body text on paper is 13.3:1.
+ * The palette is sampled from the lab emblem: travertine, oxblood brick and
+ * ink, with the node-graph's teal raised to an instrument cyan and used only
+ * as a signal. Every text pair below meets WCAG AA; body text is 14.5:1.
+ *
+ * There is one scheme. The site does not follow prefers-color-scheme: the
+ * palette was designed and reviewed on a travertine page, and a dark variant
+ * that nobody has looked at is worse than none. See docs/DESIGN-GUIDE.md.
  */
 
 /* ========================================================================
@@ -37,31 +42,38 @@
      *current* surface and is re-pointed inside the dark bands, so anything
      that needs the real page colour regardless of context — the text on a
      filled button, for instance — must use --page-paper. */
-  --page-paper:     #f7f3eb;
+  --page-paper:     #f6f1e8;
   --paper:          var(--page-paper);  /* warm near-white reading surface  */
-  --field:          #ede5d7;  /* travertine band for secondary sections */
-  --ink:            #1b2a31;  /* body text                    13.3:1    */
-  --ink-soft:       #4a5b63;  /* metadata and secondary text   6.4:1    */
-  --petrol:         #22434f;  /* brand blue-green, used as a surface    */
-  --petrol-deep:    #16303a;
-  --accent-2:       #22434f;  /* petrol used as *ink*          9.6:1    */
-  --signal:         #9c4f38;  /* terracotta: links, emphasis   5.3:1    */
-  --signal-strong:  #7e3e2c;  /* hover                         7.3:1    */
-  --rule:           #c6b9a4;  /* hairlines and dividers (decorative)    */
+  --field:          #ebe1d2;  /* travertine band for secondary sections */
+  --ink:            #2a1d19;  /* body text                    14.5:1    */
+  --ink-soft:       #4a3831;  /* metadata and secondary text   9.8:1    */
+  --petrol:         #4a2118;  /* brand oxblood, used as a surface       */
+  --petrol-deep:    #33170f;
+  --accent-2:       #0b6b77;  /* instrument cyan, used as ink  5.5:1    */
+  --signal:         #8c3a2b;  /* brick: links, emphasis        6.8:1    */
+  --signal-strong:  #6e2c20;  /* hover                         9.1:1    */
+  --rule:           #d2c3ae;  /* hairlines and dividers (decorative)    */
 
   /* Project tags are filled, so they need an explicit foreground that is
      correct in both colour schemes rather than inheriting a surface token. */
-  --tag-armada-bg:   #9c4f38;
-  --tag-armada-fg:   #f7f3eb;
-  --tag-datagems-bg: #22434f;
-  --tag-datagems-fg: #f7f3eb;
+  --tag-armada-bg:   #8c3a2b;
+  --tag-armada-fg:   #f6f1e8;
+  --tag-datagems-bg: #0b6b77;
+  --tag-datagems-fg: #f6f1e8;
+
+  /* A note is a panel laid on a page surface, so its own background is the
+     other surface: travertine on paper, paper on the travertine sections.
+     A translucent tint cannot do that job. It lands on both surfaces as the
+     same small darkening, which reads as a box on neither. */
+  --note-bg: var(--field);
 
   /* Inverse context (hero, footer) ------------------------------------ */
-  --inverse-bg:     #22434f;
-  --inverse-text:   #f1ebe0;  /* on --inverse-bg               8.9:1    */
-  --inverse-soft:   #bccad0;  /* on --inverse-bg               6.3:1    */
-  --inverse-signal: #eba98f;  /* on --inverse-bg               5.4:1    */
-  --inverse-rule:   rgb(241 235 224 / 0.28);
+  --inverse-bg:     #4a2118;
+  --inverse-text:   #f4eadf;  /* on --inverse-bg              11.6:1    */
+  --inverse-soft:   #d7b9ab;  /* on --inverse-bg               7.5:1    */
+  --inverse-signal: #5fd4e3;  /* on --inverse-bg               7.9:1    */
+  --inverse-rule:   rgb(244 234 223 / 0.28);
+  --graph-ink:      #bcc7c4;  /* the node figure on a band (decorative) */
 
   /* Typography -------------------------------------------------------- */
   --font-text:  'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -100,6 +112,15 @@
   --hero-skew:     clamp(4.5rem, 14vw, 12rem);
   --pagehead-skew: clamp(2rem, 5vw, 4rem);
 
+  /* Tilt and overlap are two different things and now have two names. The
+     tilt is how much lower one end of the diagonal is than the other; the
+     overlap is how far the band is pulled over the section below. They are
+     equal by default, which is what makes that section show through the
+     diagonal, but a band that has been lifted clear of the join has nothing
+     to show through and should not overlap at all. */
+  --hero-overlap:   var(--hero-skew);
+  --hero-band-lift: 0px;
+
   /* How far the emblem hangs below the hero, and how much extra room the
      section underneath reserves for it. Zero until the emblem is actually
      allowed to overhang, which is only from the large breakpoint up — so the
@@ -113,32 +134,20 @@
   /* Focus -------------------------------------------------------------- */
   --focus: var(--signal);
 
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
+/*
+ * Below Pure's md breakpoint the hero stacks and the emblem is the last thing
+ * in it. Cutting the band across the emblem's middle leaves its lower half on
+ * the page surface, which gives it an edge to sit against instead of ending
+ * quietly inside a dark field. The emblem is sized as a fraction of the
+ * viewport, so the lift tracks the viewport too.
+ */
+@media screen and (max-width: 47.99em) {
   :root {
-    --page-paper:     #131e23;
-    --field:          #1b2a31;
-    --ink:            #e9e3d7;  /* 13.3:1 on paper */
-    --ink-soft:       #a4b1b7;  /*  7.7:1 on paper */
-    --petrol:         #0e181c;
-    --petrol-deep:    #0a1215;
-    --accent-2:       #8fb6c4;  /*  7.8:1 on paper */
-    --signal:         #e2977d;  /*  7.2:1 on paper */
-    --signal-strong:  #f0b79e;
-    --rule:           #33474f;
-
-    --tag-armada-bg:   #e2977d;
-    --tag-armada-fg:   #131e23;
-    --tag-datagems-bg: #8fb6c4;
-    --tag-datagems-fg: #131e23;
-
-    --inverse-bg:     #0e181c;
-    --inverse-text:   #e9e3d7;
-    --inverse-soft:   #a4b1b7;
-    --inverse-signal: #e2977d;
-    --inverse-rule:   rgb(233 227 215 / 0.22);
+    --hero-overlap:   0px;
+    --hero-band-lift: clamp(7rem, 38vw, 11rem);
   }
 }
 
@@ -367,11 +376,13 @@ input, select, textarea, button { font-family: inherit; }
   white-space: nowrap;
 }
 
-/* Kind of output. Each is distinguished by colour *and* by border style,
-   so the distinction survives greyscale and colour-vision deficiency. */
-.tag--vision     { color: var(--signal); border-color: var(--signal); border-width: 1px 1px 3px; }
+/* Where a paper appeared. One family, weighted by how substantial the venue
+   is, and told apart by border style as well as by colour, so the distinction
+   survives greyscale and colour-vision deficiency. What the paper argues is
+   said by the group it is filed under, not by a tag. */
+.tag--conference { color: var(--accent-2); border-color: var(--accent-2); border-style: solid; border-width: 1px 1px 3px; }
 .tag--journal    { color: var(--accent-2); border-color: var(--accent-2); border-style: solid; border-width: 2px; }
-.tag--conference { color: var(--accent-2); border-color: var(--accent-2); border-style: solid; }
+.tag--workshop   { color: var(--accent-2); border-color: var(--accent-2); border-style: solid; }
 .tag--demo       { color: var(--accent-2); border-color: var(--accent-2); border-style: dashed; }
 .tag--poster     { color: var(--ink-soft); border-style: dotted; border-color: var(--ink-soft); }
 .tag--dataset    { color: var(--ink-soft); border-style: double; border-width: 3px; }
@@ -386,15 +397,6 @@ input, select, textarea, button { font-family: inherit; }
   border-color: transparent;
   padding-inline: 0;
   color: var(--ink-soft);
-}
-
-.tag--pending {
-  border-style: dashed;
-  border-color: var(--ink-soft);
-  color: var(--ink-soft);
-  font-style: italic;
-  letter-spacing: 0.06em;
-  text-transform: none;
 }
 
 /* Buttons -------------------------------------------------------------- */
@@ -436,6 +438,43 @@ input, select, textarea, button { font-family: inherit; }
   background: color-mix(in srgb, var(--inverse-text) 14%, transparent);
   border-color: var(--inverse-text);
   color: var(--inverse-text);
+}
+
+/* Notes ---------------------------------------------------------------- */
+
+/* A block set aside from the argument of its section: a caveat under a list,
+   a panel inviting people to work with the lab, a disclosure. One rule for all
+   of them, because a reader who learns to recognise the frame once should not
+   have to learn it again on the next page. The heading and the row of links
+   are optional; a note is often a single paragraph. */
+.note {
+  padding: 1.5rem;
+  background: var(--note-bg);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent-2);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.note strong { color: var(--ink); }
+
+.note__title {
+  font-size: var(--step-1);
+  margin-bottom: 0.7rem;
+  color: var(--ink);
+}
+
+.note__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  font-weight: 600;
+}
+
+/* A note hugs its content rather than stretching to the height of whatever
+   Pure has put beside it in the row. */
+@media screen and (min-width: 48em) {
+  .note { align-self: flex-start; }
 }
 
 /* ========================================================================
@@ -553,15 +592,16 @@ input, select, textarea, button { font-family: inherit; }
   --focus: var(--inverse-signal);
 
   --skew: var(--hero-skew);
+  --band-lift: var(--hero-band-lift);
 
   position: relative;
   z-index: 1;
   color: var(--inverse-text);
   padding-block: clamp(2rem, 5vw, 4rem) clamp(2.5rem, 6vw, 5rem);
 
-  /* The band overlaps the section below it by exactly --skew, so what shows
-     through the diagonal is that section itself. See .hero::before. */
-  margin-bottom: calc(-1 * var(--skew));
+  /* Pulled over the section below by --hero-overlap, so what shows through
+     the diagonal is that section itself. See .hero::before. */
+  margin-bottom: calc(-1 * var(--hero-overlap));
 }
 
 /*
@@ -591,8 +631,19 @@ input, select, textarea, button { font-family: inherit; }
   background-image:
     radial-gradient(120% 90% at 78% 10%, rgb(52 94 110 / 0.55), transparent 62%),
     url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f1ebe0' fill-opacity='0.055' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='2.5'/%3E%3Ccircle cx='23' cy='23' r='1.6'/%3E%3C/g%3E%3C/svg%3E");
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--skew)), 0 100%);
+  /* Two knobs, doing two different things. --skew tilts the bottom edge: it
+     is how much higher the right end finishes than the left. --band-lift
+     raises both ends together, and defaults to 0, which leaves the left end
+     on the band's own bottom edge. Neither says anything about how far the
+     band is pulled over the section below; that is the host's margin. */
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--skew) - var(--band-lift, 0px)),
+    0 calc(100% - var(--band-lift, 0px)));
 }
+
+
 
 /*
  * The section underneath gets its padding back, so its content still clears
@@ -601,12 +652,82 @@ input, select, textarea, button { font-family: inherit; }
  * here would resolve to nothing and the padding would collapse to zero.
  */
 .hero + .section {
-  padding-top: calc(var(--section-pad) + var(--hero-skew) + var(--hero-reserve));
+  padding-top: calc(var(--section-pad) + var(--hero-overlap) + var(--hero-reserve));
 }
 
 .pagehead + .section {
   padding-top: calc(var(--section-pad) + var(--pagehead-skew));
 }
+
+/*
+ * A node-and-link figure for a dark band. Everything adjustable is a custom
+ * property, so a second band could reuse it by overriding a few values rather
+ * than by copying the rule.
+ *
+ * A 62% box means the drawing renders at roughly natural size, so about 70% of
+ * it is in view rather than a magnified sliver: widening the box would zoom in,
+ * not widen. The fade masks the element box, so first ink stays at 57% of the
+ * band whatever the viewport; the text column ends at 54%, which is the margin
+ * that keeps ink off words.
+ */
+.graph {
+  --graph-fade: linear-gradient(to right, transparent 0,
+    transparent var(--graph-fade-start, 30.7%),
+    #000 var(--graph-fade-end, 55%), #000 100%);
+  /* Top to bottom shading. A second mask layer rather than an SVG gradient:
+     a gradient would need a url(#id) paint reference, which does not resolve
+     reliably from an external stylesheet. */
+  --graph-shade: linear-gradient(to bottom, #000, rgb(0 0 0 / 0.55));
+
+  /* Hidden by default. On a narrow screen there is no empty half to put it
+     in, so it would sit under the text as noise rather than as decoration; it
+     appears from Pure's md breakpoint up, where the band has room for it. */
+  display: none;
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: var(--graph-width, 62%);
+  z-index: 0;
+  pointer-events: none;
+  color: var(--graph-ink);
+  -webkit-mask-image: var(--graph-fade);
+  mask-image: var(--graph-fade);
+}
+
+/* Where the two layers can be combined, the shading applies as well. Where
+   they cannot, the horizontal fade still does, which is the part that keeps
+   the figure off the text. */
+@supports (mask-composite: intersect) {
+  .graph {
+    mask-image: var(--graph-fade), var(--graph-shade);
+    mask-composite: intersect;
+  }
+}
+
+@media screen and (min-width: 48em) {
+  .graph { display: block; }
+}
+
+.graph svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.graph__edges {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--graph-stroke, 1.72);
+  stroke-opacity: var(--graph-edge-alpha, 0.26);
+}
+
+.graph__nodes {
+  fill: currentColor;
+  fill-opacity: var(--graph-node-alpha, 0.62);
+}
+
+/* The disc under each node stops its edges at the dot instead of letting them
+   show through, so it is the band colour, not a transparency. */
+.graph__halo { fill: var(--graph-ground, var(--inverse-bg)); }
 
 .hero__grid { position: relative; z-index: 1; align-items: center; }
 
@@ -614,7 +735,7 @@ input, select, textarea, button { font-family: inherit; }
    full width, so the emblem is capped and centred here instead. */
 .hero__figure {
   margin: 0 auto 1.25rem;
-  max-width: min(15rem, 62%);
+  max-width: min(19rem, 78%);
 }
 
 @media screen and (min-width: 48em) {
@@ -628,7 +749,14 @@ input, select, textarea, button { font-family: inherit; }
 
 .hero__figure img {
   width: 100%;
-  filter: drop-shadow(0 12px 28px rgb(6 16 20 / 0.45));
+  /* Light by default. Below the md breakpoint the emblem straddles the band's
+     diagonal and finishes on the page surface, where a shadow tuned for the
+     dark ground reads as grime. */
+  filter: drop-shadow(0 6px 16px rgb(6 16 20 / 0.18));
+}
+
+@media screen and (min-width: 48em) {
+  .hero__figure img { filter: drop-shadow(0 12px 28px rgb(6 16 20 / 0.45)); }
 }
 
 .hero__h1 { margin: 0 0 1rem; }
@@ -677,9 +805,8 @@ input, select, textarea, button { font-family: inherit; }
 }
 
 .hero__fact {
-  font-size: var(--step--1);
   letter-spacing: 0.04em;
-  color: var(--inverse-soft);
+  color: var(--inverse-text);
 }
 
 
@@ -712,7 +839,10 @@ input, select, textarea, button { font-family: inherit; }
  * The hero and the page header are <section> elements too, so they count as
  * the first item and the alternation starts beneath them.
  */
-.section:nth-of-type(even) { background: var(--field); }
+.section:nth-of-type(even) {
+  background: var(--field);
+  --note-bg: var(--page-paper);
+}
 
 .section__head { margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
 
@@ -787,7 +917,11 @@ input, select, textarea, button { font-family: inherit; }
    8. About: prose, glossary, pull quote
    ===================================================================== */
 
-.prose { max-width: var(--measure); }
+/* .prose { max-width: var(--measure); } */
+
+@media screen and (min-width: 48em) {
+  .main-prose { margin-left:var(--step-5); }
+}
 
 .prose__lead {
   font-size: var(--step-1);
@@ -796,20 +930,25 @@ input, select, textarea, button { font-family: inherit; }
 
 .prose p + p { margin-top: 0; }
 
-.pullquote {
-  margin: 0;
-  padding-left: clamp(1.75rem, 4vw, 3rem);
-  position: relative;
-}
+.pullquote { margin: 0; }
 
+/*
+ * The opening mark sits on its own line above the quotation.
+ *
+ * It used to hang beside it, absolutely positioned, with a padding-left meant
+ * to clear it. That could not hold: the glyph's advance width scales with its
+ * font-size on a 9vw curve while the indent scaled on a 4vw one, so the gap
+ * between them narrowed to a few pixels at some widths — and vanished entirely
+ * with a fallback font, whose quotation mark is a different width again. A
+ * block element cannot overlap what follows it, at any size, in any font.
+ */
 .pullquote::before {
   content: "\201C";
-  position: absolute;
-  left: -0.05em;
-  top: -0.25em;
+  display: block;
   font-family: var(--font-display);
-  font-size: clamp(4rem, 9vw, 7rem);
-  line-height: 1;
+  font-size: clamp(3.5rem, 7vw, 5.5rem);
+  line-height: 0.75;
+  margin-bottom: 0.12em;
   color: var(--rule);
 }
 
@@ -1093,51 +1232,24 @@ input, select, textarea, button { font-family: inherit; }
   color: var(--ink-soft);
 }
 
-.joinbox {
-  padding: 1.5rem;
-  background: color-mix(in srgb, var(--ink) 5%, transparent);
-  border: 1px solid var(--rule);
-  border-left: 3px solid var(--accent-2);
-}
-
-.joinbox__title {
-  font-size: var(--step-1);
-  margin-bottom: 0.7rem;
-}
-
-.joinbox p {
-  font-size: var(--step--1);
-  color: var(--ink-soft);
-  line-height: 1.55;
-}
-
-.joinbox__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1.2rem;
-  font-weight: 600;
-}
-
-/* Width comes from pure-u-md-2-5. The box hugs its content rather than
-   stretching to the roster's height. */
-@media screen and (min-width: 48em) {
-  .joinbox { align-self: flex-start; }
-}
-
 /* ========================================================================
    11. Publications
    ===================================================================== */
 
-.pubnote {
-  padding: 1rem 1.25rem;
-  border-left: 3px solid var(--signal);
-  background: transparent;
-  background: color-mix(in srgb, var(--signal) 7%, transparent);
-  font-size: var(--step--1);
-  line-height: 1.55;
+/*
+ * One legend, two rows: the kinds are a fixed set, the projects are not, so
+ * they are listed separately. As two siblings in the shell they picked up the
+ * shell's row-gap, which is sized to separate whole sections and put most of a
+ * section's worth of space inside one legend. The rows now share a parent and
+ * their own much smaller gap.
+ */
+.legend {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
 }
 
-.legend {
+.legend__row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1152,8 +1264,6 @@ input, select, textarea, button { font-family: inherit; }
   text-transform: uppercase;
   color: var(--ink-soft);
 }
-
-.legend__label:not(:first-child) { margin-left: 0.9rem; }
 
 .pubs { display: grid; gap: 1.4rem; }
 
@@ -1181,30 +1291,57 @@ input, select, textarea, button { font-family: inherit; }
 .pub__title a:focus-visible { color: var(--signal); }
 
 .pub__detail {
-  font-size: var(--step--1);
   color: var(--ink-soft);
   max-width: 62ch;
 }
 
-.pub.is-pending .pub__title,
-.pub.is-forthcoming .pub__title {
-  font-weight: 400;
-  font-style: italic;
-  color: var(--ink-soft);
+
+
+/*
+ * A statement: a term and its rule, one per row, hairline separated. Wider
+ * measure than the glossary because each entry is a paragraph rather than a
+ * definition, so multi-column would break the reading.
+ */
+.statement-list { display: grid; }
+
+.statement-list__item {
+  padding-top: 1rem;
+  margin-bottom: 1.1rem;
+  border-top: 1px solid var(--rule);
 }
 
+.statement-list__item:last-child { margin-bottom: 0; }
 
+.statement-list dt {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
 
-/* A one-paragraph aside, where a whole section would be out of proportion. */
-.smallnote {
-  padding-left: 1.1rem;
-  border-left: 3px solid var(--accent-2);
+.statement-list dd {
+  margin: 0;
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* Marks a sentence carried over unchanged from the statement this one adapts.
+   Small, but not hidden: the page explains it, so it has to be findable. */
+.cmark {
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--signal);
+  white-space: nowrap;
+}
+
+/* Its own row at the end of the section, so the grid's row-gap already
+   separates it from the note above. */
+.statement-date {
   font-size: var(--step--1);
-  line-height: 1.6;
   color: var(--ink-soft);
 }
-
-.smallnote strong { color: var(--ink); }
 
 /* ========================================================================
    12. Open practice
@@ -1222,17 +1359,14 @@ input, select, textarea, button { font-family: inherit; }
   margin-bottom: 0.4rem;
 }
 
+/* No measure cap. These sit one to a column, and the column is already a
+   comfortable 33ch to 58ch across the range. A 34ch cap left the text filling
+   barely half its column at the widest sizes, while the rule above it spanned
+   the whole width, so the blocks read as mis-sized. */
 .openitem p {
   font-size: var(--step--1);
   color: var(--ink-soft);
   line-height: 1.55;
-  max-width: 34ch;
-}
-
-/* Thirds come from pure-u-md-1-3; the slight cascade is the only addition. */
-@media screen and (min-width: 48em) {
-  .openitem:nth-child(2) { margin-top: 0.9rem; }
-  .openitem:nth-child(3) { margin-top: 1.8rem; }
 }
 
 /* ========================================================================
@@ -1375,24 +1509,16 @@ input, select, textarea, button { font-family: inherit; }
 }
 
 /*
- * ARMADA supplies flat monochrome cuts of its mark, white and black. The white
- * one is used as supplied on a dark page and inverted on a light one, which
- * produces exactly the black cut the project also supplies. Inverting is the
- * one adjustment a monochrome mark allows; a full-colour mark would need its
- * own rule instead.
+ * The projects supply flat white cuts of their marks. The page is always light,
+ * so they are always inverted, which produces exactly the black cut ARMADA also
+ * supplies. Inverting is the one adjustment a monochrome mark allows; a
+ * full-colour mark would need its own rule instead.
  */
 .project__logo img {
   width: min(11rem, 100%);
   height: auto;
   filter: invert(1);
 }
-
-@media (prefers-color-scheme: dark) {
-  .project__logo img { filter: none; }
-}
-
-
-
 
 /* ========================================================================
    15. Sub-pages: page header, breadcrumb, highlights, call to action
@@ -1627,7 +1753,7 @@ input, select, textarea, button { font-family: inherit; }
     .theme,
     .project,
     .person,
-    .joinbox,
+    .note,
     .glossary__item,
     .openitem,
     .highlight,
