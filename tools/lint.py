@@ -322,6 +322,33 @@ def check_jsonld(name: str, html_with_comments: str, site_ids: set[str]) -> None
                 (fail if hard else warn)(name, message)
                 break
 
+        # A DefinedTerm's description *is* the term's definition, and the page
+        # prints it in full. Unlike a project abstract, which condenses a longer
+        # CORDIS record, there is nothing here to summarise, so a paraphrase is
+        # only ever two descriptions of one term where a reader can check one.
+        # All five research themes had drifted into paraphrases at once, none of
+        # them wrong and none of them the text on the page.
+        #
+        # Scoped to DefinedTerm on purpose. The organisation and the projects
+        # legitimately carry a condensed description, so the same rule applied
+        # to every `description` would be wrong.
+        prose = " ".join(re.sub(r"<[^>]+>", " ", visible).split())
+        for node in graph:
+            types = node.get("@type")
+            types = types if isinstance(types, list) else [types]
+            if "DefinedTerm" not in types:
+                continue
+            described = node.get("description")
+            if not described:
+                continue
+            if " ".join(described.split()) not in prose:
+                fail(
+                    name,
+                    f"DefinedTerm {node.get('@id')} is described in words the "
+                    "page does not print; a term's description is its visible "
+                    "text, copied verbatim",
+                )
+
 
 # --------------------------------------------------------------------------
 # Repository-wide checks

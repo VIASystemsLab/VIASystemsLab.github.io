@@ -131,6 +131,12 @@ university, the principal investigator, the five research themes as
 `DefinedTerm`s, brief `ResearchProject` stubs pointing at `projects.html`, the
 emblem as an `ImageObject`, and the repository as `SoftwareSourceCode`.
 
+Each `DefinedTerm`'s `description` is the theme's visible text, copied
+verbatim, and the linter enforces it. The organisation and the projects may
+carry a condensed description, because each condenses something longer; a
+theme's definition is already one short paragraph, so a paraphrase there is
+only a second definition that no reader can check.
+
 The project stubs are deliberately thin: `name`, the two dates,
 `mainEntityOfPage` and `member`, and nothing else. The homepage shows a
 highlight rather than a record, so asserting the full title, the project's

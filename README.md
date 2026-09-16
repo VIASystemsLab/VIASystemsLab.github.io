@@ -139,6 +139,12 @@ block, keep its `id` stable — the JSON-LD `DefinedTerm` for that theme points 
 it — and add a matching `DefinedTerm` to the graph in `<head>`. The blocks are
 unnumbered, so order is the only thing that changes when you add one.
 
+**The `DefinedTerm`'s `description` is the theme's visible text, copied
+verbatim**, and `tools/lint.py` fails if it is not. A theme's definition is one
+short paragraph with no longer source behind it, so there is nothing to
+condense: a paraphrase is two definitions of one term, and a reader can only
+check the one on the page. All five had drifted.
+
 ### A project
 
 In `projects.html`, inside the "Funded projects" section. Copy an
