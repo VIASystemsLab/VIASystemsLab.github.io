@@ -82,19 +82,43 @@ every consumer is concerned.
 
 ## 3. Vocabularies
 
-| Prefix | IRI | Used for |
+### Declared, because a term from them appears
+
+| Prefix | IRI | Used for | On |
+| --- | --- | --- | --- |
+| *(default)* | `https://schema.org/` | Everything structural: `ResearchOrganization`, `Person`, `ResearchProject`, `ScholarlyArticle`, `Dataset`, `SoftwareSourceCode`, `DefinedTerm`, `MonetaryGrant`. | every page |
+| `iptcExt` | `http://iptc.org/std/Iptc4xmpExt/2008-02-29/` | `DigitalSourceType`, for AI provenance. Reached through the `digitalSourceType` term definition rather than written as a prefixed name. | `index.html` |
+
+**Declare a prefix only where a term from it is used.** An unused declaration
+is not free: it reads as a promise that the page says something in that
+vocabulary, so the next person to touch the graph has to read it to find out
+that the page does not. `dcterms`, `foaf` and `org` were all declared with not
+one term between them, and were removed rather than left as decoration.
+
+### Available, not currently declared
+
+The other namespaces the linter will accept an `http:` IRI from. Declare one on
+the page that starts using it, and not before:
+
+| Prefix | IRI | For |
 | --- | --- | --- |
-| *(default)* | `https://schema.org/` | Everything structural: `ResearchOrganization`, `Person`, `ResearchProject`, `ScholarlyArticle`, `Dataset`, `SoftwareSourceCode`, `DefinedTerm`, `MonetaryGrant`. |
-| `dcterms` | `http://purl.org/dc/terms/` | Declared for bibliographic terms schema.org lacks. |
-| `iptcExt` | `http://iptc.org/std/Iptc4xmpExt/2008-02-29/` | `DigitalSourceType`, on `index.html`, for AI provenance. |
+| `dcterms` | `http://purl.org/dc/terms/` | [Bibliographic terms](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/) schema.org lacks. |
+| `foaf` | `http://xmlns.com/foaf/0.1/` | [Person and group relations](http://xmlns.com/foaf/spec/). Prefer the schema.org equivalent where there is one, so the graph keeps to one vocabulary for one job. |
+| `org` | `http://www.w3.org/ns/org#` | The [W3C Organization Ontology](https://www.w3.org/TR/vocab-org/), for organisational structure a `ResearchOrganization` cannot express. |
+
+### `http:` is not a typo
 
 Namespace IRIs use `http:`, not `https:`, because that is what the IRI *is*.
-"Fixing" one to `https:` silently creates a different, undefined term. The
-linter allows `http:` for exactly these prefixes and rejects it everywhere
-else.
+"Fixing" one to `https:` silently creates a different, undefined term.
 
-Keep the context minimal. Declare a prefix on the page that uses it, not
-everywhere.
+`tools/lint.py` accepts an `http:` URL under these prefixes and rejects it
+everywhere else, so the list above is also the list of vocabularies the build
+will let you reach for:
+
+```
+http://purl.org/    http://xmlns.com/    http://www.w3.org/
+http://iptc.org/    http://cv.iptc.org/
+```
 
 ---
 
