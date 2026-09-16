@@ -33,7 +33,7 @@ python3 tools/lint.py
 | --- | --- |
 | `index.html` | The homepage, in navigation order: hero, about, research themes, project highlights, people, footer. |
 | `projects.html` | Every project, in full. The homepage carries highlights only. |
-| `publications.html` | Every output, grouped by kind. |
+| `publications.html` | Every peer-reviewed paper, grouped by the kind of contribution. Data and software are published with the project that produced them, not listed here. |
 | `ai-statement.html` | The lab's statement on AI and scientific research: principles, example guidelines, and the sources it adapts, including how the document itself was written. Linked from About, from the publications practice section and from the open-practice notes. |
 | `img/original/` | The lab's master artwork. Edited by hand. |
 | `img/logos/` | Third-party marks — the university, the EU emblem, partner projects. Reproduced as supplied: read [`img/logos/README.md`](img/logos/README.md) before touching them. |
@@ -140,7 +140,7 @@ Add the matching `ResearchProject` object to the JSON-LD graph in that page's
 `<head>`. If the project should also appear on the homepage, add a short
 `<li class="highlight">` to `index.html` — the homepage carries highlights
 only, never the full record. Add the grant to the funding column in the footer
-of all three pages.
+of every page.
 
 **Publish a figure only once it appears in the project's CORDIS record or on
 its own site.** Grant numbers, durations, consortium sizes and contributions
@@ -394,7 +394,7 @@ page, in `humans.txt`, and in the page metadata.
   never be inverted or tinted.
 
 If you add an image, declare its source type. If you add a funded project, add
-its grant to the funding acknowledgement in the footer of all three pages.
+its grant to the funding acknowledgement in the footer of every page.
 
 ## Deployment
 

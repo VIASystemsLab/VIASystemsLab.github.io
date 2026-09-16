@@ -521,7 +521,7 @@ Worth stating, so they are not proposed again as improvements:
 | A custom 15-column CSS Grid, because Pure's 5-column model is too coarse | Pure's own grid, `.pure-g` / `.pure-u-*` | Not reimplementing a grid that ships with the framework. Pure's `md`/`lg` are `48em`/`64em` — exactly the breakpoints the design already used. The 24ths cover the asymmetric splits the plan wanted. |
 | Asymmetric, staggered compositions on an odd grid | Aligned grids; no offsets | Staggering read as a mistake rather than as composition. Asymmetry survives where it is structural — a wide body beside a narrow rail. |
 | Decide whether to keep the wave motif | Retired | Replaced by one shallow diagonal on the dark bands. No fixed heights, no negative offsets, nothing to clip. |
-| A focused one-page site | Three pages | Projects and publications outgrew a section each; the homepage carries highlights and links out. |
+| A focused one-page site | Four pages | Projects and publications outgrew a section each; the homepage carries highlights and links out. |
 | Display serif + text sans, family unspecified | Source Serif 4 + Source Sans 3, self-hosted | Both OFL, variable, designed to pair. Self-hosting removes a third-party request. |
 | Palette described in words ("pale cool blue", "restrained vermilion") | Sampled from the emblem | The artwork already was a palette. |
 | — | Section tinting is positional | Content-keyed tints broke on reorder. See §4. |
@@ -538,6 +538,6 @@ Worth stating, so they are not proposed again as improvements:
 python3 tools/lint.py          # structure, links, metadata, CSS tokens
 ```
 
-Then look at it: 320px, 768px, 1440px; light and dark; 200% zoom; keyboard
-only. The linter checks that the rules here are *followed*; it cannot tell you
+Then look at it: 320px, 768px, 1440px; 200% zoom; keyboard only. There is one
+colour scheme, so there is one to look at. The linter checks that the rules here are *followed*; it cannot tell you
 whether the result is any good.

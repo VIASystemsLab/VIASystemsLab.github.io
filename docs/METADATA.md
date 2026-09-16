@@ -59,9 +59,9 @@ for it. Every other page **references** it by `@id` and says nothing more:
   "member": { "@id": "https://orcid.org/0000-0001-7922-5998" } }
 ```
 
-This matters for more than tidiness. A description repeated on three pages
-becomes three descriptions that drift apart; the one on the page nobody
-remembers to update is the one a harvester reads.
+This matters for more than tidiness. A description repeated on every page
+becomes as many descriptions as there are pages, and they drift apart; the
+one on the page nobody remembers to update is the one a harvester reads.
 
 ### Choosing an `@id`
 
@@ -123,6 +123,25 @@ A `CollectionPage` with a `BreadcrumbList` and an `ItemList`, plus a
 `ScholarlyArticle` for every listed publication, each with its DOI as `@id` and
 a `funding` reference to the project that paid for it. See §6.
 
+### `ai-statement.html`
+
+One node typed `["WebPage", "DigitalDocument"]`, because the page both *is* a
+page and *carries* a document that other work can cite. It names the lab as
+`author` and the principal investigator as `editor`, and it declares where its
+text comes from:
+
+- **`isBasedOn`** the statement it adapts, by DOI.
+- **`citation`** the lab's own work that informed it, by DOI.
+- **`dateModified`**, which the visible "Last update" line must match.
+
+Both sources are described on this page, since it is the page a reader would
+go to for them: a `CreativeWork` for the statement and a `ScholarlyArticle` for
+the paper. Neither is a lab output, so neither belongs on `publications.html`.
+
+Change the text materially and `dateModified` and the visible date change with
+it. A statement whose recorded date predates its content is worse than an
+undated one.
+
 ---
 
 ## 5. Recipes
@@ -182,7 +201,7 @@ checked with them.
 3. Add it to the page's `ItemList` and bump `numberOfItems`.
 4. If it belongs on the homepage, add a **highlight** there and a matching stub
    node — name, dates, `mainEntityOfPage`, nothing more.
-5. Add the grant to the funding disclaimer in the footer of all three pages.
+5. Add the grant to the funding disclaimer in the footer of every page.
 
 Every date, grant number and figure comes from the project's CORDIS record.
 
