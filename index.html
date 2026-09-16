@@ -395,10 +395,17 @@
       <figure class="hero__figure pure-u-1 pure-u-md-1-2 pure-u-lg-11-24">
         <!--
           Two cuts of the same emblem, differing only in the tagline colour.
-          Below Pure's md breakpoint the band's diagonal crosses above the
-          tagline and leaves it on the page surface, so the black cut is the
-          one that reads; from 48em up the emblem sits wholly on the dark band
-          and the white cut does. Both are built by tools/build_assets.py.
+          Which one reads depends on what the tagline lands on, and that
+          changes twice as the layout widens:
+
+            below 48em   the band is lifted and the emblem's lower half,
+                         tagline included, finishes on the page  ->  black
+            48em to 64em the emblem sits wholly on the dark band  ->  white
+            64em and up  --hero-overhang pulls the emblem down through the
+                         diagonal and the tagline clears it again  ->  black
+
+          The first matching source wins, so the order here is narrowest
+          first. Both cuts are built by tools/build_assets.py.
         -->
         <picture>
           <source type="image/webp" media="(max-width: 47.99em)"
@@ -406,10 +413,15 @@
                   sizes="78vw">
           <source media="(max-width: 47.99em)"
                   srcset="img/via-logo-pictorial-b-480.png">
+          <source type="image/webp" media="(max-width: 63.99em)"
+                  srcset="img/via-logo-pictorial-w-480.webp 480w, img/via-logo-pictorial-w-720.webp 720w, img/via-logo-pictorial-w-1080.webp 1080w"
+                  sizes="42vw">
+          <source media="(max-width: 63.99em)"
+                  srcset="img/via-logo-pictorial-w-480.png">
           <source type="image/webp"
                   srcset="img/via-logo-pictorial-b-480.webp 480w, img/via-logo-pictorial-b-720.webp 720w, img/via-logo-pictorial-b-1080.webp 1080w"
-                  sizes="(min-width: 64rem) 34vw, 42vw">
-          <img src="img/via-logo-pictorial-b-480.png" width="1305" height="1205"
+                  sizes="34vw">
+          <img src="img/via-logo-pictorial-b-480.png" width="1305" height="1206"
                alt="The VIA Systems Lab emblem: a Roman arch framing a paved road that leads towards the Verona Arena, with the joints between the paving stones drawn as the edges of a data graph."
                decoding="async" fetchpriority="high">
         </picture>
@@ -425,7 +437,7 @@
         <h2 id="about-title" class="section__title">About the lab</h2>
       </header>
 
-      <div class="prose pure-u-1 pure-u-md-1-2 pure-u-lg-13-24">
+      <div class="prose pure-u-1 pure-u-lg-13-24">
         <p class="prose__lead">
           The <strong>VIA Systems Lab</strong> is a research lab at the University of
           Verona working on intelligent analytics systems, information access, and
@@ -639,8 +651,8 @@
         <p class="eyebrow"><span class="eyebrow__num">04</span> People</p>
         <h2 id="people-title" class="section__title">People and affiliation</h2>
         <p class="section__standfirst">
-          The lab works with doctoral candidates, postdoctoral researchers and
-          collaborators in Verona and across the ARMADA and DataGEMS consortia.
+          We work with doctoral candidates, postdoctoral researchers, scientists, and
+          collaborators in Verona and beyond.         
         </p>
       </header>
 
