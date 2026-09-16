@@ -428,18 +428,27 @@ def check_markup_presentation(names: list[str]) -> None:
             page = fh.read()
         body = re.sub(r"<!--.*?-->", "", page, flags=re.S)
 
-        for match in re.finditer(r"\sstyle\s*=", body):
+        for match in re.finditer(r"\sstyle\s*=", body, re.I):
             fail(name, f"inline style attribute at line {body[:match.start()].count(chr(10)) + 1}; "
                        "move the declarations into css/custom.css")
 
-        if re.search(r"<style[\s>]", body):
+        if re.search(r"<style[\s>]", body, re.I):
             fail(name, "embedded <style> element; the site has one stylesheet")
 
-        for attr in SVG_PRESENTATION + HTML_PRESENTATION:
-            for match in re.finditer(rf"\s{re.escape(attr)}\s*=\s*[\"']", body):
-                fail(name, f"presentation attribute {attr}= at line "
-                           f"{body[:match.start()].count(chr(10)) + 1}; "
-                           "give the element a class and style it in css/custom.css")
+        # Scan inside tags only, with quoted values blanked out first. An
+        # attribute is a name at a whitespace boundary, so this catches the
+        # unquoted form (align=center) and the boolean form (nowrap) as well
+        # as the quoted one, and does not fire on the word "align" in a
+        # sentence or on a class named align-left.
+        for match in re.finditer(r"<[a-zA-Z][^>]*>", body):
+            tag = re.sub(r"=\s*\"[^\"]*\"", '=""', match.group(0))
+            tag = re.sub(r"=\s*'[^']*'", "=''", tag)
+            line = body[:match.start()].count(chr(10)) + 1
+            for attr in SVG_PRESENTATION + HTML_PRESENTATION:
+                if re.search(rf"\s{re.escape(attr)}\s*(?==|\s|/?>)", tag, re.I):
+                    fail(name, f"presentation attribute {attr} at line {line}; "
+                               "give the element a class and style it in "
+                               "css/custom.css")
 
 
 def check_language(names: list[str]) -> None:
