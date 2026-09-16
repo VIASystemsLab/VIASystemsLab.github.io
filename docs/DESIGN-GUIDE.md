@@ -113,7 +113,7 @@ component rule.**
 | `--field` | `#ebe1d2` | Travertine band for alternate sections | — |
 | `--ink` | `#2a1d19` | Body text | 14.5:1 on paper |
 | `--ink-soft` | `#4a3831` | Metadata, secondary text | 9.8:1 |
-| `--accent-2` | `#0b6b77` | Instrument cyan used as *ink*: rules, tags | 5.5:1 |
+| `--accent-2` | `#0b6b77` | Instrument cyan used as *ink*: section titles, rules, tags | 5.5:1 on paper, 4.8:1 on travertine |
 | `--petrol` | `#4a2118` | Oxblood used as a *surface* | — |
 | `--signal` | `#8c3a2b` | Brick: links, emphasis | 6.8:1 |
 | `--signal-strong` | `#6e2c20` | Hover | 9.1:1 |
@@ -127,7 +127,7 @@ component rule.**
 | `--inverse-text` | `#f4eadf` | 11.6:1 |
 | `--inverse-soft` | `#d7b9ab` | 7.5:1 |
 | `--inverse-signal` | `#5fd4e3` | 7.9:1 |
-| `--graph-ink` | `#bcc7c4` | decorative, never text |
+| `--graph-ink` | derived: half `--inverse-signal` in `--inverse-soft`, which lands on #9bc6c7 | decorative, never text |
 
 ### There is one scheme
 
