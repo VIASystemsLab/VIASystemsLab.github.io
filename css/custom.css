@@ -134,14 +134,18 @@
      underneath has to add for it. The overhang is zero until the large
      breakpoint, so neither value touches a layout that does not use it.
 
-     The reserve is derived, not guessed. The section below already carries
-     --section-pad above its text; the reserve is whatever the overhang needs
-     beyond that, plus 2rem of air. Fixed numbers could not hold the
-     relationship: the overhang grows at 11vw and the padding at 7vw, so any
-     constant reserve is outgrown at some width and the emblem lands on the
-     first line. */
+     The reserve is smaller than the overhang on purpose. The emblem hangs
+     over the right of the row beneath it, and that corner is empty: the
+     section head is a left-hand unit and its title ends columns before the
+     emblem starts. Reserving the whole overhang was correct arithmetic and
+     the wrong layout, an extra 64px above every section head at 1920px,
+     which read as a hole over the title.
+
+     What the reserve does have to do is keep the emblem off the rows that
+     follow the head. If anything is ever placed in the top right of the
+     section after the hero, this is the number that has to grow with it. */
   --hero-overhang: 0rem;
-  --hero-reserve:  max(0rem, var(--hero-overhang) + 2rem - var(--section-pad));
+  --hero-reserve:  0rem;
 
   /* Texture ------------------------------------------------------------ */
 
@@ -180,6 +184,7 @@
 @media screen and (min-width: 64em) {
   :root {
     --hero-overhang: clamp(3.5rem, 11vw, 12rem);
+    --hero-reserve:  clamp(0rem, 3vw, 3.5rem);
   }
 }
 
