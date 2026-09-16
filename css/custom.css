@@ -73,10 +73,6 @@
   --inverse-text:   #f4eadf;  /* on --inverse-bg              11.6:1    */
   --inverse-soft:   #d7b9ab;  /* on --inverse-bg               7.5:1    */
   --inverse-signal: #5fd4e3;  /* on --inverse-bg               7.9:1    */
-  /* The filled callout on a band: the teal muted into the cream, so the
-     button sits with the palette rather than lighting up against it.
-     Lands on #c0c8c2, which carries --petrol-deep at 9.7:1. */
-  --inverse-fill:   color-mix(in srgb, var(--accent-2) 22%, var(--inverse-text));
   --inverse-rule:   rgb(244 234 223 / 0.28);
   /* The glow in the band's top corner: the brick, thinned, so it composites
      to a lighter oxblood over --inverse-bg. It was a literal teal from the
@@ -149,11 +145,13 @@
 
   /* Texture ------------------------------------------------------------ */
 
-  /* Grain for the dark bands: fractal noise, desaturated, laid on at 6%%.
+  /* Grain for the dark bands: fractal noise, desaturated, laid on at 16%.
+     Two numbers tune it: baseFrequency is the coarseness, lower being larger
+     flecks, and the rect's opacity is the strength.
      It gives the band a tooth instead of a flat field, and being grey it
      carries no colour of its own, so it survives a palette change. The tile
      stitches, so nothing seams where it repeats. */
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='0.06'/%3E%3C/svg%3E");
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.62' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='0.16'/%3E%3C/svg%3E");
 
   /* Icons -------------------------------------------------------------- */
   --icon-ext: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6 2h8v8h-2V5.4L4.4 13 3 11.6 10.6 4H6z'/%3E%3C/svg%3E");
@@ -440,10 +438,14 @@ input, select, textarea, button { font-family: inherit; }
   transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
 }
 
+/* The same fill as .button--solid on a light page, so one callout reads as
+   one thing across the site. On the band that fill is only 1.5:1 against the
+   ground, so the shape is carried by the hairline the ghost button uses, and
+   the label by --page-paper at 8.1:1 on the fill. */
 .button--primary {
-  background: var(--inverse-fill);
-  border: 1px solid var(--inverse-fill);
-  color: var(--petrol-deep);
+  background: var(--accent-2);
+  border: 1px solid var(--inverse-rule);
+  color: var(--page-paper);
 }
 
 .button--primary:hover,
