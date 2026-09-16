@@ -48,8 +48,9 @@ jobs:
           curl -sSLo vnu.jar.sha1 "$base/vnu.jar.sha1"
           sha1sum -c vnu.jar.sha1
       - name: Validate every published page
-        # via.html is the superseded first draft and is not part of the site.
-        run: java -jar vnu.jar --errors-only index.html projects.html publications.html
+        # Every page of the site lives in the repository root, so the glob is
+        # the list: a page added later is validated without editing this file.
+        run: java -jar vnu.jar --errors-only ./*.html
 
   assets:
     name: Derived assets are current
