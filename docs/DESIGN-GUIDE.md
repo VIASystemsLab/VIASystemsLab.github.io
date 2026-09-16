@@ -123,10 +123,11 @@ component rule.**
 
 | Token | Value | Contrast on `--inverse-bg` |
 | --- | --- | --- |
-| `--inverse-bg` | `#4a2118` | — |
+| `--inverse-bg` | `#4a2118`, an alias of `--petrol` | — |
 | `--inverse-text` | `#f4eadf` | 11.6:1 |
 | `--inverse-soft` | `#d7b9ab` | 7.5:1 |
 | `--inverse-signal` | `#5fd4e3` | 7.9:1 |
+| `--inverse-fill` | derived: 22% `--accent-2` in `--inverse-text`, which lands on #c0c8c2 | 9.7:1 with `--petrol-deep` |
 | `--graph-ink` | derived: half `--inverse-signal` in `--inverse-soft`, which lands on #9bc6c7 | decorative, never text |
 
 ### There is one scheme

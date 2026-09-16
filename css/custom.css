@@ -54,12 +54,13 @@
   --signal-strong:  #6e2c20;  /* hover                         9.1:1    */
   --rule:           #d2c3ae;  /* hairlines and dividers (decorative)    */
 
-  /* Project tags are filled, so they need an explicit foreground that is
-     correct in both colour schemes rather than inheriting a surface token. */
-  --tag-armada-bg:   #8c3a2b;
-  --tag-armada-fg:   #f6f1e8;
-  --tag-datagems-bg: #085059;
-  --tag-datagems-fg: #f6f1e8;
+  /* Project tags are filled, so they name their own foreground rather than
+     inheriting a surface token. The names say what the pair is for; the
+     values come from the palette above, so a colour is edited in one place. */
+  --tag-armada-bg:   var(--signal);
+  --tag-armada-fg:   var(--page-paper);
+  --tag-datagems-bg: var(--accent-2);
+  --tag-datagems-fg: var(--page-paper);
 
   /* A note is a panel laid on a page surface, so its own background is the
      other surface: travertine on paper, paper on the travertine sections.
@@ -68,10 +69,14 @@
   --note-bg: var(--field);
 
   /* Inverse context (hero, footer) ------------------------------------ */
-  --inverse-bg:     #4a2118;
+  --inverse-bg:     var(--petrol);
   --inverse-text:   #f4eadf;  /* on --inverse-bg              11.6:1    */
   --inverse-soft:   #d7b9ab;  /* on --inverse-bg               7.5:1    */
   --inverse-signal: #5fd4e3;  /* on --inverse-bg               7.9:1    */
+  /* The filled callout on a band: the teal muted into the cream, so the
+     button sits with the palette rather than lighting up against it.
+     Lands on #c0c8c2, which carries --petrol-deep at 9.7:1. */
+  --inverse-fill:   color-mix(in srgb, var(--accent-2) 22%, var(--inverse-text));
   --inverse-rule:   rgb(244 234 223 / 0.28);
   /* The glow in the band's top corner: the brick, thinned, so it composites
      to a lighter oxblood over --inverse-bg. It was a literal teal from the
@@ -436,8 +441,8 @@ input, select, textarea, button { font-family: inherit; }
 }
 
 .button--primary {
-  background: var(--inverse-signal);
-  border: 1px solid var(--inverse-signal);
+  background: var(--inverse-fill);
+  border: 1px solid var(--inverse-fill);
   color: var(--petrol-deep);
 }
 
@@ -773,11 +778,11 @@ input, select, textarea, button { font-family: inherit; }
   /* Light by default. Below the md breakpoint the emblem straddles the band's
      diagonal and finishes on the page surface, where a shadow tuned for the
      dark ground reads as grime. */
-  filter: drop-shadow(0 6px 16px rgb(6 16 20 / 0.18));
+  filter: drop-shadow(0 6px 16px rgb(51 23 15 / 0.18));
 }
 
 @media screen and (min-width: 48em) {
-  .hero__figure img { filter: drop-shadow(0 12px 28px rgb(6 16 20 / 0.45)); }
+  .hero__figure img { filter: drop-shadow(0 12px 28px rgb(51 23 15 / 0.45)); }
 }
 
 .hero__h1 { margin: 0 0 1rem; }
