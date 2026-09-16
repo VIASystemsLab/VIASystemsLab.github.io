@@ -49,9 +49,13 @@ SITEMAP_PAGES = [
 ]
 
 # Brand colours, kept in step with the tokens at the top of css/custom.css.
-TRAVERTINE = "#efe8dc"
-PETROL = "#22434f"
-TERRACOTTA = "#9c4f38"
+# These are --page-paper, --petrol and --signal. The social card and the app
+# icons are the only artwork generated here that carries the palette, so when
+# a token changes, change it here and rebuild, or the card that unfurls on
+# someone else's site will be a redesign out of date.
+PAPER = "#f6f1e8"
+OXBLOOD = "#4a2118"
+BRICK = "#8c3a2b"
 
 
 def run(cmd: list[str]) -> None:
@@ -200,14 +204,14 @@ def build_og_card(tmp: str) -> list[str]:
     plaque = data_uri(os.path.join(ORIGINALS, "via-logo-horizontal-b.png"))
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="{TRAVERTINE}"/>
-  <rect x="26" y="26" width="1148" height="578" fill="none" stroke="{PETROL}" stroke-width="3"/>
-  <rect x="38" y="38" width="1124" height="554" fill="none" stroke="{PETROL}" stroke-width="1" stroke-opacity=".55"/>
+  <rect width="1200" height="630" fill="{PAPER}"/>
+  <rect x="26" y="26" width="1148" height="578" fill="none" stroke="{OXBLOOD}" stroke-width="3"/>
+  <rect x="38" y="38" width="1124" height="554" fill="none" stroke="{OXBLOOD}" stroke-width="1" stroke-opacity=".55"/>
   <image x="270" y="78" width="660" height="371" xlink:href="{plaque}"/>
-  <rect x="510" y="497" width="180" height="3" fill="{TERRACOTTA}"/>
-  <circle cx="562" cy="498.5" r="8" fill="{PETROL}"/>
-  <circle cx="600" cy="489" r="9" fill="{TERRACOTTA}"/>
-  <circle cx="638" cy="498.5" r="8" fill="{PETROL}"/>
+  <rect x="510" y="497" width="180" height="3" fill="{BRICK}"/>
+  <circle cx="562" cy="498.5" r="8" fill="{OXBLOOD}"/>
+  <circle cx="600" cy="489" r="9" fill="{BRICK}"/>
+  <circle cx="638" cy="498.5" r="8" fill="{OXBLOOD}"/>
 </svg>
 """
     staged = os.path.join(tmp, "og.svg")
@@ -238,7 +242,7 @@ def build_icons(tmp: str) -> list[str]:
     seal = data_uri(os.path.join(ORIGINALS, "via-logo-circle-b.png"))
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="{TRAVERTINE}"/>
+  <rect width="512" height="512" fill="{PAPER}"/>
   <image x="36" y="36" width="440" height="440" xlink:href="{seal}"/>
 </svg>
 """
