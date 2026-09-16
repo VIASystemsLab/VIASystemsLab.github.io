@@ -986,29 +986,50 @@ input, select, textarea, button { font-family: inherit; }
 
 .prose p + p { margin-top: 0; }
 
-.pullquote { margin: 0; }
-
 /*
- * The opening mark sits on its own line above the quotation.
+ * The opening mark hangs in its own column, level with the quotation rather
+ * than stacked above it, and the quotation is indented past it.
  *
- * It used to hang beside it, absolutely positioned, with a padding-left meant
- * to clear it. That could not hold: the glyph's advance width scales with its
- * font-size on a 9vw curve while the indent scaled on a 4vw one, so the gap
- * between them narrowed to a few pixels at some widths — and vanished entirely
- * with a fallback font, whose quotation mark is a different width again. A
- * block element cannot overlap what follows it, at any size, in any font.
+ * The mark was absolutely positioned once, with a padding-left meant to clear
+ * it. That could not hold: the glyph's advance width scales with its font-size
+ * on one curve while the indent scaled on another, so the gap between them
+ * narrowed to a few pixels at some widths, and vanished entirely with a
+ * fallback font whose quotation mark is a different width again. It then spent
+ * a while as a block on its own line, which could not collide but put the mark
+ * a long way above the words.
+ *
+ * An auto-width grid column removes the coupling instead of retuning it: the
+ * column is exactly as wide as the glyph, whatever size or font it ends up at,
+ * so the indent and the mark are one measurement rather than two that have to
+ * agree. There is no width here to keep in step.
  */
+.pullquote {
+  /* The one optical adjustment: how far the mark drops below the first line.
+     In em, so it scales with the glyph and not on a second curve. */
+  --quote-drop: 0.18em;
+  --quote-gap:  0.4rem;
+
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--quote-gap);
+}
+
 .pullquote::before {
   content: "\201C";
-  display: block;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+  margin-top: var(--quote-drop);
   font-family: var(--font-display);
   font-size: clamp(3.5rem, 7vw, 5.5rem);
   line-height: 0.75;
-  margin-bottom: 0.12em;
   color: var(--rule);
 }
 
 .pullquote blockquote {
+  grid-column: 2;
+  grid-row: 1;
   margin: 0;
   font-family: var(--font-display);
   font-size: var(--step-2);
@@ -1017,7 +1038,11 @@ input, select, textarea, button { font-family: inherit; }
   text-wrap: pretty;
 }
 
+/* Column 2, so the attribution lines up with the quotation it belongs to
+   rather than with the mark. */
 .pullquote figcaption {
+  grid-column: 2;
+  grid-row: 2;
   margin-top: 0.9rem;
   font-size: var(--step--1);
   letter-spacing: 0.12em;
