@@ -385,6 +385,12 @@ def check_css() -> None:
     for sheet in ("css/custom.css", "css/fonts.css"):
         with open(os.path.join(ROOT, sheet), encoding="utf-8") as fh:
             body = fh.read()
+        # A data URI is a document of its own, and a url() inside one points
+        # within that document, not at a file here. Drop them before looking
+        # for targets to resolve.
+        body = re.sub(r'url\(\s*"data:[^"]*"\s*\)', "", body)
+        body = re.sub(r"url\(\s*'data:[^']*'\s*\)", "", body)
+        body = re.sub(r"url\(\s*data:[^)]*\)", "", body)
         for url in re.findall(r"url\(\s*['\"]?([^'\")]+)", body):
             if url.startswith(("data:", "http", "#")):
                 continue
@@ -634,11 +640,18 @@ def check_design_guide() -> None:
     start = css.index(":root {")
     root = css[start:css.index(marker)] if marker in css else css[start:]
 
+    # Every token the table names has to exist, including the ones whose value
+    # is derived from another and so has no hex of its own.
+    for token in re.findall(r"\| `(--[a-z0-9-]+)` \|", guide):
+        if not re.search(rf"{re.escape(token)}:", root):
+            fail("docs/DESIGN-GUIDE.md", f"documents {token}, which css/custom.css does not declare")
+
+    # Where the table gives a hex, it has to be the hex the stylesheet gives.
     for token, quoted in re.findall(r"\| `(--[a-z0-9-]+)` \| `(#[0-9a-f]{6})` \|", guide):
         declared = re.search(rf"{re.escape(token)}:\s*(#[0-9a-f]{{6}})", root)
         if not declared:
-            fail("docs/DESIGN-GUIDE.md", f"documents {token}, which css/custom.css does not declare")
-        elif declared.group(1) != quoted:
+            continue
+        if declared.group(1) != quoted:
             fail(
                 "docs/DESIGN-GUIDE.md",
                 f"says {token} is {quoted} but css/custom.css declares {declared.group(1)}",
