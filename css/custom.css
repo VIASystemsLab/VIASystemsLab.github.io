@@ -49,7 +49,7 @@
   --ink-soft:       #4a3831;  /* metadata and secondary text   9.8:1    */
   --petrol:         #4a2118;  /* brand oxblood, used as a surface       */
   --petrol-deep:    #33170f;
-  --accent-2:       #0b6b77;  /* instrument cyan, used as ink  5.5:1    */
+  --accent-2:       #085059;  /* instrument cyan, used as ink  8.1:1    */
   --signal:         #8c3a2b;  /* brick: links, emphasis        6.8:1    */
   --signal-strong:  #6e2c20;  /* hover                         9.1:1    */
   --rule:           #d2c3ae;  /* hairlines and dividers (decorative)    */
@@ -58,7 +58,7 @@
      correct in both colour schemes rather than inheriting a surface token. */
   --tag-armada-bg:   #8c3a2b;
   --tag-armada-fg:   #f6f1e8;
-  --tag-datagems-bg: #0b6b77;
+  --tag-datagems-bg: #085059;
   --tag-datagems-fg: #f6f1e8;
 
   /* A note is a panel laid on a page surface, so its own background is the
@@ -871,8 +871,7 @@ input, select, textarea, button { font-family: inherit; }
   font-size: var(--step-4);
   letter-spacing: -0.01em;
   /* The one cool colour the page has, on the one heading level that marks
-     its structure. 5.5:1 on paper and 4.8:1 on travertine, both well past
-     what this size needs. */
+     its structure. 8.1:1 on paper and 7.1:1 on travertine. */
   color: var(--accent-2);
   margin-bottom: 0.6rem;
 }

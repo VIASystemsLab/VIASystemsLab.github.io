@@ -113,7 +113,7 @@ component rule.**
 | `--field` | `#ebe1d2` | Travertine band for alternate sections | — |
 | `--ink` | `#2a1d19` | Body text | 14.5:1 on paper |
 | `--ink-soft` | `#4a3831` | Metadata, secondary text | 9.8:1 |
-| `--accent-2` | `#0b6b77` | Instrument cyan used as *ink*: section titles, rules, tags | 5.5:1 on paper, 4.8:1 on travertine |
+| `--accent-2` | `#085059` | Instrument cyan used as *ink*: section titles, rules, tags | 8.1:1 on paper, 7.1:1 on travertine |
 | `--petrol` | `#4a2118` | Oxblood used as a *surface* | — |
 | `--signal` | `#8c3a2b` | Brick: links, emphasis | 6.8:1 |
 | `--signal-strong` | `#6e2c20` | Hover | 9.1:1 |
@@ -149,11 +149,12 @@ the seal and plaque for exactly that case.
 - **`--petrol` is a surface, `--accent-2` is ink.** Different hues as well as
   different roles: the oxblood grounds the dark bands, the instrument cyan
   marks rules and tags. Use the one that matches your intent.
-- **The cyan is the whole technical register.** `#0b6b77` is the emblem's own
-  teal at 91% saturation instead of 68% — the chroma of an indicator lamp
-  rather than a patina. It carries the "technology" reading almost single
-  handed, which is also why it stays confined to links, rules and small tags.
-  Spread across a surface it would read as a dashboard.
+- **The cyan is the whole technical register.** `#085059` is the emblem's own
+  teal at 91% saturation instead of 68%: the chroma of an indicator lamp
+  rather than a patina, with the brightness pulled down from 47% to 35% so it
+  can carry a heading at 8.1:1. It makes the "technology" reading almost
+  single handed, which is also why it stays confined to section titles, rules
+  and small tags. Spread across a surface it would read as a dashboard.
 - **Filled elements name both sides.** A tag with a coloured background gets
   its own `--tag-*-bg` / `--tag-*-fg` pair rather than inheriting a surface
   token, because the surface token flips between schemes and the pairing would
