@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Statement on AI and Scientific Research · VIA Systems Lab</title>
+<meta name="description" content="How the VIA Systems Lab uses, and declines to use, AI tools in scientific work: principles, example guidelines for review, presentations, coding, diagrams and citations.">
+<link rel="canonical" href="https://viasystemslab.github.io/ai-statement.html">
+
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f6f1e8">
+
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="icons/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="site.webmanifest">
+<link rel="author" type="text/plain" href="humans.txt">
+
+<link rel="preload" href="fonts/source-sans-3-roman-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/source-serif-4-roman-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/pure.css">
+<link rel="stylesheet" href="css/grids-responsive.css">
+<link rel="stylesheet" href="css/custom.css">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="VIA Systems Lab">
+<meta property="og:locale" content="en_GB">
+<meta property="og:url" content="https://viasystemslab.github.io/ai-statement.html">
+<meta property="og:title" content="Statement on AI and Scientific Research · VIA Systems Lab">
+<meta property="og:description" content="Tools amplify, they do not replace. Tools do not make decisions. Some tedious work is part of the process.">
+<meta property="og:image" content="https://viasystemslab.github.io/img/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="The VIA Systems Lab plaque: VIA SYSTEMS LAB, Verona Intelligent Analytics Systems.">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "dcterms": "http://purl.org/dc/terms/"
+  },
+  "@graph": [
+    {
+      "@id": "https://viasystemslab.github.io/ai-statement.html#webpage",
+      "@type": ["WebPage", "DigitalDocument"],
+      "url": "https://viasystemslab.github.io/ai-statement.html",
+      "name": "Statement on AI and Scientific Research",
+      "description": "How the VIA Systems Lab uses, and declines to use, AI tools in scientific work.",
+      "inLanguage": "en",
+      "dateModified": "2026-08",
+      "isPartOf": { "@id": "https://viasystemslab.github.io/#website" },
+      "about": { "@id": "https://viasystemslab.github.io/#organization" },
+      "author": { "@id": "https://viasystemslab.github.io/#organization" },
+      "editor": { "@id": "https://orcid.org/0000-0001-7922-5998" },
+      "isBasedOn": { "@id": "https://doi.org/10.5281/zenodo.22144397" },
+      "citation": [
+        { "@id": "https://doi.org/10.5281/zenodo.22144397" },
+        { "@id": "https://doi.org/10.48786/edbt.2025.78" }
+      ],
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "VIA Systems Lab", "item": "https://viasystemslab.github.io/" },
+          { "@type": "ListItem", "position": 2, "name": "Statement on AI and Scientific Research", "item": "https://viasystemslab.github.io/ai-statement.html" }
+        ]
+      }
+    },
+    {
+      "@id": "https://viasystemslab.github.io/#organization",
+      "@type": "ResearchOrganization",
+      "name": "VIA Systems Lab",
+      "alternateName": "Verona Intelligent Analytics Systems",
+      "url": "https://viasystemslab.github.io/",
+      "parentOrganization": { "@id": "https://ror.org/039bp8j42" },
+      "logo": { "@id": "https://viasystemslab.github.io/#emblem" }
+    },
+    {
+      "@id": "https://ror.org/039bp8j42",
+      "@type": "CollegeOrUniversity",
+      "name": "University of Verona",
+      "url": "https://www.univr.it/",
+      "sameAs": [ "https://ror.org/039bp8j42" ]
+    },
+    {
+      "@id": "https://doi.org/10.5281/zenodo.22144397",
+      "@type": "CreativeWork",
+      "name": "Crockett Lab Statement on AI and Scientific Research",
+      "author": { "@type": "Person", "name": "M. J. Crockett" },
+      "datePublished": "2026",
+      "publisher": { "@type": "Organization", "name": "Zenodo" },
+      "url": "https://doi.org/10.5281/zenodo.22144397",
+      "identifier": "10.5281/zenodo.22144397"
+    },
+    {
+      "@id": "https://doi.org/10.48786/edbt.2025.78",
+      "@type": "ScholarlyArticle",
+      "name": "Towards Reliable Conversational Data Analytics",
+      "datePublished": "2025",
+      "isPartOf": {
+        "@type": "PublicationEvent",
+        "name": "28th International Conference on Extending Database Technology (EDBT 2025)"
+      },
+      "url": "https://doi.org/10.48786/edbt.2025.78",
+      "identifier": "10.48786/edbt.2025.78",
+      "author": [
+        { "@type": "Person", "name": "Sihem Amer-Yahia" },
+        { "@type": "Person", "name": "Jasmina Bogojeska" },
+        { "@type": "Person", "name": "Roberta Facchinetti" },
+        { "@type": "Person", "name": "Valeria Franceschi" },
+        { "@type": "Person", "name": "Aristides Gionis" },
+        { "@type": "Person", "name": "Katja Hose" },
+        { "@type": "Person", "name": "Georgia Koutrika" },
+        { "@type": "Person", "name": "Roger Kouyos" },
+        { "@id": "https://orcid.org/0000-0001-7922-5998" },
+        { "@type": "Person", "name": "Silviu Maniu" },
+        { "@type": "Person", "name": "Katsiaryna Mirylenka" },
+        { "@type": "Person", "name": "Davide Mottin" },
+        { "@type": "Person", "name": "Themis Palpanas" },
+        { "@type": "Person", "name": "Mattia Rigotti" },
+        { "@type": "Person", "name": "Yannis Velegrakis" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+
+<body id="top">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="masthead">
+  <div class="masthead__inner">
+    <a class="wordmark" href="index.html">
+      <picture>
+        <source type="image/webp" srcset="img/via-logo-circle-b-240.webp">
+        <img class="wordmark__seal" src="img/via-logo-circle-b-240.png" width="240" height="240" alt="" decoding="async">
+      </picture>
+      <span class="wordmark__text">
+        <span class="wordmark__name">VIA Systems Lab</span>
+        <span class="wordmark__sub">Verona Intelligent Analytics Systems</span>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <ul class="nav__list">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#research">Research</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="publications.html">Publications</a></li>
+        <li><a href="index.html#people">People</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="pagehead" aria-labelledby="page-title">
+    <div class="shell pure-g">
+      <div class="pagehead__text pure-u-1 pure-u-md-5-6 pure-u-lg-17-24">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="index.html">VIA Systems Lab</a></li>
+            <li aria-current="page">AI statement</li>
+          </ol>
+        </nav>
+        <h1 id="page-title" class="pagehead__h1">Statement on AI and Scientific Research</h1>
+        <p class="pagehead__lead">
+          How this lab uses, and declines to use, AI tools in scientific work.
+          It applies to our research, to what we publish, and to the code and
+          data we release.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="principles-title">
+    <div class="shell pure-g">
+      <header class="section__head pure-u-1 pure-u-md-5-6 pure-u-lg-17-24">
+        <p class="eyebrow"><span class="eyebrow__num">01</span> Principles</p>
+        <h2 id="principles-title" class="section__title">The people in this lab believe in the following principles</h2>
+      </header>
+
+      <ul class="openlist pure-g">
+        <li class="openitem pure-u-1 pure-u-md-1-3">
+          <h3 class="openitem__title">Tools amplify, they do not replace</h3>
+          <p>In the hands of someone who already understands the problem, a tool
+            is a force multiplier. It sharpens and speeds up work, but it cannot
+            substitute for the knowledge required to use it well. For the same
+            reason, a tool used without responsible direction can just as readily
+            amplify bias, discrimination, and harm.</p>
+        </li>
+        <li class="openitem pure-u-1 pure-u-md-1-3">
+          <h3 class="openitem__title">Tools do not make decisions</h3>
+          <p>However capable a tool is, the judgment calls remain ours. A tool can
+            inform a decision; it cannot stand in for the process of making one.</p>
+        </li>
+        <li class="openitem pure-u-1 pure-u-md-1-3">
+          <h3 class="openitem__title">Some tedious work is part of the process, not an obstacle to it</h3>
+          <p>Even where a tool could reliably automate a manual task, we do not
+            concede that step by default. Certain work teaches us something
+            precisely because it is slow and manual, and we protect the right to
+            keep doing it by hand.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="statement-title">
+    <div class="shell pure-g">
+      <header class="section__head pure-u-1 pure-u-md-5-6 pure-u-lg-17-24">
+        <p class="eyebrow"><span class="eyebrow__num">02</span> Statement</p>
+        <h2 id="statement-title" class="section__title">On the use of AI in our scientific work</h2>
+        <p class="section__standfirst">
+          Based on these principles, and on the work and thoughts of other
+          researchers <span class="cmark">[C]</span>, we have developed the
+          following statement.
+        </p>
+      </header>
+
+      <div class="prose main-prose pure-u-1 pure-u-md-1 pure-u-lg-17-24">
+        <p>
+          &ldquo;AI&rdquo; refers to a diverse set of automated and semiautomated
+          technologies including (but not limited to) predictive machine learning
+          systems, automated transcription, generative models that produce images
+          and text, chatbots built on large language models (LLMs), and coding
+          agents that automate programming tasks. Some forms of this technology
+          offer substantial benefits for our research, while other forms threaten
+          our core values. <span class="cmark">[C]</span>
+        </p>
+        <p>
+          The lab holds two priorities as equal: producing reliable knowledge and
+          supporting the development of knowers, namely students, teachers,
+          researchers, and practitioners. Neither one comes first. There is no
+          knowledge without knowers who exist in community with one another, and
+          we are committed to sustaining that community so the practice of science
+          can continue.
+        </p>
+        <p>
+          Papers and reports document our work so that others can learn from it and
+          build on it. Software and data give that work a working, reproducible
+          form, so others can run it, check it, and extend it. Neither is the goal.
+          The goal is to improve our understanding of the world, to build our
+          knowledge and skills as scientists, and to pass that knowledge and those
+          skills on, so that the world benefits from them. Reliability and trust
+          are the guiding principle behind both priorities: we need knowledge that
+          can be trusted, and we need the knowers who produce it to be trustworthy
+          in turn. We are concerned that the widespread and uncritical use of AI
+          tools in science erodes the personal relationships and collective
+          learning on which both priorities depend.
+        </p>
+        <p>
+          We are also concerned about the widespread use of proprietary models for
+          producing scientific findings, which threatens transparency and
+          reproducibility, cornerstones of robust science. As a rule, we do not
+          rely on the conclusions of proprietary models as findings in their own
+          right; any result we report must be reproducible on inspectable, fixed
+          machinery, not on an opaque system whose workings we cannot inspect or
+          rerun identically.
+        </p>
+        <p>
+          We recognize that many of the companies developing AI tools engage in
+          unethical business practices, e.g., by training their models on stolen
+          data and exploiting the labor of vulnerable people. We are alarmed by
+          industrial development of power-hungry data centers during a climate
+          emergency, and by the deployment of chatbot products that harm mental
+          health. When we use AI tools, particularly those developed by
+          profit-seeking companies, we are complicit in these harms. Open, local
+          models already exist, and we expect them to become practical to run
+          alongside proprietary ones. We do not build new models ourselves; our
+          research is aimed at building applications that work on top of these open
+          alternatives, so that dependence on proprietary products is a choice, not
+          a necessity.
+        </p>
+        <p>
+          These values and acknowledgments inform our approach to incorporating AI
+          in our scientific work. We agree with the position taken elsewhere
+          <span class="cmark">[C]</span> that many of the potential benefits and
+          threats of this technology cannot be summarized in a generic lab policy;
+          rather, the tradeoffs depend on the specifics of the project, the AI tool
+          in question, and the training stage of the lab member.
+        </p>
+        <p>
+          Every lab member develops a personal AI policy in consultation with their
+          mentors, revisited each semester. We support conscientious refusal as a
+          valid choice, and collaborative projects must respect and communicate
+          each member&rsquo;s policy from the outset.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="guidelines-title">
+    <div class="shell pure-g">
+      <header class="section__head pure-u-1 pure-u-md-5-6 pure-u-lg-17-24">
+        <p class="eyebrow"><span class="eyebrow__num">03</span> Guidelines</p>
+        <h2 id="guidelines-title" class="section__title">Example guidelines</h2>
+        <p class="section__standfirst">
+          How we currently handle the situations that come up most often. They
+          are worked examples for a personal policy to start from, not a rule
+          that settles every case.
+        </p>
+      </header>
+
+      <dl class="statement-list main-prose pure-u-1 pure-u-md-11-12 pure-u-lg-17-24">
+        <div class="statement-list__item">
+          <dt>Peer review</dt>
+          <dd>AI tools are never used to review a manuscript or grant. They may be
+            used to reformulate an already-written review for language and clarity,
+            provided no private or de-anonymizing information is shared in the
+            process.</dd>
+        </div>
+        <div class="statement-list__item">
+          <dt>Presentations</dt>
+          <dd>Use of AI to draft a presentation is strongly discouraged. Building a
+            talk is a manual process because it is a dialogue with the material, and
+            it requires the presenter to think deeply about what is being presented.
+            Delegating that drafting is delegating the thinking itself. AI tools may
+            still be used to template, summarize, or translate a message that has
+            already been written by the presenter.</dd>
+        </div>
+        <div class="statement-list__item">
+          <dt>Coding</dt>
+          <dd>AI tools may be used to translate precise, already-specified
+            requirements into code. They are never used to decide on technology
+            choices, nor to invent algorithms; both require thinking and a decision
+            made beforehand by the researcher, in part because we have no clear way
+            to attribute authorship for an algorithm we did not design. Tests are
+            always written first. Using AI to search for bugs is acceptable,
+            provided we acknowledge that such a search is not exhaustive and its
+            findings are double-checked.</dd>
+        </div>
+        <div class="statement-list__item">
+          <dt>Diagrams</dt>
+          <dd>AI tools may be used to translate information into an editable
+            diagram, but only once that information is already understood and
+            described by the person making the diagram. Making a diagram is itself
+            part of understanding, and the result must remain manually editable. We
+            never produce diagrams that cannot be edited by hand, since a fixed,
+            non-editable diagram discourages the manual fixing that is part of
+            getting it right.</dd>
+        </div>
+        <div class="statement-list__item">
+          <dt>Finding citations</dt>
+          <dd>AI tools may be used to help locate candidate citations, but every
+            citation used in our work is read and assessed by the author before it
+            is included. We verify, for each one, that the paper exists, that it is
+            relevant to the claim it supports, that it actually contains the content
+            being claimed, and that all bibliographic data is correct.</dd>
+        </div>
+      </dl>
+
+      <p class="note pure-u-1 pure-u-md-3-4 pure-u-lg-2-3">
+        We will discuss and revisit this statement annually and revise it in light
+        of our experiences and new information.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="refs-title">
+    <div class="shell pure-g">
+      <header class="section__head pure-u-1 pure-u-md-5-6 pure-u-lg-17-24">
+        <p class="eyebrow"><span class="eyebrow__num">04</span> Sources</p>
+        <h2 id="refs-title" class="section__title">Acknowledgement and references</h2>
+        <p class="section__standfirst">
+          This statement adapts the original text of the Crockett Lab statement,
+          and is informed by our own work on AI and scientific research. Both
+          are below.
+        </p>
+      </header>
+
+      <ol class="pubs pure-u-1 pure-u-md-8-12 pure-u-lg-15-24">
+        <li class="pub">
+          <h3 class="pub__title">
+            <a href="https://doi.org/10.5281/zenodo.22144397">Crockett Lab Statement on AI and Scientific Research</a>
+          </h3>
+          <p class="pub__detail">
+            <span class="pub__authors">M. J. Crockett</span>.
+            <span class="pub__venue">Zenodo</span>, <time datetime="2026">2026</time>.
+            <a class="link-ext" href="https://doi.org/10.5281/zenodo.22144397">doi:10.5281/zenodo.22144397</a>
+          </p>
+        </li>
+        <li class="pub">
+          <h3 class="pub__title">
+            <a href="https://doi.org/10.48786/edbt.2025.78">Towards Reliable Conversational Data Analytics</a>
+          </h3>
+          <p class="pub__detail">
+            <span class="pub__authors">Sihem Amer-Yahia, Jasmina Bogojeska, Roberta
+            Facchinetti, Valeria Franceschi, Aristides Gionis, Katja Hose, Georgia
+            Koutrika, Roger Kouyos, Matteo Lissandrini, Silviu Maniu, Katsiaryna
+            Mirylenka, Davide Mottin, Themis Palpanas, Mattia Rigotti, Yannis
+            Velegrakis</span>.
+            <span class="pub__venue">Proceedings of the 28th International Conference
+            on Extending Database Technology, EDBT 2025</span>.
+            <a class="link-ext" href="https://doi.org/10.48786/edbt.2025.78">doi:10.48786/edbt.2025.78</a>
+          </p>
+        </li>
+      </ol>
+
+      <aside class="note pure-u-1 pure-u-md-8-12 pure-u-lg-15-24">
+        <h3 class="note__title">How this document was written</h3>
+        <p>
+          This document itself was produced with the help of an AI tool, used to
+          reformulate and restructure the original Crockett Lab statement into this
+          one. The process was directed sentence by sentence by the editor (Matteo
+          Lissandrini): for each passage, the editor specified what needed to change
+          and why, the AI tool proposed alternative wordings, and the lab selected,
+          edited, or rejected each proposal before it was included. The editor also
+          reviewed the final text to ensure it met the lab&rsquo;s standards and
+          requirements.
+        </p>
+        <p>
+          Every sentence carried over unchanged from the original is marked
+          <span class="cmark">[C]</span>; a marker is removed once its paragraph has
+          been reformulated through this process.
+        </p>
+      </aside>
+
+      <p class="statement-date pure-u-1">Last update: <time datetime="2026-08">August 2026</time>.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact" class="footer" vocab="https://schema.org/" typeof="ResearchOrganization" resource="https://viasystemslab.github.io/#organization">
+  <div class="shell pure-g">
+
+    <div class="footer__col pure-u-1 pure-u-md-1-3">
+      <h2 class="footer__title">Contact</h2>
+      <address class="footer__body">
+        <a property="email" href="mailto:matteo.lissandrini@univr.it">matteo.lissandrini@univr.it</a><br>
+        <span property="parentOrganization" typeof="CollegeOrUniversity" resource="https://ror.org/039bp8j42">
+          <span property="name">University of Verona</span><br>
+          Department of Foreign Languages and Literatures<br>
+          <span property="address" typeof="PostalAddress"><span property="addressLocality">Verona</span>, <span property="addressCountry">Italy</span></span>
+        </span>
+      </address>
+    </div>
+
+    <div class="footer__col pure-u-1 pure-u-md-1-3">
+      <h2 class="footer__title">This site</h2>
+      <ul class="footer__body footer__list">
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="publications.html">Publications</a></li>
+        <li><a href="ai-statement.html" aria-current="page">AI statement</a></li>
+        <li><a class="link-ext" href="https://github.com/VIASystemsLab/VIASystemsLab.github.io">Source on GitHub</a></li>
+        <li><a href="humans.txt">humans.txt</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col pure-u-1 pure-u-md-1-3">
+      <h2 class="footer__title">Funding</h2>
+      <div class="footer__body">
+        <p class="footer__euflag">
+          <picture>
+            <source type="image/webp" srcset="img/eu-flag-192.webp">
+            <img src="img/eu-flag-192.png" width="237" height="158"
+                 alt="Flag of the European Union" loading="lazy" decoding="async">
+          </picture>
+          <span>Funded by the<br>European Union</span>
+        </p>
+        <ul class="footer__list">
+          <li>ARMADA, grant 101168951</li>
+          <li>DataGEMS, grant 101188416</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__marks pure-u-1">
+      <!-- The footer band is dark in both colour schemes, so the white cut is
+           always the right one and there is nothing to switch on. -->
+      <picture class="footer__plaque">
+        <source type="image/webp" srcset="img/via-logo-horizontal-w-280.webp 280w, img/via-logo-horizontal-w-560.webp 560w" sizes="11rem">
+        <img src="img/via-logo-horizontal-w-280.png"
+             srcset="img/via-logo-horizontal-w-280.png 280w, img/via-logo-horizontal-w-560.png 560w"
+             sizes="11rem" width="1672" height="941"
+             alt="VIA Systems Lab" loading="lazy" decoding="async">
+      </picture>
+      <picture class="footer__univr">
+        <source type="image/webp" srcset="img/univr-dlls-480.webp 480w, img/univr-dlls-960.webp 960w" sizes="13rem">
+        <img src="img/univr-dlls-480.png"
+             srcset="img/univr-dlls-480.png 480w, img/univr-dlls-960.png 960w"
+             sizes="13rem" width="2362" height="472"
+             alt="University of Verona, Department of Foreign Languages and Literatures"
+             loading="lazy" decoding="async">
+      </picture>
+    </div>
+
+    <div class="footer__fine pure-u-1">
+      <p>
+        <strong>Provenance.</strong> The lab emblem was created with OpenAI&rsquo;s
+        ChatGPT image generation tool and refined by hand; this site&rsquo;s markup,
+        styles and tooling were drafted with Claude Opus 5 and reviewed by the
+        authors. Full statement in <a href="humans.txt">humans.txt</a>.
+      </p>
+      <p>
+        <strong>Funding disclaimer.</strong> Views and opinions expressed are
+        those of the authors only and do not necessarily reflect those of the
+        European Union or the granting authority. Neither the European Union nor
+        the granting authority can be held responsible for them.
+      </p>
+      <p>
+        <strong>Colophon.</strong> Set in Source Serif 4 and Source Sans 3 under
+        the SIL Open Font Licence, on Pure CSS 3.0.0. No cookies, no analytics,
+        no third-party requests; readable without JavaScript.
+      </p>
+      <p>
+        <strong>Accessibility.</strong> If you find a problem,
+        <a href="mailto:matteo.lissandrini@univr.it">tell us</a> and we will fix
+        it. Content &copy; VIA Systems Lab, University of Verona.
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>

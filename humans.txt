@@ -12,7 +12,7 @@
 
 /* THANKS */
 
-	European Union — ARMADA, grant agreement 101168951, and DataGEMS,
+	European Union, for ARMADA, grant agreement 101168951, and DataGEMS,
 	grant agreement 101188416, both under Horizon Europe.
 
 	Athena Research Center, Greece, and the DataGEMS consortium.
