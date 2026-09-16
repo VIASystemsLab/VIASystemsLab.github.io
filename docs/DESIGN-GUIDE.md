@@ -132,8 +132,12 @@ write a font size.** Body is `--step-0` (1–1.1rem) at line height 1.62.
 - Uppercase is for short labels only: eyebrows, tags, column titles, the
   wordmark. Never for a sentence.
 - `text-wrap: balance` on headings, `pretty` on pull quotes.
-- Measure is capped per component (`--measure`, or a `ch` value). Long lines are
-  a legibility bug, not a layout preference.
+- Measure is capped per component: `--measure` for prose, `--measure-lead`
+  (68ch) for the standfirst under a section heading, or a local `ch` value.
+  **The cap is deliberately narrower than the column it sits in.** A standfirst
+  block spans 17/24 of the shell, but its text stops around 56% — filling the
+  column would give a ~95-character line. Long lines are a legibility bug, not
+  a layout preference.
 - Numbers in metadata use `font-variant-numeric: lining-nums tabular-nums` so
   columns of grant numbers and dates align.
 
@@ -200,11 +204,18 @@ the band's element overlaps the section beneath it by `--hero-skew` /
 `--pagehead-skew`, so what shows through the diagonal **is that section**, in
 whatever colour it has. There is no second colour to keep in step.
 
-The emblem hangs past the hero's content row into that overlap, crossing the
-diagonal. That is the one deliberate piece of dynamism on the site, and it is a
-margin on an ordinary Pure unit — it reflows, wraps and zooms like anything
-else. The offset is always smaller than the hero's bottom padding, so the
-emblem can never reach the section below however the text grows.
+The emblem hangs past the hero's content row, crosses the diagonal and carries
+on into the section below. That is the one deliberate piece of dynamism on the
+site, and it is a margin on an ordinary Pure unit — it reflows, wraps and zooms
+like anything else.
+
+The offset is deliberately larger than the hero's own bottom padding: the
+emblem is meant to leave the band, not stop at it. What keeps it safe is the
+section underneath. That section is pulled up by the skew and adds the same
+amount back as padding, so its first line of text always sits `--section-pad`
+below the hero's bottom edge, whatever the viewport. **If you change the hero's
+padding, the skew or the overhang, re-check that clearance** — it is the only
+thing standing between the emblem and the text below it.
 
 ### Rhythm
 

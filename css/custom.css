@@ -89,12 +89,23 @@
   --row-gap:     clamp(2rem, 4vw, 3.5rem);
   --section-pad: clamp(3rem, 7vw, 6.5rem);
   --measure:     38rem;
+  /* The standfirst under a section heading. Wider than body copy because it
+     is set larger and read in one pass, but still capped: the column it sits
+     in is wider than this, and filling it would give a ~95-character line. */
+  --measure-lead: 68ch;
 
   /* How far each dark band overlaps the section beneath it. These live here,
      not on .hero and .pagehead, because the section that follows reads them
      too — and a sibling inherits nothing from the element before it. */
-  --hero-skew:     clamp(3rem, 10vw, 8rem);
+  --hero-skew:     clamp(4.5rem, 14vw, 12rem);
   --pagehead-skew: clamp(2rem, 5vw, 4rem);
+
+  /* How far the emblem hangs below the hero, and how much extra room the
+     section underneath reserves for it. Zero until the emblem is actually
+     allowed to overhang, which is only from the large breakpoint up — so the
+     reserved space never appears on a layout that does not use it. */
+  --hero-overhang: 0rem;
+  --hero-reserve:  0rem;
 
   /* Icons -------------------------------------------------------------- */
   --icon-ext: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6 2h8v8h-2V5.4L4.4 13 3 11.6 10.6 4H6z'/%3E%3C/svg%3E");
@@ -128,6 +139,14 @@
     --inverse-soft:   #a4b1b7;
     --inverse-signal: #e2977d;
     --inverse-rule:   rgb(233 227 215 / 0.22);
+  }
+}
+
+/* The emblem overhangs only once there is room for it beside the text. */
+@media screen and (min-width: 64em) {
+  :root {
+    --hero-overhang: clamp(3.5rem, 11vw, 12rem);
+    --hero-reserve:  clamp(0rem, 3vw, 3.5rem);
   }
 }
 
@@ -538,7 +557,7 @@ input, select, textarea, button { font-family: inherit; }
   position: relative;
   z-index: 1;
   color: var(--inverse-text);
-  padding-block: clamp(2rem, 5vw, 4rem) clamp(4rem, 11vw, 9rem);
+  padding-block: clamp(2rem, 5vw, 4rem) clamp(2.5rem, 6vw, 5rem);
 
   /* The band overlaps the section below it by exactly --skew, so what shows
      through the diagonal is that section itself. See .hero::before. */
@@ -582,7 +601,7 @@ input, select, textarea, button { font-family: inherit; }
  * here would resolve to nothing and the padding would collapse to zero.
  */
 .hero + .section {
-  padding-top: calc(var(--section-pad) + var(--hero-skew));
+  padding-top: calc(var(--section-pad) + var(--hero-skew) + var(--hero-reserve));
 }
 
 .pagehead + .section {
@@ -599,7 +618,12 @@ input, select, textarea, button { font-family: inherit; }
 }
 
 @media screen and (min-width: 48em) {
-  .hero__figure { max-width: none; margin: 0; }
+  .hero__figure {
+    max-width: none;
+    margin: 0;
+    /* --hero-overhang is 0 until 64em, so this is inert at this width. */
+    margin-bottom: calc(-1 * var(--hero-overhang));
+  }
 }
 
 .hero__figure img {
@@ -661,16 +685,6 @@ input, select, textarea, button { font-family: inherit; }
 
 @media screen and (min-width: 64em) {
   .hero__grid { align-items: flex-end; }
-  .hero__figure {
-    /* The emblem hangs past the bottom of its row and crosses the diagonal:
-       this is the "pull" of the page. It is a margin on an ordinary Pure unit,
-       not absolute positioning, so it still reflows, wraps and zooms. The
-       hero's bottom padding is always larger than this offset, so the emblem
-       cannot reach the section below however the text grows. The offset is
-       kept under the wedge height too, so the emblem crosses the diagonal
-       rather than clearing it. */
-    margin-bottom: clamp(-6.5rem, -6vw, -2rem);
-  }
   .hero__text {
     padding-bottom: clamp(0.5rem, 2vw, 2rem);
   }
@@ -709,7 +723,7 @@ input, select, textarea, button { font-family: inherit; }
 }
 
 .section__standfirst {
-  max-width: 44ch;
+  max-width: var(--measure-lead);
   font-size: var(--step-1);
   line-height: 1.5;
   color: var(--ink-soft);
@@ -1424,18 +1438,12 @@ input, select, textarea, button { font-family: inherit; }
 }
 
 .pagehead__lead {
-  max-width: 52ch;
+  max-width: var(--measure-lead);
   font-size: var(--step-1);
   line-height: 1.5;
   color: var(--inverse-text);
 }
 
-.pagehead__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
-}
 
 
 
