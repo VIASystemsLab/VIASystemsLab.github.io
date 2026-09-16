@@ -119,8 +119,9 @@ the organisation and the university by `@id`.
 
 ### `publications.html`
 
-A `CollectionPage` with a `BreadcrumbList`. **No output entities yet**, because
-none has been verified — see §6.
+A `CollectionPage` with a `BreadcrumbList` and an `ItemList`, plus a
+`ScholarlyArticle` for every listed publication, each with its DOI as `@id` and
+a `funding` reference to the project that paid for it. See §6.
 
 ---
 
@@ -215,14 +216,17 @@ it is the property EU reporting cares about, so do not omit it.
 
 ## 6. The verification rule
 
-**An output is published only once its record has been checked against the DOI
-itself.** Not against a memory of it, not against a citation in another paper,
-not against a preprint's metadata.
+**Every entry on the publications page has a resolving DOI, and its record has
+been checked against that DOI.** Not against a memory of it, not against a
+citation in another paper, not against a preprint's metadata.
 
-Until then the visible entry stays marked `is-pending` and **no JSON-LD node is
-created for it**. An incomplete visible entry is honest and costs a reader
-nothing. A wrong DOI in structured data is copied into reference managers and
-aggregator databases within days and is very hard to retract.
+No DOI means no entry. The page lists peer-reviewed publications only: there is
+no forthcoming section, no work in preparation, and no placeholder marked
+pending. Data and software are published with the project that produced them.
+
+A wrong DOI in structured data is copied into reference managers and aggregator
+databases within days, and is very hard to retract. Leaving a paper off the list
+until its DOI exists costs a reader nothing by comparison.
 
 The same applies to ORCID iDs, ROR IDs, grant numbers and affiliations.
 

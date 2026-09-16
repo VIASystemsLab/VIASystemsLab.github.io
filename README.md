@@ -34,6 +34,7 @@ python3 tools/lint.py
 | `index.html` | The homepage, in navigation order: hero, about, research themes, project highlights, people, footer. |
 | `projects.html` | Every project, in full. The homepage carries highlights only. |
 | `publications.html` | Every output, grouped by kind. |
+| `ai-statement.html` | The lab's statement on AI and scientific research: principles, example guidelines, and the sources it adapts, including how the document itself was written. Linked from About, from the publications practice section and from the open-practice notes. |
 | `img/original/` | The lab's master artwork. Edited by hand. |
 | `img/logos/` | Third-party marks — the university, the EU emblem, partner projects. Reproduced as supplied: read [`img/logos/README.md`](img/logos/README.md) before touching them. |
 
@@ -47,6 +48,15 @@ python3 tools/lint.py
 | `fonts/` | Source Serif 4 and Source Sans 3, variable, `latin` and `latin-ext` subsets. |
 | `icons/favicon.svg` | The favicon, hand-drawn. Every PNG icon beside it is generated from it or from the seal. |
 | `img/` | Everything directly in here is generated from `img/original/` and `img/logos/`. Do not edit. |
+
+**All presentation lives in `css/custom.css`.** The pages carry no `style`
+attribute, no `<style>` element, no SVG presentation attribute (`fill`,
+`stroke`, `stop-color`, …) and no presentational HTML attribute (`align`,
+`bgcolor`, …). To change how something looks, give it a class and style the
+class. `tools/lint.py` fails the build on any of them.
+
+Geometry is not presentation: a path's `d`, a circle's `cx`, a `viewBox` and
+`preserveAspectRatio` describe the shape itself and belong in the markup.
 
 ### Metadata, tooling and checks
 
@@ -144,29 +154,44 @@ repositories, then record it in the project's `sameAs`.
 
 ### A publication
 
-In `publications.html`. Each entry goes in the group matching its kind, newest
-first. There is a filled-in template in an HTML comment at the end of the list
-— copy that.
+In `publications.html`. There is a filled-in template in an HTML comment at the
+end of the list — copy that.
 
-Every entry carries two things: a **kind** tag and the **project** that funded
-it. The tag classes are:
+Groups and tags are two different axes, and it is worth keeping them apart:
+
+- **The group** says what kind of contribution the paper makes: a journal
+  article, a research paper, a vision or position paper, a demonstration, a
+  poster. Put the entry in the matching group, newest first.
+- **The tags** say where it was published and who paid for it: the type of
+  publication, then the venue, then the funding project.
+
+So a vision paper that appeared at a conference is filed under **Vision and
+position papers** and tagged **Conference**. The two do not have to agree
+because they are not answering the same question.
+
+The tag classes are:
 
 ```
-tag--vision  tag--journal  tag--conference  tag--demo
-tag--poster  tag--dataset  tag--software
-tag--armada  tag--datagems           (funding project)
-tag--venue   tag--pending            (venue label, unverified marker)
+tag--journal  tag--conference  tag--workshop  tag--demo  tag--poster
+tag--dataset  tag--software                 (project outputs)
+tag--armada   tag--datagems                 (funding project)
+tag--venue                                  (venue label)
 ```
 
-Kinds are distinguished by border style as well as by colour, so they still
+Types are distinguished by border style as well as by colour, so they still
 read in greyscale and to a colour-blind reader. Keep that property if you add a
-new kind.
+new type.
 
-An entry is published in full only when its title, authors, year and DOI have
-been checked **against the DOI itself**. Until then leave it marked
-`is-pending`: a visibly incomplete entry is honest, a confidently wrong DOI is
-not. `tools/lint.py` enforces the same rule for structured data — it fails if
-the JSON-LD asserts an ORCID iD or an email address the page never shows.
+**Every entry has a resolving DOI.** No DOI, no entry: not a preprint, not a
+paper in preparation, not a placeholder. The page lists peer-reviewed
+publications only, so there is no forthcoming section. Data and software are
+published with the project that produced them.
+
+Resolve the DOI and check the title, authors, year and venue against what it
+resolves to before adding anything. `tools/lint.py` fails the build if a
+published entry has no `doi.org` link, and if the structured data asserts an
+ORCID iD or an email address the page never shows. It cannot tell you the DOI
+points at the right paper.
 
 ### A person
 
@@ -196,14 +221,20 @@ agreement.
 palette, type scale, layout, composition rules and what is deliberately absent.
 Read it before changing how anything looks.
 
-All colour and type decisions live at the top of `css/custom.css`, in `:root`
-and in the `prefers-color-scheme: dark` block. Change them there, never in a
-component.
+All colour and type decisions live at the top of `css/custom.css`, in `:root`.
+Change them there, never in a component.
 
-The palette is sampled from the lab emblem: travertine, petrol, terracotta,
-ink. Both schemes meet WCAG AA on every text pair; body text on paper is
-13.3:1. **If you change a colour, re-check the pairs it appears in** — the
-tokens carry their measured ratio in a comment.
+The palette is sampled from the lab emblem: travertine, oxblood brick and ink,
+with the node-graph's teal raised to an instrument cyan and used only as a
+signal. There is one scheme; the site does not follow `prefers-color-scheme`,
+and [docs/DESIGN-GUIDE.md](docs/DESIGN-GUIDE.md) says why. Every text pair
+meets WCAG AA; body text on paper is 14.5:1. **If you change a colour,
+re-check the pairs it appears in** — the tokens carry their measured ratio in a
+comment, and `tools/lint.py` checks the arithmetic.
+
+A component that needs a value to vary exposes it as a custom property with a
+default, rather than being copied and edited. `.graph`, the node figure on the
+hero band, is the worked example.
 
 Two typefaces, both variable, both under the SIL Open Font Licence:
 Source Serif 4 for headings, Source Sans 3 for everything else.
