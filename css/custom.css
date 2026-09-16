@@ -1364,9 +1364,8 @@ input, select, textarea, button { font-family: inherit; }
    barely half its column at the widest sizes, while the rule above it spanned
    the whole width, so the blocks read as mis-sized. */
 .openitem p {
-  font-size: var(--step--1);
   color: var(--ink-soft);
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 /* ========================================================================
