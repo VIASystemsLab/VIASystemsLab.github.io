@@ -5,3 +5,9 @@
 CLAUDE.md
 .claude
 .temp
+
+# Per-person commit identity; see .gitidentity.example
+.gitidentity
+# Python bytecode, from running the tools in tools/
+__pycache__/
+*.pyc

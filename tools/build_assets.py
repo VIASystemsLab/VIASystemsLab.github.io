@@ -41,17 +41,21 @@ LOCKFILE = os.path.join(ROOT, "assets.lock.json")
 SITE_ORIGIN = "https://viasystemslab.github.io"
 
 # Pages that are part of the published site, with their sitemap settings.
-# via.html is the superseded first draft and is deliberately absent.
 SITEMAP_PAGES = [
     ("index.html", "1.0", "monthly"),
     ("projects.html", "0.8", "monthly"),
     ("publications.html", "0.8", "weekly"),
+    ("ai-statement.html", "0.6", "yearly"),
 ]
 
 # Brand colours, kept in step with the tokens at the top of css/custom.css.
-TRAVERTINE = "#efe8dc"
-PETROL = "#22434f"
-TERRACOTTA = "#9c4f38"
+# These are --page-paper, --petrol and --signal. The social card and the app
+# icons are the only artwork generated here that carries the palette, so when
+# a token changes, change it here and rebuild, or the card that unfurls on
+# someone else's site will be a redesign out of date.
+PAPER = "#f6f1e8"
+OXBLOOD = "#4a2118"
+BRICK = "#8c3a2b"
 
 
 def run(cmd: list[str]) -> None:
@@ -120,16 +124,22 @@ def build_images(tmp: str) -> list[str]:
 
     # The emblem carries the hero. It is the one image big enough to be worth
     # three widths, and it is served as WebP with a single PNG fallback.
-    pictorial = os.path.join(ORIGINALS, "via-logo-pictorial.png")
-    for width in (480, 720, 1080):
-        staged = os.path.join(tmp, f"pictorial-{width}.png")
-        resize(pictorial, width, staged)
-        target = os.path.join(out, f"via-logo-pictorial-{width}.webp")
-        to_webp(staged, target, quality=80)
-        produced.append(os.path.relpath(target, ROOT))
-    fallback = os.path.join(out, "via-logo-pictorial-480.png")
-    resize(pictorial, 480, fallback)
-    produced.append(os.path.relpath(fallback, ROOT))
+    #
+    # Both cuts are served. The emblem sits on the dark band on a wide screen,
+    # where the white tagline reads; on a narrow one the band's diagonal cuts
+    # above the tagline and leaves it on the page surface, where the black cut
+    # is the legible one. index.html picks between them on a media condition.
+    for cut in ("w", "b"):
+        pictorial = os.path.join(ORIGINALS, f"via-logo-pictorial-{cut}.png")
+        for width in (480, 720, 1080):
+            staged = os.path.join(tmp, f"pictorial-{cut}-{width}.png")
+            resize(pictorial, width, staged)
+            target = os.path.join(out, f"via-logo-pictorial-{cut}-{width}.webp")
+            to_webp(staged, target, quality=80)
+            produced.append(os.path.relpath(target, ROOT))
+        fallback = os.path.join(out, f"via-logo-pictorial-{cut}-480.png")
+        resize(pictorial, 480, fallback)
+        produced.append(os.path.relpath(fallback, ROOT))
 
     # The plaque only ever appears on the footer band, which is dark in both
     # colour schemes, so only the white cut is served. The black original is
@@ -142,15 +152,15 @@ def build_images(tmp: str) -> list[str]:
         to_webp(png, webp, quality=90)
         produced += [os.path.relpath(png, ROOT), os.path.relpath(webp, ROOT)]
 
-    # The seal sits in the masthead, whose surface does follow the colour
-    # scheme, so that one does need both cuts.
-    for variant in ("b", "w"):
-        source = os.path.join(ORIGINALS, f"via-logo-circle-{variant}.png")
-        png = os.path.join(out, f"via-logo-circle-{variant}-240.png")
-        resize(source, 240, png)
-        webp = os.path.join(out, f"via-logo-circle-{variant}-240.webp")
-        to_webp(png, webp, quality=90)
-        produced += [os.path.relpath(png, ROOT), os.path.relpath(webp, ROOT)]
+    # The seal sits in the masthead, which is always the light page surface, so
+    # only the black cut is served. The white one stays in img/original in case
+    # the site ever gains a dark scheme.
+    source = os.path.join(ORIGINALS, "via-logo-circle-b.png")
+    png = os.path.join(out, "via-logo-circle-b-240.png")
+    resize(source, 240, png)
+    webp = os.path.join(out, "via-logo-circle-b-240.webp")
+    to_webp(png, webp, quality=90)
+    produced += [os.path.relpath(png, ROOT), os.path.relpath(webp, ROOT)]
 
     return produced
 
@@ -194,14 +204,14 @@ def build_og_card(tmp: str) -> list[str]:
     plaque = data_uri(os.path.join(ORIGINALS, "via-logo-horizontal-b.png"))
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="{TRAVERTINE}"/>
-  <rect x="26" y="26" width="1148" height="578" fill="none" stroke="{PETROL}" stroke-width="3"/>
-  <rect x="38" y="38" width="1124" height="554" fill="none" stroke="{PETROL}" stroke-width="1" stroke-opacity=".55"/>
+  <rect width="1200" height="630" fill="{PAPER}"/>
+  <rect x="26" y="26" width="1148" height="578" fill="none" stroke="{OXBLOOD}" stroke-width="3"/>
+  <rect x="38" y="38" width="1124" height="554" fill="none" stroke="{OXBLOOD}" stroke-width="1" stroke-opacity=".55"/>
   <image x="270" y="78" width="660" height="371" xlink:href="{plaque}"/>
-  <rect x="510" y="497" width="180" height="3" fill="{TERRACOTTA}"/>
-  <circle cx="562" cy="498.5" r="8" fill="{PETROL}"/>
-  <circle cx="600" cy="489" r="9" fill="{TERRACOTTA}"/>
-  <circle cx="638" cy="498.5" r="8" fill="{PETROL}"/>
+  <rect x="510" y="497" width="180" height="3" fill="{BRICK}"/>
+  <circle cx="562" cy="498.5" r="8" fill="{OXBLOOD}"/>
+  <circle cx="600" cy="489" r="9" fill="{BRICK}"/>
+  <circle cx="638" cy="498.5" r="8" fill="{OXBLOOD}"/>
 </svg>
 """
     staged = os.path.join(tmp, "og.svg")
@@ -232,7 +242,7 @@ def build_icons(tmp: str) -> list[str]:
     seal = data_uri(os.path.join(ORIGINALS, "via-logo-circle-b.png"))
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="{TRAVERTINE}"/>
+  <rect width="512" height="512" fill="{PAPER}"/>
   <image x="36" y="36" width="440" height="440" xlink:href="{seal}"/>
 </svg>
 """

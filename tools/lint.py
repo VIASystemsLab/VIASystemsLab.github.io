@@ -358,7 +358,11 @@ def check_css() -> None:
 
     declared = set(re.findall(r"(?:^|[;{])\s*(--[a-zA-Z0-9-]+)\s*:", stripped, re.M))
     used = set(re.findall(r"var\(\s*(--[a-zA-Z0-9-]+)", stripped))
-    undefined = sorted(used - declared)
+    # var(--x, fallback) is a deliberate option: a component exposes a knob a
+    # caller may override and otherwise supplies its own value. Only a var()
+    # with no fallback has to resolve to a declaration.
+    required = set(re.findall(r"var\(\s*(--[a-zA-Z0-9-]+)\s*\)", stripped))
+    undefined = sorted(required - declared)
     if undefined:
         fail("css/custom.css", f"var() references undeclared custom properties: {', '.join(undefined)}")
 
@@ -366,15 +370,146 @@ def check_css() -> None:
     if unused:
         warn("css/custom.css", f"declared but never used: {', '.join(unused)}")
 
+    # Blocks that sit side by side share a top edge. Offsetting alternate items
+    # with :nth-child reads as a mistake rather than as composition, and it has
+    # been reintroduced three times: on the research themes, on the project
+    # highlights, and on the open-science list. See docs/DESIGN-GUIDE.md §7.
+    for selector, body in re.findall(r"([^{}]*:nth-child[^{}]*)\{([^}]*)\}", stripped):
+        if re.search(r"margin-(top|block-start)\s*:", body):
+            fail(
+                "css/custom.css",
+                f"{' '.join(selector.split())} offsets items with a top margin; "
+                "blocks side by side share a top edge (docs/DESIGN-GUIDE.md \u00a77)",
+            )
+
     for sheet in ("css/custom.css", "css/fonts.css"):
         with open(os.path.join(ROOT, sheet), encoding="utf-8") as fh:
             body = fh.read()
+        # A data URI is a document of its own, and a url() inside one points
+        # within that document, not at a file here. Drop them before looking
+        # for targets to resolve.
+        body = re.sub(r'url\(\s*"data:[^"]*"\s*\)', "", body)
+        body = re.sub(r"url\(\s*'data:[^']*'\s*\)", "", body)
+        body = re.sub(r"url\(\s*data:[^)]*\)", "", body)
         for url in re.findall(r"url\(\s*['\"]?([^'\")]+)", body):
             if url.startswith(("data:", "http", "#")):
                 continue
             target = os.path.normpath(os.path.join(ROOT, os.path.dirname(sheet), url))
             if not os.path.exists(target):
                 fail(sheet, f"url() target does not exist: {url}")
+
+
+BUZZWORDS = (
+    "leverage", "cutting-edge", "cutting edge", "seamless", "seamlessly",
+    "revolutionise", "revolutionize", "unlock the power", "game-changing",
+    "best-in-class", "state-of-the-art solution", "synergy", "paradigm shift",
+)
+
+
+# Presentation belongs in the stylesheet. An attribute that paints, sizes or
+# positions something cannot be restyled, cannot respond to a media query or a
+# colour scheme, and is invisible to anyone reading the CSS to find out how a
+# thing looks. Geometry is not presentation: a path's `d`, a circle's `cx`, a
+# `viewBox` and `preserveAspectRatio` describe *what the shape is*, and stay in
+# the markup.
+SVG_PRESENTATION = (
+    "fill", "fill-opacity", "fill-rule", "stroke", "stroke-width",
+    "stroke-opacity", "stroke-linecap", "stroke-linejoin", "stroke-dasharray",
+    "opacity", "stop-color", "stop-opacity", "color", "font-family",
+    "font-size", "font-weight", "text-anchor", "dominant-baseline",
+    "letter-spacing",
+)
+
+# Presentational HTML attributes. All were removed from the language; browsers
+# still honour them, which is what makes them worth failing on.
+HTML_PRESENTATION = (
+    "align", "valign", "bgcolor", "background", "border", "cellpadding",
+    "cellspacing", "hspace", "vspace", "nowrap", "face", "bordercolor",
+)
+
+
+def check_markup_presentation(names: list[str]) -> None:
+    for name in names:
+        with open(os.path.join(ROOT, name), encoding="utf-8") as fh:
+            page = fh.read()
+        body = re.sub(r"<!--.*?-->", "", page, flags=re.S)
+
+        for match in re.finditer(r"\sstyle\s*=", body, re.I):
+            fail(name, f"inline style attribute at line {body[:match.start()].count(chr(10)) + 1}; "
+                       "move the declarations into css/custom.css")
+
+        if re.search(r"<style[\s>]", body, re.I):
+            fail(name, "embedded <style> element; the site has one stylesheet")
+
+        # Scan inside tags only, with quoted values blanked out first. An
+        # attribute is a name at a whitespace boundary, so this catches the
+        # unquoted form (align=center) and the boolean form (nowrap) as well
+        # as the quoted one, and does not fire on the word "align" in a
+        # sentence or on a class named align-left.
+        for match in re.finditer(r"<[a-zA-Z][^>]*>", body):
+            tag = re.sub(r"=\s*\"[^\"]*\"", '=""', match.group(0))
+            tag = re.sub(r"=\s*'[^']*'", "=''", tag)
+            line = body[:match.start()].count(chr(10)) + 1
+            for attr in SVG_PRESENTATION + HTML_PRESENTATION:
+                if re.search(rf"\s{re.escape(attr)}\s*(?==|\s|/?>)", tag, re.I):
+                    fail(name, f"presentation attribute {attr} at line {line}; "
+                               "give the element a class and style it in "
+                               "css/custom.css")
+
+
+def check_language(names: list[str]) -> None:
+    """The mechanical half of the language rules in docs/DESIGN-GUIDE.md.
+
+    Only what a script can judge: em dashes, and a short list of words that
+    have no place in a research lab's copy. Everything else in that section
+    needs a person.
+    """
+    for name in names:
+        with open(os.path.join(ROOT, name), encoding="utf-8") as fh:
+            raw = fh.read()
+        visible = strip_comments(raw)
+        visible = re.sub(r"<script.*?</script>", "", visible, flags=re.S)
+
+        dashes = len(re.findall(r"&mdash;|\u2014", visible))
+        if dashes:
+            fail(
+                name,
+                f"{dashes} em dash(es) in published copy; use a comma, a colon, "
+                "parentheses or two sentences (docs/DESIGN-GUIDE.md \u00a72)",
+            )
+
+        lowered = re.sub(r"<[^>]+>", " ", visible).lower()
+        for word in BUZZWORDS:
+            if word in lowered:
+                fail(name, f"buzzword in published copy: {word!r}")
+
+
+def check_publications() -> None:
+    """Every listed publication must carry a resolving DOI.
+
+    The page lists peer-reviewed publications only. A title without an
+    identifier is exactly the entry that gets copied into a reference manager
+    and never corrected, so the absence of a DOI fails the build. Whether the
+    DOI points at the right paper is a human's job.
+    """
+    path = os.path.join(ROOT, "publications.html")
+    if not os.path.exists(path):
+        return
+    with open(path, encoding="utf-8") as fh:
+        html = strip_comments(fh.read())
+
+    for entry in re.findall(r'<li class="pub\b.*?</li>', html, re.S):
+        title = re.search(r"<h4[^>]*>(.*?)</h4>", entry, re.S)
+        label = " ".join(re.sub(r"<[^>]+>", " ", title.group(1)).split()) if title else "?"
+        if "doi.org/" not in entry:
+            fail("publications.html", f"publication entry without a DOI: {label!r}")
+        for marker in ("is-pending", "is-forthcoming"):
+            if marker in entry:
+                fail(
+                    "publications.html",
+                    f"entry {label!r} is marked {marker}; the page lists "
+                    "peer-reviewed publications with a DOI only",
+                )
 
 
 def check_humans() -> None:
@@ -446,8 +581,14 @@ def check_contrast_comments() -> None:
     with open(os.path.join(ROOT, "css", "custom.css"), encoding="utf-8") as fh:
         css = fh.read()
 
-    dark_at = css.index("@media (prefers-color-scheme: dark)")
-    blocks = {"light": css[css.index(":root {"):dark_at], "dark": css[dark_at:dark_at + 2000]}
+    # The site may ship one scheme or two; only check the ones that exist.
+    marker = "@media (prefers-color-scheme: dark)"
+    root_start = css.index(":root {")
+    if marker in css:
+        dark_at = css.index(marker)
+        blocks = {"light": css[root_start:dark_at], "dark": css[dark_at:dark_at + 2000]}
+    else:
+        blocks = {"light": css[root_start:]}
 
     for scheme, block in blocks.items():
         def value(token: str) -> str | None:
@@ -495,13 +636,22 @@ def check_design_guide() -> None:
         css = fh.read()
 
     # Only the light-scheme block: that is what the guide's table documents.
-    root = css[css.index(":root {"):css.index("@media (prefers-color-scheme: dark)")]
+    marker = "@media (prefers-color-scheme: dark)"
+    start = css.index(":root {")
+    root = css[start:css.index(marker)] if marker in css else css[start:]
 
+    # Every token the table names has to exist, including the ones whose value
+    # is derived from another and so has no hex of its own.
+    for token in re.findall(r"\| `(--[a-z0-9-]+)` \|", guide):
+        if not re.search(rf"{re.escape(token)}:", root):
+            fail("docs/DESIGN-GUIDE.md", f"documents {token}, which css/custom.css does not declare")
+
+    # Where the table gives a hex, it has to be the hex the stylesheet gives.
     for token, quoted in re.findall(r"\| `(--[a-z0-9-]+)` \| `(#[0-9a-f]{6})` \|", guide):
         declared = re.search(rf"{re.escape(token)}:\s*(#[0-9a-f]{{6}})", root)
         if not declared:
-            fail("docs/DESIGN-GUIDE.md", f"documents {token}, which css/custom.css does not declare")
-        elif declared.group(1) != quoted:
+            continue
+        if declared.group(1) != quoted:
             fail(
                 "docs/DESIGN-GUIDE.md",
                 f"says {token} is {quoted} but css/custom.css declares {declared.group(1)}",
@@ -607,6 +757,9 @@ def main() -> int:
         check_jsonld(name, raw, site_ids)
 
     check_css()
+    check_markup_presentation(names)
+    check_language(names)
+    check_publications()
     check_humans()
     check_contrast_comments()
     check_design_guide()

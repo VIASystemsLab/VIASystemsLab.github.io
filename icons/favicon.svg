@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="VIA Systems Lab">
   <title>VIA Systems Lab</title>
-  <rect width="64" height="64" fill="#22434f"/>
-  <rect x="4.5" y="4.5" width="55" height="55" fill="none" stroke="#efe8dc" stroke-opacity=".5" stroke-width="2"/>
-  <path fill="#efe8dc" d="M11 14h17.5v3.5h-4.8L34 37.4 44.3 17.5H39.5V14h13v3.5h-3.4L37.6 43h-7L15.4 17.5H11z"/>
-  <rect x="16" y="50.4" width="32" height="2.6" fill="#efe8dc"/>
-  <circle cx="25.5" cy="51.7" r="3.3" fill="#efe8dc"/>
-  <circle cx="32" cy="48.4" r="3.7" fill="#9c4f38"/>
-  <circle cx="38.5" cy="51.7" r="3.3" fill="#efe8dc"/>
+  <rect width="64" height="64" fill="#4a2118"/>
+  <rect x="4.5" y="4.5" width="55" height="55" fill="none" stroke="#f6f1e8" stroke-opacity=".5" stroke-width="2"/>
+  <path fill="#f6f1e8" d="M11 14h17.5v3.5h-4.8L34 37.4 44.3 17.5H39.5V14h13v3.5h-3.4L37.6 43h-7L15.4 17.5H11z"/>
+  <rect x="16" y="50.4" width="32" height="2.6" fill="#f6f1e8"/>
+  <circle cx="25.5" cy="51.7" r="3.3" fill="#f6f1e8"/>
+  <circle cx="32" cy="48.4" r="3.7" fill="#8c3a2b"/>
+  <circle cx="38.5" cy="51.7" r="3.3" fill="#f6f1e8"/>
 </svg>
