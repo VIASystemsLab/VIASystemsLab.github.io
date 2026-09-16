@@ -280,6 +280,13 @@ Every date, grant number and figure comes from the project's CORDIS record.
    `<p class="pub__artifacts">` row to the visible entry, so the page shows
    what the graph claims.
 
+The venue is `publication`, not `isPartOf`. `publication` is the schema.org
+property whose range *is* `PublicationEvent`; `isPartOf` ranges over
+`CreativeWork`, and a `PublicationEvent` is an `Event`, so that form asserted a
+type the property does not accept. Both live records used it until they were
+corrected together. If one of them ever reads `isPartOf` again, this is why it
+should not.
+
 Neither artefact is an entry in its own right. This page lists peer-reviewed
 publications, and a dataset is not peer reviewed; it hangs off the paper it
 belongs to. Where a project publishes data or code wholesale rather than
