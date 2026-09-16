@@ -131,9 +131,16 @@ university, the principal investigator, the five research themes as
 `DefinedTerm`s, brief `ResearchProject` stubs pointing at `projects.html`, the
 emblem as an `ImageObject`, and the repository as `SoftwareSourceCode`.
 
-The project stubs deliberately carry **no `description`** — the homepage shows
-only highlights, so asserting the full description there would claim something
-the page does not show.
+The project stubs are deliberately thin: `name`, the two dates,
+`mainEntityOfPage` and `member`, and nothing else. The homepage shows a
+highlight rather than a record, so asserting the full title, the project's
+website or its grant there would describe a project the page does not describe,
+in a second copy that can drift from the one on `projects.html`.
+
+It did drift. The homepage's `sameAs` was missing the project's repository and
+ARMADA's grant was missing its amount, and nothing caught either, because the
+linter checks `@id`s within a page and never across pages. Keeping the stub to
+four properties is what makes that impossible rather than merely unlikely.
 
 ### `projects.html`
 
@@ -224,7 +231,18 @@ checked with them.
 
 3. Add it to the page's `ItemList` and bump `numberOfItems`.
 4. If it belongs on the homepage, add a **highlight** there and a matching stub
-   node — name, dates, `mainEntityOfPage`, nothing more.
+   node: `name`, `startDate`, `endDate`, `mainEntityOfPage`, and `member`
+   pointing at the organisation. Nothing else, and in particular not the
+   grant, which is described once on `projects.html` and reached from the stub
+   through `mainEntityOfPage`.
+
+   `member` is in that list because a `ResearchProject` is an `Organization` in
+   schema.org, so it is the property that says the lab is part of the
+   consortium. It is also the only thing tying the lab to its projects in the
+   homepage graph: the organisation node references the themes and the
+   principal investigator, never the projects. It is a relationship rather than
+   a claim about the project, which is the same reason §2's example treats
+   `<project> member <person>` as adding no claims.
 5. Add the grant to the funding disclaimer in the footer of every page.
 
 Every date, grant number and figure comes from the project's CORDIS record.
