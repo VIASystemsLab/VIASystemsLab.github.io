@@ -19,6 +19,7 @@ import json
 import os
 import re
 import sys
+from html import unescape
 from urllib.parse import urldefrag, urlparse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -61,6 +62,36 @@ def warn(page: str, msg: str) -> None:
 def strip_comments(html: str) -> str:
     """Remove HTML comments so that markup templates inside them are not linted."""
     return re.sub(r"<!--.*?-->", "", html, flags=re.S)
+
+
+def visible_text(html: str) -> str:
+    """The words a reader sees: tags dropped, entities decoded, spaces collapsed.
+
+    Tags are dropped before entities are decoded. The other order would turn an
+    escaped `&lt;p&gt;` in the copy into a tag and then strip the text away.
+    """
+    return " ".join(unescape(re.sub(r"<[^>]+>", " ", html)).split())
+
+
+def element_text(html: str, element_id: str) -> str | None:
+    """The visible text of the element carrying `element_id`, or None if absent.
+
+    The end of the element is found by counting opening and closing tags of its
+    own name, which is enough for hand-written markup that nests properly.
+    """
+    start = re.search(rf'<(\w+)[^>]*\sid="{re.escape(element_id)}"[^>]*>', html)
+    if not start:
+        return None
+    tag = start.group(1)
+    depth = 0
+    for token in re.finditer(rf"<(/?){tag}\b[^>]*>", html[start.start() :]):
+        if token.group(1):
+            depth -= 1
+            if depth == 0:
+                return visible_text(html[start.start() : start.start() + token.end()])
+        elif not token.group(0).endswith("/>"):
+            depth += 1
+    return visible_text(html[start.start() :])
 
 
 def pages() -> list[str]:
@@ -326,13 +357,15 @@ def check_jsonld(name: str, html_with_comments: str, site_ids: set[str]) -> None
         # prints it in full. Unlike a project abstract, which condenses a longer
         # CORDIS record, there is nothing here to summarise, so a paraphrase is
         # only ever two descriptions of one term where a reader can check one.
-        # All five research themes had drifted into paraphrases at once, none of
-        # them wrong and none of them the text on the page.
+        #
+        # The text is compared against the block the term's @id fragment points
+        # at, never against the page as a whole: a page-wide search accepts any
+        # paragraph anywhere, so two terms whose definitions had been swapped
+        # would both pass it.
         #
         # Scoped to DefinedTerm on purpose. The organisation and the projects
         # legitimately carry a condensed description, so the same rule applied
         # to every `description` would be wrong.
-        prose = " ".join(re.sub(r"<[^>]+>", " ", visible).split())
         for node in graph:
             types = node.get("@type")
             types = types if isinstance(types, list) else [types]
@@ -341,12 +374,22 @@ def check_jsonld(name: str, html_with_comments: str, site_ids: set[str]) -> None
             described = node.get("description")
             if not described:
                 continue
-            if " ".join(described.split()) not in prose:
+            fragment = urldefrag(node.get("@id") or "").fragment
+            block = element_text(visible, fragment) if fragment else None
+            if block is None:
+                fail(
+                    name,
+                    f"DefinedTerm {node.get('@id')} carries a description but "
+                    "the page has no element with that fragment as its id, so "
+                    "there is nothing to check the definition against",
+                )
+                continue
+            if " ".join(described.split()) not in block:
                 fail(
                     name,
                     f"DefinedTerm {node.get('@id')} is described in words the "
-                    "page does not print; a term's description is its visible "
-                    "text, copied verbatim",
+                    "page does not print under it; a term's description is its "
+                    "visible text, copied verbatim",
                 )
 
 
@@ -398,9 +441,8 @@ def check_css() -> None:
         warn("css/custom.css", f"declared but never used: {', '.join(unused)}")
 
     # Blocks that sit side by side share a top edge. Offsetting alternate items
-    # with :nth-child reads as a mistake rather than as composition, and it has
-    # been reintroduced three times: on the research themes, on the project
-    # highlights, and on the open-science list. See docs/DESIGN-GUIDE.md §7.
+    # with :nth-child reads as a mistake rather than as composition.
+    # See docs/DESIGN-GUIDE.md §7.
     for selector, body in re.findall(r"([^{}]*:nth-child[^{}]*)\{([^}]*)\}", stripped):
         if re.search(r"margin-(top|block-start)\s*:", body):
             fail(
