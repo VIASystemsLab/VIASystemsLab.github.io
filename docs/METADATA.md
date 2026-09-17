@@ -63,6 +63,10 @@ This matters for more than tidiness. A description repeated on every page
 becomes as many descriptions as there are pages, and they drift apart; the
 one on the page nobody remembers to update is the one a harvester reads.
 
+One bounded exception: a project highlighted on the homepage also carries a
+stub there, with `mainEntityOfPage` pointing at its record on `projects.html`.
+§4 lists the five properties a stub may hold and says why it stops there.
+
 ### Choosing an `@id`
 
 Prefer an identifier someone else maintains and that resolves:
@@ -92,8 +96,7 @@ every consumer is concerned.
 **Declare a prefix only where a term from it is used.** An unused declaration
 is not free: it reads as a promise that the page says something in that
 vocabulary, so the next person to touch the graph has to read it to find out
-that the page does not. `dcterms`, `foaf` and `org` were all declared with not
-one term between them, and were removed rather than left as decoration.
+that the page does not.
 
 ### Available, not currently declared
 
@@ -137,16 +140,15 @@ carry a condensed description, because each condenses something longer; a
 theme's definition is already one short paragraph, so a paraphrase there is
 only a second definition that no reader can check.
 
-The project stubs are deliberately thin: `name`, the two dates,
+The project stubs are deliberately thin: `name`, `startDate`, `endDate`,
 `mainEntityOfPage` and `member`, and nothing else. The homepage shows a
 highlight rather than a record, so asserting the full title, the project's
 website or its grant there would describe a project the page does not describe,
 in a second copy that can drift from the one on `projects.html`.
 
-It did drift. The homepage's `sameAs` was missing the project's repository and
-ARMADA's grant was missing its amount, and nothing caught either, because the
-linter checks `@id`s within a page and never across pages. Keeping the stub to
-four properties is what makes that impossible rather than merely unlikely.
+Nothing would catch that drift. The linter checks `@id`s within a page and
+never across pages, so holding the stub to those five properties is what makes
+a second copy impossible rather than merely unlikely.
 
 ### `projects.html`
 
@@ -242,8 +244,9 @@ checked with them.
    grant, which is described once on `projects.html` and reached from the stub
    through `mainEntityOfPage`.
 
-   `member` is in that list because a `ResearchProject` is an `Organization` in
-   schema.org, so it is the property that says the lab is part of the
+   `member` is in that list because schema.org types a `ResearchProject` under
+   `Thing > Organization > Project`: a project inherits `member` from
+   `Organization`, and it is the property that says the lab is part of the
    consortium. It is also the only thing tying the lab to its projects in the
    homepage graph: the organisation node references the themes and the
    principal investigator, never the projects. It is a relationship rather than
@@ -266,7 +269,7 @@ Every date, grant number and figure comes from the project's CORDIS record.
      "author": [{ "@id": "https://orcid.org/0000-0001-7922-5998" }],
      "datePublished": "2026",
      "publication": { "@type": "PublicationEvent", "name": "EDBT 2026" },
-     "identifier": "https://doi.org/10.0000/xxxxx",
+     "identifier": "10.0000/xxxxx",
      "url": "https://doi.org/10.0000/xxxxx",
      "funding": { "@id": "https://cordis.europa.eu/project/id/101168951" },
      "creativeWorkStatus": "Published"
@@ -282,10 +285,11 @@ Every date, grant number and figure comes from the project's CORDIS record.
 
 The venue is `publication`, not `isPartOf`. `publication` is the schema.org
 property whose range *is* `PublicationEvent`; `isPartOf` ranges over
-`CreativeWork`, and a `PublicationEvent` is an `Event`, so that form asserted a
-type the property does not accept. Both live records used it until they were
-corrected together. If one of them ever reads `isPartOf` again, this is why it
-should not.
+`CreativeWork`, and a `PublicationEvent` is an `Event`, so that form asserts a
+type the property does not accept.
+
+`identifier` is the bare DOI. `@id` and `url` already carry the resolver form,
+and the entry on `publications.html` is written the same way.
 
 Neither artefact is an entry in its own right. This page lists peer-reviewed
 publications, and a dataset is not peer reviewed; it hangs off the paper it
@@ -295,9 +299,13 @@ record on `projects.html` links it.
 
 `isBasedOn` is a compromise. schema.org has no precise "is supplemented by"
 relation, so it is the closest core property for material the work rests on.
-Where the exact [DataCite relation](https://datacite-metadata-schema.readthedocs.io/en/4.6/appendices/appendix-1/relationType/)
-matters, `dcterms` is listed in §3 as available and gets declared on the page
-the first time a term from it is used.
+The vocabulary that has the exact term is
+[DataCite's relationType](https://datacite-metadata-schema.readthedocs.io/en/4.6/appendices/appendix-1/relationType/),
+and this site cannot reach it: §3 is the list of namespaces `tools/lint.py`
+accepts, and DataCite is not on it. Dublin Core is, but its relation terms stop
+at "is part of" and "references", so declaring `dcterms` buys nothing here.
+Saying `IsSupplementTo` exactly means first adding the DataCite namespace to §3
+and to `ALLOWED_HTTP_PREFIXES` in `tools/lint.py`.
 
 A dataset with a DOI uses that DOI as its `@id`, which is what makes it
 citable. **A repository URL is not a persistent identifier.** It will rot, so
