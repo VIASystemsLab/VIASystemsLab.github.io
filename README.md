@@ -228,7 +228,7 @@ members work with the lab from another institution, Collaborators are named on
 a shared output.
 
 For a member of the lab, add the matching `Person` node to the JSON-LD graph
-and list it under the organisation's `member`. The RDFa attributes (`typeof`,
+and add it to the organisation's `member` array. The RDFa attributes (`typeof`,
 `property`, `resource`) must keep matching that node, and `resource` must be the
 person's ORCID URL, or the two descriptions become two separate entities. The
 ORCID iD has to be visible in the card — the linter enforces it. See
