@@ -64,7 +64,7 @@ Geometry is not presentation: a path's `d`, a circle's `cx`, a `viewBox` and
 | --- | --- |
 | `docs/DESIGN-GUIDE.md` | What the site looks like and why — colour, type, layout, composition, imagery. The authority on design decisions. |
 | `docs/METADATA.md` | How the structured data works and how to extend it. Read it before adding a person, project or publication. |
-| `docs/DESIGN-PLAN.md` | The original brief. Historical; superseded by the design guide, which lists what changed. |
+| `docs/DESIGN-PLAN.md` | The original brief, kept as a historical document. The design guide supersedes it. |
 | `humans.txt` | Who made the site, per [humanstxt.org](https://humanstxt.org), including what was machine-generated. |
 | `sitemap.xml`, `robots.txt` | Generated and hand-written respectively. Never edit the sitemap. |
 | `site.webmanifest` | Name, icons and theme colours for installed/bookmarked use. |
@@ -92,17 +92,17 @@ things Pure leaves to the page:
 - `.shell` centres a row and caps its width
 - `.pure-g` gets gutters, which Pure omits so its units stay exact percentages
 
-Everything else in that file styles components. Where a block is offset — the
-second project highlight steps down slightly, the emblem hangs past the hero —
-it is a `margin` on top of a Pure unit, never a second grid system.
+Everything else in that file styles components. Where a block is offset, as
+the emblem is where it hangs past the hero, it is a `margin` on top of a Pure
+unit, never a second grid system.
 
 ### Surfaces are positional, never per-section
 
 Sections alternate between the page surface and the travertine band through
 `.section:nth-of-type(even)`. **Do not add a `section--about`-style modifier to
-tint one.** Tying a colour to a named piece of content is what once left a
-mismatched wedge under the hero when the sections were reordered; the linter now
-rejects those modifiers.
+tint one.** Tying a colour to a named piece of content leaves a mismatched
+wedge under the hero as soon as the sections are reordered; the linter rejects
+those modifiers.
 
 For the same reason, a panel that sits *inside* a section never names a surface
 in its own rule. Two treatments are sanctioned, and the choice is how much the
@@ -143,7 +143,7 @@ unnumbered, so order is the only thing that changes when you add one.
 verbatim**, and `tools/lint.py` fails if it is not. A theme's definition is one
 short paragraph with no longer source behind it, so there is nothing to
 condense: a paraphrase is two definitions of one term, and a reader can only
-check the one on the page. All five had drifted.
+check the one on the page.
 
 ### A project
 
