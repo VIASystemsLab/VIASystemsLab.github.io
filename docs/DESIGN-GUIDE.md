@@ -3,10 +3,9 @@
 What the VIA Systems Lab site looks like and why, as built. This is the
 authority on design decisions; change the site and change this page with it.
 
-It grew out of [DESIGN-PLAN.md](DESIGN-PLAN.md), which is the original brief and
-is now historical. Where the two disagree, this page wins — §13 lists what
-changed and why, so nobody re-derives a decision that has already been made and
-reversed.
+[DESIGN-PLAN.md](DESIGN-PLAN.md) is the original brief and is kept as a
+historical document. Where the two disagree, this page wins. §13 states the
+decisions most often reopened, so nobody re-derives one that is already made.
 
 Related: [README](../README.md) for how to edit the site,
 [METADATA.md](METADATA.md) for the structured data.
@@ -131,15 +130,13 @@ component rule.**
 
 ### There is one scheme
 
-The site does **not** follow `prefers-color-scheme`. It had a dark variant
-briefly; it was removed because the palette was designed and reviewed on a
-travertine page and nobody had ever looked at the dark one. A scheme that has
-not been reviewed is worse than none — it ships a second design that no one
-signed off.
+The site does **not** follow `prefers-color-scheme`. The palette is designed
+and reviewed on a travertine page, and a scheme nobody has reviewed is worse
+than none: it ships a second design that no one signed off.
 
-If a dark scheme is wanted later, derive it, review it on real pages, and only
-then add the media query back. `img/original/` still holds the white cuts of
-the seal and plaque for exactly that case.
+If a dark scheme is wanted, derive it, review it on real pages, and only then
+add the media query. `img/original/` holds the white cuts of the seal and the
+plaque for that case.
 
 ### Rules
 
@@ -157,8 +154,10 @@ the seal and plaque for exactly that case.
   and small tags. Spread across a surface it would read as a dashboard.
 - **Filled elements name both sides.** A tag with a coloured background gets
   its own `--tag-*-bg` / `--tag-*-fg` pair rather than inheriting a surface
-  token, because the surface token flips between schemes and the pairing would
-  break silently.
+  token. `--paper` is re-pointed to the band colour inside the dark bands, so a
+  filled element that took its foreground from it would pair that background
+  against the wrong ink, silently. Where you mean the real page colour
+  regardless of context, name `--page-paper`.
 - **The focus ring is `--focus`**, re-pointed inside inverse bands. It is never
   removed.
 
@@ -166,7 +165,7 @@ the seal and plaque for exactly that case.
 
 ## 4. Surfaces
 
-Two rules, both learned the hard way.
+Two rules.
 
 ### Section tinting is positional, never per-section
 
@@ -178,26 +177,53 @@ Sections alternate between the page surface and the travertine band according
 to **where they sit**, not what they are. `section--about`-style modifiers are
 forbidden and the linter rejects them.
 
-The reason: tinting used to be keyed to named sections. When the sections were
-reordered, the pattern became arbitrary and the band under the hero silently
-changed colour, leaving a mismatched wedge. A colour that belongs to a name has
+The reason: a tint keyed to a named section belongs to the content rather than
+to the place. Reorder the sections and the pattern turns arbitrary, the band
+under the hero changes colour with nothing announcing it, and a mismatched
+wedge is left sitting on the section below. A colour that belongs to a name has
 to be kept in step by hand; a colour that belongs to a position does not.
 
 The hero and the page header are `<section>` elements too, so they count as the
 first item and the alternation starts beneath them.
 
-### Panels tint their surface, they do not name it
+### Panels never name their own surface
 
-A panel that sits *inside* a section — the project rail, the "working with the
-lab" box — uses:
+A panel that sits *inside* a section takes its background from the section's
+position, never from a surface token written into the panel's own rule. Two
+treatments do that. The choice between them is how much the panel has to
+separate from the page.
+
+**Tint what it lands on.** The project rail:
 
 ```css
 background: color-mix(in srgb, var(--ink) 5%, transparent);
 ```
 
-not `var(--paper)` or `var(--field)`. It then reads correctly on whichever
-surface it lands on, in either colour scheme, and survives the section being
-re-tinted.
+A subordinate column inside a record only has to lift off the page. The tint
+reads correctly on either surface, and there is nothing to keep in step.
+
+**Swap to the opposite surface.** The "working with the lab" box, and every
+other `.note`:
+
+```css
+.note { background: var(--note-bg); }
+
+.section:nth-of-type(even) {
+  background: var(--field);
+  --note-bg: var(--page-paper);
+}
+```
+
+`--note-bg` is travertine at the root and paper inside a tinted section, so a
+note always lands on the surface its section is not. A block set aside from the
+argument of its section has to read as a distinct panel, and a 5% wash lands on
+both surfaces as the same small darkening, which reads as a box on neither.
+
+What both avoid is `var(--paper)` or `var(--field)` in the component rule
+itself. That is the version that breaks: the surface would be decided by the
+panel rather than by where the panel sits, so a reorder would have to be
+followed by hand. The declaration above sits inside the positional selector, so
+it does not.
 
 ---
 
@@ -270,11 +296,10 @@ are **no negative margins** anywhere in the gutter system; a negative
 - **Never keep two things apart with two independent scales.** If a gap is
   maintained by one value growing on one curve and another growing on a
   different one, the gap is only correct at the width you happened to check.
-  This has bitten the site twice: the hero fade, where a mask in one coordinate
-  space had to clear text positioned in another, and the pull quote, whose
-  hanging mark grew on `9vw` while the indent clearing it grew on `4vw`. Both
-  were fixed by removing the coupling rather than retuning the numbers — mask
-  the element box, make the glyph a block. Prefer an arrangement that cannot
+  Two places here are arranged so that it cannot arise: the hero fade masks the
+  element box rather than clearing text positioned in another coordinate space,
+  and the pull quote's hanging mark is a block rather than a glyph growing on
+  `9vw` against an indent growing on `4vw`. Prefer an arrangement that cannot
   collide over one that currently does not.
 
 ---
@@ -283,17 +308,16 @@ are **no negative margins** anywhere in the gutter system; a negative
 
 ### Alignment, not stagger
 
-Earlier versions offset alternate rows and stepped the second card down. That
-is gone. Research themes are a plain grid — three across, then two, with the
-short row centred — and the two project highlights share a top edge.
+Research themes are a plain grid, three across and then two with the short row
+centred, and the two project highlights share a top edge. Alternate rows are
+never offset and no card is stepped down.
 
 The rule: **two things side by side are read as a pair, and a staggered top
 edge reads as a mistake rather than as composition.** Asymmetry is fine when it
 is structural (a wide body beside a narrow rail); it is not fine as decoration.
 
-This has been reintroduced three times, on the research themes, the project
-highlights and the open-science list, so it is now enforced: `tools/lint.py`
-fails the build on any `:nth-child` selector that sets a top margin.
+It is enforced: `tools/lint.py` fails the build on any `:nth-child` selector
+that sets a top margin.
 
 ### The graph on the band
 
@@ -301,10 +325,10 @@ The hero band carries the lab's own node-and-link figure — the one the emblem
 draws in the paving stones — as a single drawing, placed in the half of the
 band that has no text.
 
-It is not a tile. An earlier version repeated a small motif edge to edge at
-uniform density, which is what makes a background read as wallpaper, and it put
-texture directly behind the words. The figure is now drawn once, at 36 nodes
-and 65 edges, hand-placed so it stays irregular.
+It is not a tile. A small motif repeated edge to edge at uniform density is
+what makes a background read as wallpaper, and it puts texture behind the
+words. The figure is drawn once, at 36 nodes and 64 edges, hand-placed so it
+stays irregular.
 
 Three things about it are load-bearing:
 
@@ -357,8 +381,8 @@ Three separate numbers, because they answer three separate questions:
 | `--hero-band-lift` | How far are *both* ends raised off the band's own bottom edge? |
 
 The first two are equal by default, and that equality is what makes the next
-section show through the diagonal. They were a single token until the mobile
-layout needed them to differ; if you find a value doing two jobs, split it
+section show through the diagonal. They are two tokens because the mobile
+layout needs them to differ: if you find a value doing two jobs, split it
 before you change either.
 
 Below `md` the hero stacks, the band is lifted so its edge crosses the emblem's
@@ -420,9 +444,9 @@ element a class and style the class. `tools/lint.py` fails on all of them.
 
 An attribute that paints cannot be restyled, cannot answer a media query, and
 is invisible to anyone reading the stylesheet to find out how something looks.
-Both of the last two mattered here: the hero figure had to disappear below
-`md`, and that is one line in the stylesheet only because nothing about its
-appearance was in the page.
+The last two matter here: the hero figure disappears below `md`, and that is
+one line in the stylesheet only because nothing about its appearance is in the
+page.
 
 **Geometry is not presentation.** A path's `d`, a circle's `cx` and `r`, a
 `viewBox` and `preserveAspectRatio` say what the shape *is*. They stay in the
@@ -460,8 +484,9 @@ reader must wait for.
 
 ### The lab's own artwork
 
-`img/original/` holds the masters. Everything served from `img/` is generated by
-`tools/build_assets.py` — never edit a generated file. WebP with a PNG fallback,
+`img/original/` holds the lab's masters and `img/logos/` the supplied
+third-party marks. Everything else served from `img/` is generated by
+`tools/build_assets.py`; never edit a generated file. WebP with a PNG fallback,
 `width`/`height` on every `<img>`, `loading="lazy"` below the fold.
 
 The emblem was generated with a model and refined by hand. That is declared
@@ -515,21 +540,30 @@ Worth stating, so they are not proposed again as improvements:
 
 ---
 
-## 13. What changed since the design plan
+## 13. Settled decisions
 
-| The plan said | The site does | Why |
-| --- | --- | --- |
-| A custom 15-column CSS Grid, because Pure's 5-column model is too coarse | Pure's own grid, `.pure-g` / `.pure-u-*` | Not reimplementing a grid that ships with the framework. Pure's `md`/`lg` are `48em`/`64em` — exactly the breakpoints the design already used. The 24ths cover the asymmetric splits the plan wanted. |
-| Asymmetric, staggered compositions on an odd grid | Aligned grids; no offsets | Staggering read as a mistake rather than as composition. Asymmetry survives where it is structural — a wide body beside a narrow rail. |
-| Decide whether to keep the wave motif | Retired | Replaced by one shallow diagonal on the dark bands. No fixed heights, no negative offsets, nothing to clip. |
-| A focused one-page site | Four pages | Projects and publications outgrew a section each; the homepage carries highlights and links out. |
-| Display serif + text sans, family unspecified | Source Serif 4 + Source Sans 3, self-hosted | Both OFL, variable, designed to pair. Self-hosting removes a third-party request. |
-| Palette described in words ("pale cool blue", "restrained vermilion") | Sampled from the emblem | The artwork already was a palette. |
-| — | Section tinting is positional | Content-keyed tints broke on reorder. See §4. |
-| — | AI provenance declared in four places | Not in scope when the plan was written. |
-| — | Palette moved from petrol to oxblood, teal raised to instrument cyan | The original palette shared a hue family and a warm-accent structure with another lab site. Swapping which brand colour is the ground, and raising the cool one to signal chroma, separates the two by about 200° of hue and reverses the warm/cool relationship. |
-| — | One colour scheme, not two | A dark variant existed briefly and was removed unreviewed. See §3. |
-| JSON-LD as primary RDF, verified facts only | Unchanged | Still right. See [METADATA.md](METADATA.md). |
+Each of these gets proposed the other way about once a year, and the reason is
+not readable off the CSS.
+
+- **Pure's grid, and none of our own.** Pure ships one; its `md` and `lg`
+  breakpoints are the `48em` and `64em` the design works at, and its 24ths
+  cover every asymmetric split on the site. See §6.
+- **Oxblood is the ground, instrument cyan is the signal.** Both are sampled
+  from the emblem, which is already a palette. Making the warm colour the
+  surface rather than the accent puts about 200° of hue between this site and
+  the neighbouring lab site it would otherwise resemble, and reverses the
+  warm/cool relationship. See §3.
+- **Source Serif 4 and Source Sans 3, self-hosted.** Both are OFL, both are
+  variable, and they are designed to pair. Self-hosting removes a third-party
+  request at page load. See §5.
+- **One shallow diagonal on the dark bands, and no other motif.** It is a
+  clip-path on the band's own layer: no fixed heights, no negative offsets,
+  nothing to keep in step. See §4.
+- **Four pages, not one.** Projects and publications each need more room than a
+  section; the homepage carries highlights and links out to the records. See
+  [METADATA.md](METADATA.md) §2 for which page describes what.
+- **Provenance is declared wherever a generated asset appears**, not once in a
+  colophon. See §10 and [METADATA.md](METADATA.md) §7.
 
 ---
 

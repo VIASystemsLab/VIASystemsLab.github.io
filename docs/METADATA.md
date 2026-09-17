@@ -63,6 +63,10 @@ This matters for more than tidiness. A description repeated on every page
 becomes as many descriptions as there are pages, and they drift apart; the
 one on the page nobody remembers to update is the one a harvester reads.
 
+One bounded exception: a project highlighted on the homepage also carries a
+stub there, with `mainEntityOfPage` pointing at its record on `projects.html`.
+§4 lists the five properties a stub may hold and says why it stops there.
+
 ### Choosing an `@id`
 
 Prefer an identifier someone else maintains and that resolves:
@@ -82,19 +86,42 @@ every consumer is concerned.
 
 ## 3. Vocabularies
 
-| Prefix | IRI | Used for |
+### Declared, because a term from them appears
+
+| Prefix | IRI | Used for | On |
+| --- | --- | --- | --- |
+| *(default)* | `https://schema.org/` | Everything structural: `ResearchOrganization`, `Person`, `ResearchProject`, `ScholarlyArticle`, `Dataset`, `SoftwareSourceCode`, `DefinedTerm`, `MonetaryGrant`. | every page |
+| `iptcExt` | `http://iptc.org/std/Iptc4xmpExt/2008-02-29/` | `DigitalSourceType`, for AI provenance. Reached through the `digitalSourceType` term definition rather than written as a prefixed name. | `index.html` |
+
+**Declare a prefix only where a term from it is used.** An unused declaration
+is not free: it reads as a promise that the page says something in that
+vocabulary, so the next person to touch the graph has to read it to find out
+that the page does not.
+
+### Available, not currently declared
+
+The other namespaces the linter will accept an `http:` IRI from. Declare one on
+the page that starts using it, and not before:
+
+| Prefix | IRI | For |
 | --- | --- | --- |
-| *(default)* | `https://schema.org/` | Everything structural: `ResearchOrganization`, `Person`, `ResearchProject`, `ScholarlyArticle`, `Dataset`, `SoftwareSourceCode`, `DefinedTerm`, `MonetaryGrant`. |
-| `dcterms` | `http://purl.org/dc/terms/` | Declared for bibliographic terms schema.org lacks. |
-| `iptcExt` | `http://iptc.org/std/Iptc4xmpExt/2008-02-29/` | `DigitalSourceType`, on `index.html`, for AI provenance. |
+| `dcterms` | `http://purl.org/dc/terms/` | [Bibliographic terms](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/) schema.org lacks. |
+| `foaf` | `http://xmlns.com/foaf/0.1/` | [Person and group relations](http://xmlns.com/foaf/spec/). Prefer the schema.org equivalent where there is one, so the graph keeps to one vocabulary for one job. |
+| `org` | `http://www.w3.org/ns/org#` | The [W3C Organization Ontology](https://www.w3.org/TR/vocab-org/), for organisational structure a `ResearchOrganization` cannot express. |
+
+### `http:` is not a typo
 
 Namespace IRIs use `http:`, not `https:`, because that is what the IRI *is*.
-"Fixing" one to `https:` silently creates a different, undefined term. The
-linter allows `http:` for exactly these prefixes and rejects it everywhere
-else.
+"Fixing" one to `https:` silently creates a different, undefined term.
 
-Keep the context minimal. Declare a prefix on the page that uses it, not
-everywhere.
+`tools/lint.py` accepts an `http:` URL under these prefixes and rejects it
+everywhere else, so the list above is also the list of vocabularies the build
+will let you reach for:
+
+```
+http://purl.org/    http://xmlns.com/    http://www.w3.org/
+http://iptc.org/    http://cv.iptc.org/
+```
 
 ---
 
@@ -107,9 +134,21 @@ university, the principal investigator, the five research themes as
 `DefinedTerm`s, brief `ResearchProject` stubs pointing at `projects.html`, the
 emblem as an `ImageObject`, and the repository as `SoftwareSourceCode`.
 
-The project stubs deliberately carry **no `description`** — the homepage shows
-only highlights, so asserting the full description there would claim something
-the page does not show.
+Each `DefinedTerm`'s `description` is the theme's visible text, copied
+verbatim, and the linter enforces it. The organisation and the projects may
+carry a condensed description, because each condenses something longer; a
+theme's definition is already one short paragraph, so a paraphrase there is
+only a second definition that no reader can check.
+
+The project stubs are deliberately thin: `name`, `startDate`, `endDate`,
+`mainEntityOfPage` and `member`, and nothing else. The homepage shows a
+highlight rather than a record, so asserting the full title, the project's
+website or its grant there would describe a project the page does not describe,
+in a second copy that can drift from the one on `projects.html`.
+
+Nothing would catch that drift. The linter checks `@id`s within a page and
+never across pages, so holding the stub to those five properties is what makes
+a second copy impossible rather than merely unlikely.
 
 ### `projects.html`
 
@@ -200,7 +239,19 @@ checked with them.
 
 3. Add it to the page's `ItemList` and bump `numberOfItems`.
 4. If it belongs on the homepage, add a **highlight** there and a matching stub
-   node — name, dates, `mainEntityOfPage`, nothing more.
+   node: `name`, `startDate`, `endDate`, `mainEntityOfPage`, and `member`
+   pointing at the organisation. Nothing else, and in particular not the
+   grant, which is described once on `projects.html` and reached from the stub
+   through `mainEntityOfPage`.
+
+   `member` is in that list because schema.org types a `ResearchProject` under
+   `Thing > Organization > Project`: a project inherits `member` from
+   `Organization`, and it is the property that says the lab is part of the
+   consortium. It is also the only thing tying the lab to its projects in the
+   homepage graph: the organisation node references the themes and the
+   principal investigator, never the projects. It is a relationship rather than
+   a claim about the project, which is the same reason §2's example treats
+   `<project> member <person>` as adding no claims.
 5. Add the grant to the funding disclaimer in the footer of every page.
 
 Every date, grant number and figure comes from the project's CORDIS record.
@@ -218,7 +269,7 @@ Every date, grant number and figure comes from the project's CORDIS record.
      "author": [{ "@id": "https://orcid.org/0000-0001-7922-5998" }],
      "datePublished": "2026",
      "publication": { "@type": "PublicationEvent", "name": "EDBT 2026" },
-     "identifier": "https://doi.org/10.0000/xxxxx",
+     "identifier": "10.0000/xxxxx",
      "url": "https://doi.org/10.0000/xxxxx",
      "funding": { "@id": "https://cordis.europa.eu/project/id/101168951" },
      "creativeWorkStatus": "Published"
@@ -226,10 +277,41 @@ Every date, grant number and figure comes from the project's CORDIS record.
    ```
 
 3. Reference it from the page's `CollectionPage` via `mainEntity`.
+4. **Optionally**, point at the data or the code behind it. Add `isBasedOn` to
+   the article and a node for each artefact: a `Dataset`, or a
+   `SoftwareSourceCode` with `codeRepository`. Add the matching
+   `<p class="pub__artifacts">` row to the visible entry, so the page shows
+   what the graph claims.
 
-Use `Dataset` for data and `SoftwareSourceCode` (with `codeRepository`) for
-tools. `funding` is what links an output back to the grant that paid for it —
-it is the property EU reporting cares about, so do not omit it.
+The venue is `publication`, not `isPartOf`. `publication` is the schema.org
+property whose range *is* `PublicationEvent`; `isPartOf` ranges over
+`CreativeWork`, and a `PublicationEvent` is an `Event`, so that form asserts a
+type the property does not accept.
+
+`identifier` is the bare DOI. `@id` and `url` already carry the resolver form,
+and the entry on `publications.html` is written the same way.
+
+Neither artefact is an entry in its own right. This page lists peer-reviewed
+publications, and a dataset is not peer reviewed; it hangs off the paper it
+belongs to. Where a project publishes data or code wholesale rather than
+alongside a paper, that lives in the project's own repository and the project
+record on `projects.html` links it.
+
+`isBasedOn` is a compromise. schema.org has no precise "is supplemented by"
+relation, so it is the closest core property for material the work rests on.
+The vocabulary that has the exact term is
+[DataCite's relationType](https://datacite-metadata-schema.readthedocs.io/en/4.6/appendices/appendix-1/relationType/),
+and this site cannot reach it: §3 is the list of namespaces `tools/lint.py`
+accepts, and DataCite is not on it. Dublin Core is, but its relation terms stop
+at "is part of" and "references", so declaring `dcterms` buys nothing here.
+Saying `IsSupplementTo` exactly means first adding the DataCite namespace to §3
+and to `ALLOWED_HTTP_PREFIXES` in `tools/lint.py`.
+
+A dataset with a DOI uses that DOI as its `@id`, which is what makes it
+citable. **A repository URL is not a persistent identifier.** It will rot, so
+reach for it only where there is nothing better: archive a release, get a DOI,
+use that. `funding` goes on both. It is what links an output back to the grant
+that paid for it, which is the property EU reporting reads, so do not omit it.
 
 ---
 
@@ -281,10 +363,10 @@ If you add an image, declare its source type. If you replace the emblem with
 something drawn by a person, change the value — do not leave the old one.
 
 **The third-party marks are excluded from all of this.** The University of
-Verona lockup, the EU emblem and the ARMADA logo were supplied by their owners
-and are reproduced unaltered. They carry no `digitalSourceType`, and the
-provenance note is worded so it cannot be read as covering them. See
-`img/logos/README.md`.
+Verona lockup, the EU emblem and the ARMADA and DataGEMS logos were supplied
+by their owners and are reproduced unaltered. They carry no
+`digitalSourceType`, and the provenance note is worded so it cannot be read as
+covering them. See `img/logos/README.md`.
 
 The code has its own acknowledgement: `creditText` on the `SoftwareSourceCode`
 node, the `/* GENERATIVE TOOLS */` section of `humans.txt`, and a `[BOT]`

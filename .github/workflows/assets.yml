@@ -1,9 +1,14 @@
 name: Assets
 
-# Every image the site serves is derived from the artwork in img/original and
-# from icons/favicon.svg. When one of those sources changes, the derivatives
-# are rebuilt here and committed back, so nobody has to remember to run the
-# build script and nobody has to install cwebp to change a logo.
+# Every image the site serves is derived from the artwork in img/original, the
+# supplied third-party marks in img/logos, and icons/favicon.svg. When one of
+# those sources changes, the derivatives are rebuilt here and committed back,
+# so nobody has to remember to run the build script and nobody has to install
+# cwebp to change a logo.
+#
+# The trigger paths must stay in step with the sources assets.lock.json hashes,
+# which is what tools/build_assets.py --check compares in CI. A source that can
+# change without starting this job turns that check red with nothing to fix it.
 #
 # The push below is made with GITHUB_TOKEN, and GitHub does not start new
 # workflow runs for commits pushed with that token, so this cannot loop.
@@ -13,6 +18,7 @@ on:
     branches: [main]
     paths:
       - "img/original/**"
+      - "img/logos/**"
       - "icons/favicon.svg"
       - "tools/build_assets.py"
 
