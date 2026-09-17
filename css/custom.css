@@ -75,8 +75,8 @@
   --inverse-signal: #5fd4e3;  /* on --inverse-bg               7.9:1    */
   --inverse-rule:   rgb(244 234 223 / 0.28);
   /* The glow in the band's top corner: the brick, thinned, so it composites
-     to a lighter oxblood over --inverse-bg. It was a literal teal from the
-     palette before this one, which no longer belongs anywhere on the page. */
+     to a lighter oxblood over --inverse-bg. Mixed from --signal rather than
+     picked, so the band stays inside the page's palette. */
   --inverse-bloom:  color-mix(in srgb, var(--signal) 42%, transparent);
   /* The node figure on a band, decorative and never text. Derived rather
      than picked, so the page has one cool hue: the signal cyan, halved into
@@ -652,17 +652,17 @@ input, select, textarea, button { font-family: inherit; }
 /*
  * The diagonal, done honestly.
  *
- * It used to be a triangle painted over the band in var(--page-paper), to
- * imitate the page showing through. That only looked right while the section
- * below happened to be paper-coloured: reordering the sections, or tinting one
- * with --field, left a mismatched wedge sitting on it, and nothing in the CSS
- * said the two had to agree.
+ * Nothing is imitated. The dark band is its own layer and is *clipped* on the
+ * diagonal; the band's element is pulled down over the following section by
+ * the same amount. What shows through the cut is that section's real
+ * background, whatever colour it has been given, with no coupling to maintain
+ * and nothing to keep in step.
  *
- * So nothing is imitated now. The dark band is its own layer and is *clipped*
- * on the diagonal; the band's element is pulled down over the following
- * section by the same amount. What shows through the cut is that section's
- * real background, whatever colour it has been given, with no coupling to
- * maintain and nothing to keep in step.
+ * The alternative, a triangle painted over the band in var(--page-paper) to
+ * imitate the page showing through, only looks right while the section below
+ * happens to be paper-coloured. Reorder the sections, or tint one with
+ * --field, and a mismatched wedge sits on it with nothing in the CSS saying
+ * the two have to agree.
  *
  * The band is deepest on the left and rises to the right.
  */
@@ -873,13 +873,13 @@ input, select, textarea, button { font-family: inherit; }
 /*
  * Sections alternate between the page surface and the travertine band.
  *
- * The rhythm is positional on purpose. It used to be keyed to named sections —
- * .section--about, .section--people — which meant the tint belonged to the
- * *content* rather than to its place on the page. Reorder the sections and the
- * pattern became arbitrary: two tinted bands could end up adjacent, and the
- * band under the hero changed colour without anything saying it had. Now
- * nothing has to be kept in step; a section is tinted because of where it
- * sits, and moving it re-tints it automatically.
+ * The rhythm is positional on purpose. Keying it to named sections
+ * (.section--about, .section--people) would tie the tint to the *content*
+ * rather than to its place on the page, and reordering the sections would make
+ * the pattern arbitrary: two tinted bands adjacent, the band under the hero
+ * changing colour with nothing saying it had. Positionally, nothing has to be
+ * kept in step; a section is tinted because of where it sits, and moving it
+ * re-tints it automatically.
  *
  * The hero and the page header are <section> elements too, so they count as
  * the first item and the alternation starts beneath them.
@@ -1038,11 +1038,22 @@ input, select, textarea, button { font-family: inherit; }
   text-wrap: pretty;
 }
 
+/* The English of the verse. It is text rather than a tooltip because a
+   translation a reader cannot select, hear or reach by keyboard is not one. */
+.pullquote__gloss {
+  grid-column: 2;
+  grid-row: 2;
+  max-width: 34ch;
+  margin: 0.7rem 0 0;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
 /* Column 2, so the attribution lines up with the quotation it belongs to
    rather than with the mark. */
 .pullquote figcaption {
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 3;
   margin-top: 0.9rem;
   font-size: var(--step--1);
   letter-spacing: 0.12em;
