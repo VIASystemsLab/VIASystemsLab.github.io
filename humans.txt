@@ -26,7 +26,7 @@
 
 /* SITE */
 
-	Last update: 2026/09/16
+	Last update: 2026/09/17
 	Language: English
 	Doctype: HTML5
 	Standards: HTML5, CSS3, JSON-LD 1.1, RDFa 1.1, Schema.org,
