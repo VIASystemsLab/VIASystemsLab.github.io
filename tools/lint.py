@@ -616,6 +616,8 @@ def check_generated_assets(names: list[str]) -> None:
     for filename in sorted(os.listdir(generated)):
         if os.path.isdir(os.path.join(generated, filename)):
             continue  # img/original and img/logos hold sources, not output
+        if filename.startswith("."):
+            continue  # .DS_Store and friends are the Finder's, not the build's
         if filename not in haystack:
             warn(
                 "img",
