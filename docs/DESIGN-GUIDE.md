@@ -59,6 +59,49 @@ around it mostly do not.
 The same applies everywhere else: "Horizon Europe grant 101168951" beats
 "EU funding", and "the ARMADA repository" beats "our code".
 
+### The lab is a group, not a person
+
+The VIA Systems Lab is several researchers with shared goals. It has no mind of
+its own: it does not believe, think, care about, want or ask. An opinion, a
+decision or a piece of work belongs to the people who had it or did it, and the
+copy names them. A reader is here to work out whether to join the lab or work
+with it, and a lab written as a single actor reads as one person's project.
+
+The test is to give the lab exactly one member. If the sentence still reads
+correctly, it is describing a person rather than a group.
+
+> The lab believes an answer is only useful if it can be checked.
+
+becomes
+
+> Researchers in the lab argue that an answer is only useful if it can be
+> checked.
+
+A possessive with one owner does the same thing more quietly. "The lab's view"
+is somebody's view: say whose, or name the people who hold it.
+
+### "We" is the lab, all of it
+
+"We" is the site's voice and is right far more often than not. The
+open-science pledge is written in it, because a commitment every member makes
+is exactly what the word is for. It goes wrong in two ways.
+
+It is the wrong word when it excludes people the same page counts as members:
+
+> We work with doctoral candidates, postdoctoral researchers and collaborators
+> in Verona and beyond.
+
+becomes
+
+> The lab brings together doctoral candidates, postdoctoral researchers and
+> scientists in Verona, and works with collaborators beyond it.
+
+It is also the wrong word when the claim belongs to more people than the lab. A
+paper with fifteen authors from eight institutions is not something "we
+published"; it is a paper by members of the lab and their co-authors. Claim
+membership of the work, not ownership of it, and let the author list say the
+rest.
+
 ### No buzzwords, no marketing register
 
 No "leverage", "cutting-edge", "seamless", "powerful", "unlock",

@@ -11,3 +11,5 @@ CLAUDE.md
 # Python bytecode, from running the tools in tools/
 __pycache__/
 *.pyc
+# macOS Finder metadata, written into any directory the Finder opens
+.DS_Store

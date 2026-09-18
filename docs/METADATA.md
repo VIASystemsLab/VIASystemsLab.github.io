@@ -13,7 +13,7 @@ and both must be checkable.**
 
 A research lab's site is read by more than people. Search engines, ORCID, EU
 reporting tools, OpenAIRE-style harvesters and other researchers' scripts all
-want to know who the lab is, who works in it, what it is funded by, and what it
+want to know what the lab is, who works in it, what it is funded by, and what it
 has produced. Prose cannot tell them. Structured data can.
 
 The site uses **JSON-LD 1.1** as its primary representation, with a small
@@ -170,7 +170,7 @@ page and *carries* a document that other work can cite. It names the lab as
 text comes from:
 
 - **`isBasedOn`** the statement it adapts, by DOI.
-- **`citation`** the lab's own work that informed it, by DOI.
+- **`citation`** work by members of the lab that informed it, by DOI.
 - **`dateModified`**, which the visible "Last update" line must match.
 
 Both sources are described on this page, since it is the page a reader would
@@ -201,8 +201,10 @@ undated one.
    </li>
    ```
 
-3. Add the `Person` node to the JSON-LD graph with the **same** `@id`, and list
-   it under the organisation's `member`.
+3. Add the `Person` node to the JSON-LD graph with the **same** `@id`, and add
+   it to the organisation's `member` array. `member` is an array even while it
+   holds one entry: the lab is a group, and a graph that says so only once it
+   has a second member describes a person for as long as it has one.
 4. Make the ORCID iD **visible in the card**. This is enforced: the linter
    fails if the graph asserts an ORCID iD the page never prints.
 
