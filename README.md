@@ -65,6 +65,7 @@ Geometry is not presentation: a path's `d`, a circle's `cx`, a `viewBox` and
 | `docs/DESIGN-GUIDE.md` | What the site looks like and why — colour, type, layout, composition, imagery. The authority on design decisions. |
 | `docs/METADATA.md` | How the structured data works and how to extend it. Read it before adding a person, project or publication. |
 | `docs/DESIGN-PLAN.md` | The original brief, kept as a historical document. The design guide supersedes it. |
+| `docs/CONTRIBUTING.md` | Setup, checks and commit rules for contributors. |
 | `humans.txt` | Who made the site, per [humanstxt.org](https://humanstxt.org), including what was machine-generated. |
 | `sitemap.xml`, `robots.txt` | Generated and hand-written respectively. Never edit the sitemap. |
 | `site.webmanifest` | Name, icons and theme colours for installed/bookmarked use. |
@@ -343,52 +344,8 @@ python3 tools/lint.py              # fast, no network
 python3 tools/lint.py --external   # also resolves every outbound URL
 ```
 
-Install the git hooks once per clone, to run the checks before each commit and
-to check the commit message format:
-
-```sh
-git config core.hooksPath .githooks
-```
-
-### Commit identity
-
-Entries in the history are attributed explicitly and signed, rather than
-picking up whatever global git identity happens to be configured on the
-machine. Set yours up once per clone:
-
-```sh
-cp .gitidentity.example .gitidentity
-$EDITOR .gitidentity                              # your name, address, key id
-git config --local include.path ../.gitidentity
-```
-
-`.gitidentity` is a git config file that `.git/config` includes, so git reads
-it natively — there is no script in between. It is gitignored, because it is a
-per-person setting: cloning the repository must not hand you somebody else's
-address or signing key.
-
-Check that it took:
-
-```sh
-git config --get user.email
-git log -1 --show-signature
-```
-
-A signed entry reports `Good signature`. If signing fails, fix it rather than
-going ahead unsigned — a misattributed or unsigned entry cannot be corrected
-without rewriting history.
-
-Commit messages follow `<type>(<scope>): <subject>`, imperative, lowercase,
-no trailing full stop, 72 characters or fewer:
-
-```
-fix(nav): keep the current page marked on the projects page
-content(publications): add the EDBT vision paper
-build(assets): regenerate the emblem derivatives
-```
-
-Types: `feat` `fix` `docs` `style` `refactor` `perf` `test` `build` `ci`
-`chore` `content`.
+To set up the git hooks and your commit identity, and for the commit message
+format, read [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md).
 
 On GitHub, `.github/workflows/ci.yml` runs the linter, validates every page
 with the Nu Html Checker, and confirms the derived assets match their sources.
