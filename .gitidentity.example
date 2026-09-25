@@ -6,7 +6,7 @@
 #     cp .gitidentity.example .gitidentity
 #     git config --local include.path ../.gitidentity
 #
-# This is a git config file, so git reads it natively — there is no script in
+# This is a git config file, so git reads it natively; there is no script in
 # between. The include path is relative to .git/, which is why it starts with
 # ../ and why the include line itself lives in .git/config rather than here.
 #
