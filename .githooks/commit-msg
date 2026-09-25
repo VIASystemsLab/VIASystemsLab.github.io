@@ -27,10 +27,15 @@ export LC_ALL
 msg=$(sed -e '/^# -* >8 -*$/,$d' -e '/^#/d' "$1" | sed '/./,$!d')
 subject=$(printf '%s\n' "$msg" | head -n 1)
 
+# The way out is for people only: an agent's commit is the one this hook
+# exists to hold to the format, and the git guard denies it --no-verify anyway.
 fail() {
     echo "commit-msg: $1" >&2
     echo "  $subject" >&2
     [ -n "$2" ] && printf '%s\n' "$2" >&2
+    echo "A hand-written commit can keep its message with git commit --no-verify," >&2
+    echo "which skips this check and pre-commit, for that one commit only." >&2
+    echo "An agent fixes the message instead." >&2
     exit 1
 }
 
@@ -54,6 +59,10 @@ bot=
 case "$subject" in
     *' [BOT]') bot=1; body=${subject% \[BOT\]} ;;
     *) body=$subject ;;
+esac
+# Two spaces before the marker leave one behind, which the pattern below accepts.
+case "$body" in
+    *[[:space:]]) fail "subject line ends in whitespace" ;;
 esac
 if printf '%s' "$body" | grep -iq '\[ *bot *\]'; then
     fail "the [BOT] marker must be the literal ' [BOT]' at the end of the subject"
@@ -82,7 +91,7 @@ case "$first" in
         fail "'$first' is not imperative; write 'add', not 'added'" ;;
 esac
 case "$description" in
-    update|updates|wip|fix|fixes|changes|misc|stuff|tmp|minor)
+    update|updates|wip|fix|fixes|changes|misc|stuff|tmp|temp|minor)
         fail "say what changed; '$description' does not" ;;
 esac
 
