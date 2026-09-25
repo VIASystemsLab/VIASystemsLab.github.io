@@ -13,6 +13,32 @@
 
 set -e
 
+# Refuse a commit that adds a machine-local absolute path: where this clone
+# lives, or the committer's home directory. The path exists on one machine
+# only, so to everyone else it is a dangling reference, and it publishes the
+# account name it contains besides. Only added lines are checked, so a file
+# that already carries such a path can still be edited.
+root=$(git rev-parse --show-toplevel)
+
+# A home of / (some containers) would match every line, so it is skipped.
+home=${HOME:-}
+[ "$home" = / ] && home=
+
+found=$(git diff --cached --no-color --no-ext-diff -U0 --diff-filter=ACMR |
+    awk -v root="$root" -v home="$home" '
+        /^\+\+\+ / { file = substr($0, 7); next }
+        /^\+/ {
+            line = substr($0, 2)
+            if (index(line, root) || (home != "" && index(line, home)))
+                printf "  %s: %s\n", file, substr(line, 1, 100)
+        }')
+if [ -n "$found" ]; then
+    echo "pre-commit: staged lines add a machine-local absolute path" >&2
+    printf '%s\n' "$found" >&2
+    echo "Write it relative to the repository root instead." >&2
+    exit 1
+fi
+
 if ! command -v python3 >/dev/null 2>&1; then
     echo "pre-commit: python3 not found, skipping static checks" >&2
     exit 0
