@@ -18,7 +18,7 @@ set -e
 # only, so to everyone else it is a dangling reference, and it publishes the
 # account name it contains besides. Only added lines are checked, so a file
 # that already carries such a path can still be edited.
-root=$(git rev-parse --show-toplevel)
+root=$(git rev-parse --show-toplevel) || exit 1
 
 # A home of / (some containers) would match every line, so it is skipped.
 home=${HOME:-}
