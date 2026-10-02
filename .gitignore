@@ -13,3 +13,15 @@ __pycache__/
 *.pyc
 # macOS Finder metadata, written into any directory the Finder opens
 .DS_Store
+
+# Local agent configuration and scratch space
+.claude/
+.temp/
+
+# Build output, and the site as staged for GitHub Pages
+dist/
+.cache/
+_site/
+
+# Node, when a build step exists
+node_modules/
