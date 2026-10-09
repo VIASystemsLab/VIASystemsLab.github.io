@@ -5,19 +5,20 @@
 # Enable once per clone:
 #     git config core.hooksPath .githooks
 #
-# The checks run against the working tree, not against the staged snapshot.
-# For a site with no build step that is the useful behaviour: it catches a
-# broken link or a missing asset while you can still see what you were doing.
-# If you are committing a subset of your changes on purpose and the hook
-# complains about the part you did not stage, use --no-verify knowingly.
+# The site checks run against the working tree, not against the staged
+# snapshot. For a site with no build step that is the useful behaviour: it
+# catches a broken link or a missing asset while you can still see what you
+# were doing. If you are committing a subset of your changes on purpose and the
+# hook complains about the part you did not stage, use --no-verify knowingly.
 
 set -e
 
 # Refuse a commit that adds a machine-local absolute path: where this clone
-# lives, or the committer's home directory. The path exists on one machine
-# only, so to everyone else it is a dangling reference, and it publishes the
-# account name it contains besides. Only added lines are checked, so a file
-# that already carries such a path can still be edited.
+# lives, the committer's home directory, or anyone's home on macOS or Windows
+# (a name under the Users directory). The path exists on one machine only, so
+# to everyone else it is a dangling reference, and it publishes the account
+# name it contains besides. Only added lines are checked, so a file that
+# already carries such a path can still be edited.
 root=$(git rev-parse --show-toplevel) || exit 1
 
 # A home of / (some containers) would match every line, so it is skipped.
@@ -29,14 +30,28 @@ found=$(git diff --cached --no-color --no-ext-diff -U0 --diff-filter=ACMR |
         /^\+\+\+ / { file = substr($0, 7); next }
         /^\+/ {
             line = substr($0, 2)
-            if (index(line, root) || (home != "" && index(line, home)))
+            if (index(line, root) || (home != "" && index(line, home)) ||
+                line ~ /\/Users\/[A-Za-z0-9._-]+/ || line ~ /[A-Za-z]:\\+Users\\+[A-Za-z0-9._-]+/)
                 printf "  %s: %s\n", file, substr(line, 1, 100)
         }')
+
 if [ -n "$found" ]; then
     echo "pre-commit: staged lines add a machine-local absolute path" >&2
     printf '%s\n' "$found" >&2
     echo "Write it relative to the repository root instead." >&2
     exit 1
+fi
+
+# core.hooksPath makes `pre-commit install` refuse, so a repository's
+# .pre-commit-config.yaml is chained here instead, when the tool runs.
+# Probed with --version, not `command -v`: a pyenv shim exists even
+# where it cannot run.
+if [ -f "$root/.pre-commit-config.yaml" ]; then
+    if pre-commit --version >/dev/null 2>&1; then
+        pre-commit run --hook-stage pre-commit
+    else
+        echo "pre-commit: .pre-commit-config.yaml was not run, the pre-commit tool does not work here" >&2
+    fi
 fi
 
 if ! command -v python3 >/dev/null 2>&1; then

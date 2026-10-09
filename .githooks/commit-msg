@@ -4,7 +4,7 @@
 #
 #     <type>(<scope>): <subject>[ [BOT]]
 #
-# type    feat fix docs style refactor perf test build ci chore content
+# type    feat fix docs refactor perf test build ci chore style content
 # scope   optional, lowercase letters, digits and . _ / -,
 #         e.g. (nav) (theme) (seo) (assets) (tools/lint)
 # subject imperative, lowercase first letter, no trailing full stop
@@ -12,7 +12,7 @@
 # The subject line must be 72 characters or fewer. A trailing " [BOT]" marks a
 # commit written by an agent rather than by hand. It is optional, because this
 # hook checks hand-written commits too, but when it is present it must be
-# exactly that, at the end, and the commit must carry no attribution trailer.
+# exactly that, at the end, and the commit must carry no trailer.
 #
 # Enable once per clone:
 #     git config core.hooksPath .githooks
@@ -68,10 +68,10 @@ if printf '%s' "$body" | grep -iq '\[ *bot *\]'; then
     fail "the [BOT] marker must be the literal ' [BOT]' at the end of the subject"
 fi
 
-pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|content)(\([a-z0-9._/-]+\))?: [a-z].*[^.]$'
+pattern='^(feat|fix|docs|refactor|perf|test|build|ci|chore|style|content)(\([a-z0-9._/-]+\))?: [a-z].*[^.]$'
 if ! printf '%s' "$body" | grep -Eq "$pattern"; then
     fail "subject line does not match <type>(<scope>): <subject>" \
-"  type      feat fix docs style refactor perf test build ci chore content
+"  type      feat fix docs refactor perf test build ci chore style content
   subject   imperative, lowercase first letter, no trailing full stop
 
   examples
@@ -92,16 +92,18 @@ case "$first" in
 esac
 case "$description" in
     update|updates|wip|fix|fixes|changes|misc|stuff|tmp|temp|minor)
-        fail "say what changed; '$description' does not" ;;
+        fail "'$description' is a placeholder; say what changed" ;;
 esac
 
 # A body, if any, is separated from the subject by one blank line.
 second=$(printf '%s\n' "$msg" | sed -n '2p')
 [ -n "$second" ] && fail "leave the second line blank"
 
-if [ -n "$bot" ] && printf '%s\n' "$msg" |
-        grep -Eiq '^co-authored-by:|generated with \[?claude'; then
-    fail "agent commits carry [BOT] and no attribution trailer"
+# Git decides what a trailer is. A person's commit may carry one, such as a
+# DCO Signed-off-by; an agent's carries none.
+if [ -n "$bot" ]; then
+    trailers=$(printf '%s\n' "$msg" | git interpret-trailers --parse)
+    [ -n "$trailers" ] && fail "agent commits carry [BOT] and no trailer" "$trailers"
 fi
 
 exit 0
