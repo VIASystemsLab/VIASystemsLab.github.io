@@ -204,6 +204,13 @@ def check_structure(name: str, html: str) -> None:
             "positional (.section:nth-of-type) — drop the modifier",
         )
 
+    # A link without a target is either unfinished or damaged markup. A broken
+    # merge once left `<a property="same      6">` in a card, and no other
+    # check noticed.
+    for tag in re.findall(r"<a\b[^>]*>", html):
+        if "href=" not in tag:
+            fail(name, f"<a> without href: {' '.join(tag.split())[:80]}")
+
     for tag in re.findall(r"<img\b[^>]*>", html):
         src = re.search(r'src="([^"]+)"', tag)
         where = src.group(1) if src else tag[:40]
@@ -331,27 +338,41 @@ def check_jsonld(name: str, html_with_comments: str, site_ids: set[str]) -> None
 
         collect_literals(graph)
 
+        # "Shows" means the words a reader sees, not the markup. An RDFa
+        # `resource` attribute carries the same ORCID URL as the graph, so
+        # searching the markup accepted a card whose printed iD had been
+        # destroyed. An email address is shown as a mailto: link labelled
+        # "Email", which a reader can follow, so that counts for an address.
+        shown = visible_text(re.sub(r"<script\b.*?</script>", "", visible, flags=re.S))
+        mailto = set(re.findall(r'href="mailto:([^"?]+)', visible))
+
         orcid = re.compile(r"\b\d{4}-\d{4}-\d{4}-\d{3}[\dX]\b")
         email = re.compile(r"\b[\w.+-]+@[\w-]+\.[\w.-]+\b")
         doi = re.compile(r"\b10\.\d{4,9}/\S+\b")
 
+        # An ORCID iD sits in a node's @id, identifier and sameAs alike; one
+        # missing iD is one finding.
+        reported: set[str] = set()
         for literal in sorted(literals):
-            for pattern, kind, hard in (
-                (orcid, "ORCID iD", True),
-                (email, "email address", True),
-                (doi, "DOI", False),
+            for pattern, kind, hard, is_shown in (
+                (orcid, "ORCID iD", True, lambda v: v in shown),
+                (email, "email address", True, lambda v: v in shown or v in mailto),
+                (doi, "DOI", False, lambda v: v in visible),
             ):
                 found = pattern.search(literal)
                 if not found:
                     continue
-                if found.group(0) in visible:
+                if is_shown(found.group(0)) or found.group(0) in reported:
                     continue
+                reported.add(found.group(0))
                 message = (
                     f"JSON-LD asserts the {kind} {found.group(0)} but the page "
                     "never shows it, so a reader cannot check it"
                 )
                 (fail if hard else warn)(name, message)
                 break
+
+        check_people(name, visible, graph)
 
         # A DefinedTerm's description *is* the term's definition, and the page
         # prints it in full. Unlike a project abstract, which condenses a longer
@@ -391,6 +412,66 @@ def check_jsonld(name: str, html_with_comments: str, site_ids: set[str]) -> None
                     "page does not print under it; a term's description is its "
                     "visible text, copied verbatim",
                 )
+
+
+def check_people(name: str, html: str, graph: list[dict]) -> None:
+    """Hold each person's card and their Person node to the same claims.
+
+    The card and the node are written by hand in two places of one file, and
+    nothing else compares them. Every check here is a mistake that has reached
+    a pull request: a DBLP link copied from another person's node, a lab's page
+    marked as a person's own url, and new people left out of the lab's member
+    array. See "Add a person" in docs/METADATA.md.
+    """
+    lab = f"{SITE_ORIGIN}/#organization"
+    org = next((n for n in graph if n.get("@id") == lab), {})
+    member = org.get("member", [])
+    member = member if isinstance(member, list) else [member]
+    members = {ref.get("@id") for ref in member if isinstance(ref, dict)}
+
+    for node in graph:
+        types = node.get("@type")
+        types = types if isinstance(types, list) else [types]
+        if "Person" not in types:
+            continue
+        pid = node.get("@id", "")
+        who = node.get("name", pid)
+
+        if (node.get("memberOf") or {}).get("@id") == lab and pid not in members:
+            fail(name, f"{who} is memberOf the lab but missing from its member array")
+
+        found = re.search(
+            rf'<li\b[^>]*\bresource="{re.escape(pid)}"[^>]*>(.*?)</li>', html, re.S
+        )
+        if not found:
+            fail(name, f"{who} has a Person node but no card with resource=\"{pid}\"")
+            continue
+        card = found.group(1)
+
+        # The first property="url" is the name link; the affiliation's own
+        # link comes later and belongs to the institution.
+        url = re.search(r'property="url" href="([^"]+)"', card)
+        if not url or url.group(1) != node.get("url"):
+            fail(name, f"{who}: the card's name link and the node's url differ")
+
+        title = re.search(r'property="jobTitle">([^<]*)<', card)
+        if not title:
+            fail(name, f"{who}: the card's person__title carries no property=\"jobTitle\"")
+        elif " ".join(title.group(1).split()) != node.get("jobTitle"):
+            fail(name, f"{who}: the card's title and the node's jobTitle differ")
+
+        same_as = set(node.get("sameAs", []))
+        for link in re.findall(r'property="sameAs"[^>]*href="([^"]+)"', card):
+            if link not in same_as:
+                fail(name, f"{who}: the card links {link}, which the node's sameAs lacks")
+
+        bio = re.search(r'<p class="person__bio">(.*?)</p>', card, re.S)
+        if bio and "property=" in bio.group(1):
+            fail(
+                name,
+                f"{who}: the bio carries a property attribute, which makes a "
+                "claim about the person; links in a bio are plain links",
+            )
 
 
 # --------------------------------------------------------------------------
