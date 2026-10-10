@@ -556,7 +556,15 @@ checks, among other things:
 - every `@id` reference resolves — in this page's graph, in another page's
   graph, or into a declared controlled vocabulary
 - the canonical URL is right and `og:url` agrees with it
-- no ORCID iD or email address is asserted that the page does not show
+- no ORCID iD or email address is asserted that the page does not show: an
+  ORCID iD must be in the text a reader sees, an email address in the text or
+  as a `mailto:` link
+- every `Person` node has a card with the same `resource`, and the two agree:
+  the name link is the node's `url`, the title carries `property="jobTitle"`
+  with the same text, every identity link in the card is in the node's
+  `sameAs`, and the bio carries no `property` attributes
+- everyone whose `memberOf` is the lab is in the lab's `member` array
+- every `<a>` has an `href`
 - `humans.txt` exists, has its sections, and is linked
 
 For the things a script cannot judge, use:
