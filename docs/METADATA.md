@@ -130,7 +130,7 @@ http://iptc.org/    http://cv.iptc.org/
 ### `index.html`
 
 The canonical graph. `WebSite`, `WebPage`, the `ResearchOrganization`, the
-university, the principal investigator, the five research themes as
+university, the people in the People section, the five research themes as
 `DefinedTerm`s, brief `ResearchProject` stubs pointing at `projects.html`, the
 emblem as an `ImageObject`, and the repository as `SoftwareSourceCode`.
 
@@ -187,31 +187,184 @@ undated one.
 
 ### Add a person
 
-1. Add the visible `<li class="person">` to the People section of
-   `index.html`, in the right group.
-2. Add the RDFa attributes, with `resource` set to their ORCID URL:
+A person appears twice in `index.html`: as a card in the People section, which
+readers see, and as a `Person` node in the JSON-LD graph in `<head>`, which
+machines read. Both carry the person's ORCID URL as their identifier, so the two
+merge into one entity. Everything below is in `index.html`; nothing else
+changes.
 
-   ```html
-   <li class="person …" vocab="https://schema.org/" typeof="Person"
-       resource="https://orcid.org/0000-0000-0000-0000">
-     <h4 class="person__name">
-       <a property="url" href="https://example.org/"><span property="name">Name</span></a>
-     </h4>
-     <p class="person__title" property="jobTitle">Title</p>
-   </li>
-   ```
+Before you start, have:
 
-3. Add the `Person` node to the JSON-LD graph with the **same** `@id`, and add
-   it to the organisation's `member` array. `member` is an array even while it
-   holds one entry: the lab is a group, and a graph that says so only once it
-   has a second member describes a person for as long as it has one.
-4. Make the ORCID iD **visible in the card**. This is enforced: the linter
-   fails if the graph asserts an ORCID iD the page never prints.
+- the person's **agreement** to publish their name, links and email address;
+- their **ORCID iD**;
+- the **ROR ID** of their institution, from <https://ror.org/>. The University
+  of Verona's is `https://ror.org/039bp8j42`.
 
-Publish a name, photograph or email address only with that person's agreement.
-For a collaborator you are naming but not describing, a bare reference is
-enough — do not create a `Person` node for someone whose details you have not
-checked with them.
+Copy every link from the person's own ORCID record or website, never from
+another person's entry. A DBLP or Scholar link copied from a neighbouring entry
+passes every check and still names the wrong person.
+
+#### 1. Choose the group
+
+| Group | Who belongs | Card | `Person` node | In the lab's `member` |
+| --- | --- | --- | --- | --- |
+| Members | appointed at the University of Verona | yes | yes | yes |
+| External members | work with the lab from another institution | yes | yes | yes |
+| Collaborators | named on a shared output | yes | no | no |
+
+For a collaborator, a card with their name and affiliation is enough. Do not
+create a `Person` node for someone whose details you have not checked with
+them.
+
+#### 2. Add the card
+
+Copy this into the group's `<ul class="people">`, after the last card, and
+replace every value. The example is a member at the University of Verona.
+
+```html
+<li class="person pure-u-1 pure-u-md-1-2 pure-u-lg-1-3"
+    vocab="https://schema.org/" typeof="Person"
+    resource="https://orcid.org/0000-0002-1825-0097">
+  <h4 class="person__name">
+    <a property="url" href="https://example.org/"><span property="name">Ada Rossi</span></a>
+  </h4>
+  <p class="person__title" property="jobTitle">Doctoral Candidate</p>
+  <p class="person__affil"
+     property="affiliation" typeof="CollegeOrUniversity" resource="https://ror.org/039bp8j42">
+    Department of Computer Science,
+    <a property="url" href="https://www.univr.it/"><span property="name">University of Verona</span></a>
+  </p>
+  <p class="person__bio">
+    Two or three research topics. Doctoral candidate in the
+    <a href="projects.html#armada">ARMADA</a> doctoral network.
+  </p>
+  <p class="person__ids">
+    <a property="sameAs" class="link-ext" href="https://orcid.org/0000-0002-1825-0097">ORCID 0000-0002-1825-0097</a>
+    <a property="sameAs" class="link-ext" href="https://dblp.org/pid/000/0000.html">DBLP</a>
+    <a property="sameAs" class="link-ext" href="https://scholar.google.com/citations?user=XXXXXXXXXXXX">Scholar</a>
+    <a property="email" href="mailto:ada.rossi@univr.it">Email</a>
+  </p>
+</li>
+```
+
+What each part does:
+
+- **`resource`** is the person's ORCID URL. It must be identical to the `@id`
+  of their `Person` node in step 3, or the graph holds two people.
+- **`property="url"`** on the name link is the person's own website.
+- **`property="jobTitle"`** goes on the title, with the same text as the
+  node's `jobTitle`.
+- **`resource` on `person__affil`** is the ROR URL of their institution.
+- **The bio carries no `property` attributes.** A link in the bio to a lab, a
+  project or a group is a plain `<a href>`. With `property="url"` it would
+  claim that page as the person's own website.
+- **`person__ids`** lists their identity links, each with `property="sameAs"`,
+  and their email with `property="email"`. The ORCID iD must be printed here:
+  the linter fails if the graph asserts an ORCID iD the page never shows.
+
+Leave out any link the person does not have. Leave out the email if they did
+not agree to publish it, and leave it out of the node as well.
+
+#### 3. Add the `Person` node
+
+Add it to the `@graph` array in the JSON-LD in `<head>`, after the last
+`Person` node:
+
+```json
+{
+  "@id": "https://orcid.org/0000-0002-1825-0097",
+  "@type": "Person",
+  "name": "Ada Rossi",
+  "givenName": "Ada",
+  "familyName": "Rossi",
+  "jobTitle": "Doctoral Candidate",
+  "url": "https://example.org/",
+  "email": "ada.rossi@univr.it",
+  "affiliation": {
+    "@id": "https://ror.org/039bp8j42"
+  },
+  "worksFor": {
+    "@id": "https://ror.org/039bp8j42"
+  },
+  "memberOf": {
+    "@id": "https://viasystemslab.github.io/#organization"
+  },
+  "identifier": {
+    "@type": "PropertyValue",
+    "propertyID": "ORCID",
+    "value": "0000-0002-1825-0097",
+    "url": "https://orcid.org/0000-0002-1825-0097"
+  },
+  "sameAs": [
+    "https://orcid.org/0000-0002-1825-0097",
+    "https://dblp.org/pid/000/0000.html",
+    "https://scholar.google.com/citations?user=XXXXXXXXXXXX",
+    "https://example.org/"
+  ]
+}
+```
+
+- **`@id`**, the ORCID in `identifier` and the card's `resource` are the same
+  iD.
+- **`affiliation` and `worksFor`** point at the ROR URL of the institution
+  that employs them.
+- **`memberOf`** is always the lab, `https://viasystemslab.github.io/#organization`,
+  for external members too. Never point it at another group's web page: an
+  `@id` names an entity in the graph, not a page about it.
+- **`sameAs`** holds the same links as the card's `person__ids`, plus their
+  website and any institutional profile page.
+
+**A new institution needs its own node.** If the person's institution is not
+yet in the graph, add it once, next to the University of Verona node, or the
+linter warns that the reference resolves outside the page graph:
+
+```json
+{
+  "@id": "https://ror.org/04d836q62",
+  "@type": "CollegeOrUniversity",
+  "name": "TU Wien",
+  "url": "https://www.tuwien.at/",
+  "sameAs": [
+    "https://ror.org/04d836q62"
+  ]
+}
+```
+
+Take the name and the URL from the institution's ROR record.
+
+#### 4. Add them to the lab's `member` array
+
+In the lab's `ResearchOrganization` node, add a reference to the new node:
+
+```json
+"member": [
+  {
+    "@id": "https://orcid.org/0000-0001-7922-5998"
+  },
+  {
+    "@id": "https://orcid.org/0000-0002-1825-0097"
+  }
+]
+```
+
+`member` is an array even while it holds one entry: the lab is a group, and a
+graph that says so only once it has a second member describes a person for as
+long as it has one.
+
+#### 5. Check
+
+```sh
+python3 tools/lint.py
+```
+
+It must report no errors **and no warnings**. Then paste the page source into
+the [Schema Markup Validator](https://validator.schema.org/), open the
+expanded graph, and confirm the person appears as **one** `Person` with the
+name, title and links you expect. Finally, preview the site locally and look at
+the card.
+
+Commit it as `content(people): add Ada Rossi`, with `index.html` as the only
+file in the commit.
 
 ### Add a project
 
