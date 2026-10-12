@@ -208,7 +208,7 @@ def check_structure(name: str, html: str) -> None:
     # merge once left `<a property="same      6">` in a card, and no other
     # check noticed.
     for tag in re.findall(r"<a\b[^>]*>", html):
-        if "href=" not in tag:
+        if not re.search(r"\shref\s*=", tag):
             fail(name, f"<a> without href: {' '.join(tag.split())[:80]}")
 
     for tag in re.findall(r"<img\b[^>]*>", html):
@@ -465,8 +465,10 @@ def check_people(name: str, html: str, graph: list[dict]) -> None:
             if link not in same_as:
                 fail(name, f"{who}: the card links {link}, which the node's sameAs lacks")
 
-        bio = re.search(r'<p class="person__bio">(.*?)</p>', card, re.S)
-        if bio and "property=" in bio.group(1):
+        # The whole element, opening tag included: property on the <p> itself
+        # makes the same claim as one on a link inside it.
+        bio = re.search(r'<p\b[^>]*\bperson__bio\b[^>]*>.*?</p>', card, re.S)
+        if bio and "property=" in bio.group(0):
             fail(
                 name,
                 f"{who}: the bio carries a property attribute, which makes a "
