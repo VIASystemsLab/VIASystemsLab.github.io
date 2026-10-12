@@ -204,17 +204,19 @@ def check_structure(name: str, html: str) -> None:
             "positional (.section:nth-of-type) — drop the modifier",
         )
 
+    # Attribute names are matched whole, so data-alt or data-width does not
+    # pass for the real thing, and quoted values are blanked first, so text
+    # inside one, such as data-note=" alt=x", is not read as an attribute.
+    def has(tag: str, attr: str) -> bool:
+        bare = re.sub(r"\"[^\"]*\"|'[^']*'", '""', tag)
+        return re.search(rf"\s{attr}\s*=", bare) is not None
+
     # A link without a target is either unfinished or damaged markup. A broken
     # merge once left `<a property="same      6">` in a card, and no other
     # check noticed.
     for tag in re.findall(r"<a\b[^>]*>", html):
-        if not re.search(r"\shref\s*=", tag):
+        if not has(tag, "href"):
             fail(name, f"<a> without href: {' '.join(tag.split())[:80]}")
-
-    # Attribute names are matched whole, so data-alt or data-width does not
-    # pass for the real thing.
-    def has(tag: str, attr: str) -> bool:
-        return re.search(rf"\s{attr}\s*=", tag) is not None
 
     for tag in re.findall(r"<img\b[^>]*>", html):
         src = re.search(r'\ssrc="([^"]+)"', tag)
@@ -724,15 +726,22 @@ SHARED_FILES = {
 
 
 def check_shared_files(names: list[str]) -> None:
-    haystack = ""
+    # What the pages actually link, outside comments, as paths from the root.
+    linked: set[str] = set()
     for name in names:
         with open(os.path.join(ROOT, name), encoding="utf-8") as fh:
-            haystack += fh.read()
+            for target in local_targets(strip_comments(fh.read())):
+                path = urldefrag(target)[0]
+                if path and not urlparse(path).scheme:
+                    linked.add(os.path.normpath(path))
 
     for folder, (allowed, limit) in SHARED_FILES.items():
         for dirpath, _, filenames in os.walk(os.path.join(ROOT, folder)):
             for filename in sorted(filenames):
-                if filename == "README.md" or filename.startswith("."):
+                # The folder's own README, and the Finder's .DS_Store, which
+                # the lint sees on disk although git ignores it. Every other
+                # file, dotfiles included, is held to the rules.
+                if filename in ("README.md", ".DS_Store"):
                     continue
                 path = os.path.join(dirpath, filename)
                 rel = os.path.relpath(path, ROOT)
@@ -746,7 +755,7 @@ def check_shared_files(names: list[str]) -> None:
                         f"{size // 1024} KB is over the {limit // 1024} KB limit "
                         f"for {folder}/; export it smaller",
                     )
-                if rel not in haystack:
+                if os.path.normpath(rel) not in linked:
                     warn(rel, "no page links to it; link it or remove it")
 
 
