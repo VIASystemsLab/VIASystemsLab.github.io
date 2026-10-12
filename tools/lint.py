@@ -714,6 +714,42 @@ def check_generated_assets(names: list[str]) -> None:
             )
 
 
+# Files a contributor adds by hand and the site serves as committed, with no
+# build step. The limits keep a page quick to load and the repository quick to
+# clone: every byte committed here is downloaded by everyone, for good.
+SHARED_FILES = {
+    "img/content": ({".webp", ".png", ".jpg", ".jpeg"}, 500 * 1024),
+    "files": ({".pdf"}, 10 * 1024 * 1024),
+}
+
+
+def check_shared_files(names: list[str]) -> None:
+    haystack = ""
+    for name in names:
+        with open(os.path.join(ROOT, name), encoding="utf-8") as fh:
+            haystack += fh.read()
+
+    for folder, (allowed, limit) in SHARED_FILES.items():
+        for dirpath, _, filenames in os.walk(os.path.join(ROOT, folder)):
+            for filename in sorted(filenames):
+                if filename == "README.md" or filename.startswith("."):
+                    continue
+                path = os.path.join(dirpath, filename)
+                rel = os.path.relpath(path, ROOT)
+                if os.path.splitext(filename)[1].lower() not in allowed:
+                    fail(rel, f"{folder}/ takes only {', '.join(sorted(allowed))}")
+                    continue
+                size = os.path.getsize(path)
+                if size > limit:
+                    fail(
+                        rel,
+                        f"{size // 1024} KB is over the {limit // 1024} KB limit "
+                        f"for {folder}/; export it smaller",
+                    )
+                if rel not in haystack:
+                    warn(rel, "no page links to it; link it or remove it")
+
+
 def _relative_luminance(hex_colour: str) -> float:
     def channel(value: int) -> float:
         v = value / 255
@@ -923,6 +959,7 @@ def main() -> int:
     check_contrast_comments()
     check_design_guide()
     check_generated_assets(names)
+    check_shared_files(names)
     check_sitemap(names)
     if args.external:
         check_external(names)
