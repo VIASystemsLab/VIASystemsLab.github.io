@@ -59,6 +59,51 @@ The `pre-commit` hook runs both. CI runs them again, plus the Nu Html Checker.
 - **Write copy by the Language section of
   [DESIGN-GUIDE.md](DESIGN-GUIDE.md#2-language).** It applies to commit
   messages and comments too.
+- **Leave the lab's marks, the partner logos and the icons to the
+  maintainer.** They live in `img/original/`, `img/logos/` and `icons/`, and
+  every change to them goes through `tools/build_assets.py`, which needs image
+  tools installed (see the README). Images for page content go in
+  `img/content/` instead, as below.
+
+## Adding an image or a PDF
+
+Both are served exactly as you commit them, with no build step.
+
+**An image inside a page** goes in `img/content/`:
+
+1. Export it ready to serve: WebP (or PNG or JPEG), no wider than it is shown,
+   under **500 KB**. 1600 pixels wide is plenty for a full-width figure.
+2. Name it for what it shows, lowercase with hyphens:
+   `img/content/armada-kickoff-2026.webp`.
+3. Reference it with `alt`, `width` and `height`, and `loading="lazy"` below
+   the fold:
+
+   ```html
+   <img src="img/content/armada-kickoff-2026.webp"
+        alt="The ARMADA doctoral candidates at the kick-off meeting in Verona"
+        width="1600" height="900" loading="lazy">
+   ```
+
+   `alt` says what the image shows, for someone who cannot see it. Leave it
+   empty (`alt=""`) only for an image that adds nothing to the text.
+4. If the image was made or altered with a generative image tool, say so in
+   its caption, and see [METADATA.md §7](METADATA.md#7-ai-provenance).
+
+Publish a photograph of a person only with their agreement.
+
+**A PDF** goes in `files/`, under **10 MB**, named the same way:
+`files/armada-summer-school-2026-programme.pdf`. Link it from the page with its
+size, so a reader knows before downloading:
+
+```html
+<a href="files/armada-summer-school-2026-programme.pdf">Programme (PDF, 1.2 MB)</a>
+```
+
+Host a PDF here only when it has no other public home. A paper is linked by its
+DOI, and a dataset or a deliverable by its Zenodo or CORDIS record.
+
+`tools/lint.py` fails on a file over the limit or of another type, and warns
+about a file that no page links to.
 
 ## Commits
 
@@ -87,3 +132,30 @@ refactor with a behaviour change. Stage files by name rather than with
 
 Commits written by a coding agent end their subject line with ` [BOT]`, so they
 can be told apart from hand-written ones. Do not add it to your own.
+
+## Proposing a change
+
+Every change reaches the site through a pull request. `main` accepts nothing
+else, and merging into it publishes the site within a minute or two.
+
+1. **Make a branch.** Members of the VIASystemsLab organisation push branches
+   to this repository; anyone else forks it.
+
+   ```sh
+   git switch main && git pull
+   git switch -c profile/your-name
+   ```
+
+2. **Make the change and preview it** with `python3 -m http.server 8000`, as
+   the README describes.
+3. **Commit** as above. The hooks run the checks.
+4. **Push and open a pull request** against `main`. Keep it to one topic, such
+   as one new person or one news item.
+5. **Wait for CI.** It runs the same checks, plus the HTML validator. A red
+   check means something to fix on your branch: push the fix and CI runs again.
+6. **Ask someone else to review it.** They merge it when CI is green. Do not
+   merge your own.
+
+If `main` moves on while you wait, press **Update branch** on the pull request.
+If GitHub reports a conflict, ask for help rather than resolving it by guesswork,
+then open **Files changed** and check that it shows only your change.

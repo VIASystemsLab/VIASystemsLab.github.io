@@ -551,6 +551,13 @@ mark that carries more than one colour**, and never invert the EU emblem, which
 keeps its own blue field and 3:2 proportions. See
 [`img/logos/README.md`](../img/logos/README.md).
 
+### Content images
+
+Figures and photographs inside a page live in `img/content/` and are served as
+committed, with no build step, so anyone can add one without image tools. They
+carry the page's content, never decoration. How to prepare one, and the size
+limit, are in [CONTRIBUTING.md](CONTRIBUTING.md#adding-an-image-or-a-pdf).
+
 ---
 
 ## 11. Accessibility
@@ -579,6 +586,11 @@ Worth stating, so they are not proposed again as improvements:
 - No analytics, no cookies, no third-party request at page load.
 - No carousel, no accordion, no modal, no scroll-jacking.
 - No decorative photography. The emblem and the partner marks are the images.
+- No portraits on the person cards, for now. Adding them takes a photo slot on
+  the card, a step in `tools/build_assets.py` that sizes every photo in one
+  folder, and a step in the "Add a person" recipe, with the person's agreement.
+  Photos would also change often enough that building images at deploy time,
+  rather than committing them, becomes worth reconsidering.
 - No dashboard, animated chart or invented metric.
 
 ---
