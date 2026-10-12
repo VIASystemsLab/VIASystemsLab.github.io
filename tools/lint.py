@@ -211,12 +211,17 @@ def check_structure(name: str, html: str) -> None:
         if not re.search(r"\shref\s*=", tag):
             fail(name, f"<a> without href: {' '.join(tag.split())[:80]}")
 
+    # Attribute names are matched whole, so data-alt or data-width does not
+    # pass for the real thing.
+    def has(tag: str, attr: str) -> bool:
+        return re.search(rf"\s{attr}\s*=", tag) is not None
+
     for tag in re.findall(r"<img\b[^>]*>", html):
-        src = re.search(r'src="([^"]+)"', tag)
+        src = re.search(r'\ssrc="([^"]+)"', tag)
         where = src.group(1) if src else tag[:40]
-        if "alt=" not in tag:
+        if not has(tag, "alt"):
             fail(name, f"<img> without alt: {where}")
-        if "width=" not in tag or "height=" not in tag:
+        if not has(tag, "width") or not has(tag, "height"):
             fail(name, f"<img> without width/height (causes layout shift): {where}")
 
 
