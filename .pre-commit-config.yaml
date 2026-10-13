@@ -1,0 +1,44 @@
+# The checks every commit runs locally. Set up once per clone:
+#
+#     uv tool install pre-commit
+#     git config --local --unset-all core.hooksPath 2>/dev/null || :
+#     pre-commit install
+#
+# CI runs the site checks again on every pull request, plus the HTML validator.
+# pre-commit stashes unstaged changes first, so the checks see exactly what is
+# being committed.
+
+default_install_hook_types: [pre-commit, commit-msg]
+
+repos:
+  - repo: local
+    hooks:
+      - id: no-local-paths
+        name: No machine-local absolute paths
+        entry: tools/check_local_paths.sh
+        language: script
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+
+      - id: site-lint
+        name: Site lint (structure, links, metadata, CSS)
+        entry: python3 tools/lint.py
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+
+      - id: assets-current
+        name: Derived assets match their sources
+        entry: python3 tools/build_assets.py --check
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+
+      - id: commit-msg-format
+        name: Commit message format
+        entry: tools/check_commit_msg.sh
+        language: script
+        stages: [commit-msg]

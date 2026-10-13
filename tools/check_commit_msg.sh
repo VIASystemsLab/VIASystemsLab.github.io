@@ -14,8 +14,7 @@
 # hook checks hand-written commits too, but when it is present it must be
 # exactly that, at the end, and the commit must carry no trailer.
 #
-# Enable once per clone:
-#     git config core.hooksPath .githooks
+# Run by pre-commit at the commit-msg stage; see .pre-commit-config.yaml.
 
 # Byte-wise matching, so [a-z] means ASCII a to z in every locale.
 LC_ALL=C
@@ -28,13 +27,13 @@ msg=$(sed -e '/^# -* >8 -*$/,$d' -e '/^#/d' "$1" | sed '/./,$!d')
 subject=$(printf '%s\n' "$msg" | head -n 1)
 
 # The way out is for people only: an agent's commit is the one this hook
-# exists to hold to the format, and the git guard denies it --no-verify anyway.
+# exists to hold to the format, and agents never use --no-verify.
 fail() {
     echo "commit-msg: $1" >&2
     echo "  $subject" >&2
     [ -n "$2" ] && printf '%s\n' "$2" >&2
     echo "A hand-written commit can keep its message with git commit --no-verify," >&2
-    echo "which skips this check and pre-commit, for that one commit only." >&2
+    echo "which skips every hook, for that one commit only." >&2
     echo "An agent fixes the message instead." >&2
     exit 1
 }
