@@ -219,7 +219,8 @@ them.
 #### 2. Add the card
 
 Copy this into the group's `<ul class="people">`, after the last card, and
-replace every value. The example is a member at the University of Verona.
+replace every value. If the group still shows an `is-pending` placeholder card,
+replace that card instead. The example is a member at the University of Verona.
 
 ```html
 <li class="person pure-u-1 pure-u-md-1-2 pure-u-lg-1-3"
@@ -514,7 +515,9 @@ Values you may need, from
 | `algorithmicallyEnhanced` | Human-authored, with a model used to enhance it. |
 | `digitalCapture` | A photograph. No model involved. |
 
-If you add an image, declare its source type. If you replace the emblem with
+This applies to the lab's own artwork in `img/original/`. A content image in
+`img/content/` carries no structured data: if it was made or altered with a
+generative image tool, its caption says so. If you replace the emblem with
 something drawn by a person, change the value — do not leave the old one.
 
 **The third-party marks are excluded from all of this.** The University of

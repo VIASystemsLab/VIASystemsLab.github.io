@@ -93,7 +93,8 @@ Both are served exactly as you commit them, with no build step.
    `alt` says what the image shows, for someone who cannot see it. Leave it
    empty (`alt=""`) only for an image that adds nothing to the text.
 4. If the image was made or altered with a generative image tool, say so in
-   its caption, and see [METADATA.md §7](METADATA.md#7-ai-provenance).
+   its caption. The caption is enough: a content image needs no structured
+   data.
 
 Publish a photograph of a person only with their agreement.
 
@@ -148,7 +149,8 @@ else, and merging into it publishes the site within a minute or two.
    to this repository; anyone else forks it.
 
    ```sh
-   git switch main && git pull
+   git switch main
+   git pull
    git switch -c profile/your-name
    ```
 
@@ -156,7 +158,7 @@ else, and merging into it publishes the site within a minute or two.
    the README describes.
 3. **Commit** as above. The hooks run the checks.
 4. **Push and open a pull request** against `main`. Keep it to one topic, such
-   as one new person or one news item.
+   as one new person or one publication.
 5. **Wait for CI.** It runs the same checks, plus the HTML validator. A red
    check means something to fix on your branch: push the fix and CI runs again.
 6. **Ask someone else to review it.** They merge it when CI is green. Do not

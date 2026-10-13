@@ -19,11 +19,8 @@ Then open <http://localhost:8000/>. Serve it rather than opening the file
 directly: `file://` URLs break the manifest, the JSON-LD tooling and some
 relative paths, so what you see would not be what visitors get.
 
-Before you commit, run the checks:
-
-```sh
-python3 tools/lint.py
-```
+Before you commit, run the checks listed in
+[`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md#before-you-commit).
 
 ## What is where
 
@@ -220,22 +217,10 @@ points at the right paper.
 
 ### A person
 
-In `index.html`, in the People section. The roster has four groups —
-**Principal investigator**, **Members**, **External members** and
-**Collaborators** — and ships with one real record and four `is-pending` slots
-so the shape is obvious. Copy a `<li class="person">`, drop `is-pending`, and
-fill it in.
-
-Which group: Members are appointed at the University of Verona, External
-members work with the lab from another institution, Collaborators are named on
-a shared output.
-
-For a member of the lab, add the matching `Person` node to the JSON-LD graph
-and add it to the organisation's `member` array. The RDFa attributes (`typeof`,
-`property`, `resource`) must keep matching that node, and `resource` must be the
-person's ORCID URL, or the two descriptions become two separate entities. The
-ORCID iD has to be visible in the card — the linter enforces it. See
-[docs/METADATA.md](docs/METADATA.md).
+In `index.html`, in the People section, under **Principal investigator**,
+**Members**, **External members** or **Collaborators**. Follow
+[Add a person](docs/METADATA.md#add-a-person) in `docs/METADATA.md`: it says
+which group, and has the card and the structured data to copy.
 
 Publish a name, a photograph or an email address only with that person's
 agreement.
@@ -374,7 +359,8 @@ page, in `humans.txt`, and in the page metadata.
   particular must keep its own blue field and its 3:2 proportions, and must
   never be inverted or tinted.
 
-If you add an image, declare its source type. If you add a funded project, add
+If you add an image made or altered with a generative image tool, say so in its
+caption. If you add a funded project, add
 its grant to the funding acknowledgement in the footer of every page.
 
 ## Deployment
