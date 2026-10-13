@@ -214,13 +214,19 @@ passes every check and still names the wrong person.
 
 For a collaborator, a card with their name and affiliation is enough. Do not
 create a `Person` node for someone whose details you have not checked with
-them.
+them. So a collaborator takes only part of this recipe: the card as step 2
+describes for collaborators, then the lint and the local preview from step 5.
+Steps 3 and 4, and the Schema Markup Validator, do not apply.
 
 #### 2. Add the card
 
-Copy this into the group's `<ul class="people">`, after the last card, and
-replace every value. If the group still shows an `is-pending` placeholder card,
-replace that card instead. The example is a member at the University of Verona.
+For a collaborator, use the card in the commented-out Collaborators group in
+`index.html`, which carries no structured data: uncomment the group for the
+first one, and copy an existing collaborator's card for each one after.
+
+For a member or an external member, copy this into the group's
+`<ul class="people">`, after the last card, and replace every value. The
+example is a member at the University of Verona.
 
 ```html
 <li class="person pure-u-1 pure-u-md-1-2 pure-u-lg-1-3"

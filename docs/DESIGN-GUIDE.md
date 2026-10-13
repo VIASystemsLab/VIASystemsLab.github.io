@@ -466,7 +466,7 @@ value probably wants an existing one.
 | `.highlight` | A project in brief, on the homepage. |
 | `.project` | A full project record: body plus rail. |
 | `.project__rail` | Logo, the three links, then the facts. |
-| `.person` | A roster card. `.person--lead` marks the PI by its rule colour, not by size. |
+| `.person` | A roster card. `.person--lead` marks the PI with a solid accent rule over the dashed one of the other cards, not by size. |
 | `.pub` | One output, tagged by type of publication, venue and funding project. |
 | `.tag` | Type of publication, venue or project. Distinguished by **colour and border style**, so it survives greyscale and colour-vision deficiency. |
 | `.note` | Anything set aside from the argument of its section: a caveat, an invitation to work with the lab, a disclosure. One frame for all of them, with an optional `.note__title` and `.note__links`. |

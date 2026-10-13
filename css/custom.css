@@ -1265,11 +1265,14 @@ input, select, textarea, button { font-family: inherit; }
 
 .person {
   padding-top: 0.9rem;
-  border-top: 3px solid var(--rule);
+  border-top: 2px dashed var(--rule);
 }
 
-/* The lead card is distinguished by the accent on its rule, not by size. */
-.person--lead { border-top-color: var(--signal); }
+/* The lead card is distinguished by its rule, solid and in the accent, not
+   by size. */
+.person--lead {
+  border-top: 3px solid var(--signal);
+}
 
 .person__name {
   font-size: var(--step-1);
@@ -1309,19 +1312,6 @@ input, select, textarea, button { font-family: inherit; }
   font-weight: 600;
   letter-spacing: 0.02em;
   overflow-wrap: anywhere;
-}
-
-/* A slot waiting for a real person. Visibly provisional, so an empty roster
-   never reads as a finished one. */
-.person.is-pending {
-  border-top-style: dashed;
-  border-top-width: 2px;
-}
-
-.person.is-pending .person__name {
-  font-weight: 400;
-  font-style: italic;
-  color: var(--ink-soft);
 }
 
 /* ========================================================================
