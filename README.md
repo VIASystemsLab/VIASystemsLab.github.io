@@ -36,6 +36,8 @@ python3 tools/lint.py
 | `publications.html` | Every peer-reviewed paper, grouped by the kind of contribution. Data and software are published with the project that produced them, not listed here. |
 | `ai-statement.html` | The lab's statement on AI and scientific research: principles, example guidelines, and the sources it adapts, including how the document itself was written. Linked from the About section, from the open-science pledge on the publications page, and from the footer of every page. |
 | `img/original/` | The lab's master artwork. Edited by hand. |
+| `img/content/` | Images used inside a page, served as committed. See [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md#adding-an-image-or-a-pdf). |
+| `files/` | PDFs the site links to that have no other public home. Same section of `docs/CONTRIBUTING.md`. |
 | `img/logos/` | Third-party marks — the university, the EU emblem, partner projects. Reproduced as supplied: read [`img/logos/README.md`](img/logos/README.md) before touching them. |
 
 ### Style — how it looks
@@ -47,7 +49,7 @@ python3 tools/lint.py
 | `css/fonts.css` | `@font-face` rules. Generated to match `fonts/` — see "Fonts" below. |
 | `fonts/` | Source Serif 4 and Source Sans 3, variable, `latin` and `latin-ext` subsets. |
 | `icons/favicon.svg` | The favicon, hand-drawn. Every PNG icon beside it is generated from it or from the seal. |
-| `img/` | Everything directly in here is generated from `img/original/` and `img/logos/`. Do not edit. |
+| `img/` | Everything directly in here is generated from `img/original/` and `img/logos/`. Do not edit. Content images go in `img/content/`. |
 
 **All presentation lives in `css/custom.css`.** The pages carry no `style`
 attribute, no `<style>` element, no SVG presentation attribute (`fill`,
@@ -74,7 +76,7 @@ Geometry is not presentation: a path's `d`, a circle's `cx`, a `viewBox` and
 | `assets.lock.json` | Hashes of the artwork the generated files came from. CI compares against it. |
 | `.githooks/` | Optional pre-commit and commit-msg hooks. |
 | `.gitidentity.example` | Template for the per-person commit identity and signing key. |
-| `.github/workflows/` | CI validation, and the job that rebuilds derived images when artwork changes. |
+| `.github/workflows/` | CI validation, run on every pull request and on `main`. |
 
 ## Layout
 
@@ -298,9 +300,9 @@ on Debian or Ubuntu:
 sudo apt-get install webp librsvg2-bin imagemagick
 ```
 
-You do not have to install them to change text or CSS — only to change
-artwork. If you push artwork without rebuilding, the `Assets` workflow rebuilds
-and commits the derivatives for you.
+You do not have to install them to change text, CSS or content images, only
+to change the artwork. Rebuild before you commit: CI fails a pull request whose
+artwork and derivatives disagree.
 
 ## Metadata
 
@@ -349,8 +351,7 @@ format, read [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md).
 
 On GitHub, `.github/workflows/ci.yml` runs the linter, validates every page
 with the Nu Html Checker, and confirms the derived assets match their sources.
-It re-checks outbound links weekly. `.github/workflows/assets.yml` rebuilds and
-commits derived images when the artwork changes.
+It re-checks outbound links weekly.
 
 ## Provenance and acknowledgements
 
@@ -378,10 +379,12 @@ its grant to the funding acknowledgement in the footer of every page.
 
 ## Deployment
 
-The site is an organisation GitHub Pages site served from the default branch.
-Pushing to `main` publishes it; there is no deployment workflow and there
-should not be one. `.nojekyll` is present so the files are served exactly as
-committed.
+The site is an organisation GitHub Pages site served from the default branch,
+so merging a pull request into `main` publishes it. There is no deployment
+workflow: the pages, the generated images and the content files are all
+committed, and served exactly as committed (`.nojekyll` turns off GitHub's own
+processing). `main` accepts changes only through a pull request with CI green;
+the steps are in [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md#proposing-a-change).
 
 ## Licence
 

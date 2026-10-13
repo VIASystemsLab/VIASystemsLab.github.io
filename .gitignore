@@ -1,10 +1,5 @@
-
-
-
-
+# Local agent instructions, kept out of the repository
 CLAUDE.md
-.claude
-.temp
 
 # Per-person commit identity; see .gitidentity.example
 .gitidentity
