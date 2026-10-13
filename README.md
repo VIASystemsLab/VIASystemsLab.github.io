@@ -73,9 +73,9 @@ Geometry is not presentation: a path's `d`, a circle's `cx`, a `viewBox` and
 | `site.webmanifest` | Name, icons and theme colours for installed/bookmarked use. |
 | `tools/lint.py` | All the static checks. |
 | `tools/build_assets.py` | Regenerates every derived image, icon and the sitemap. |
+| `tools/check_*.sh` | The commit-message and local-path checks that pre-commit runs. |
 | `assets.lock.json` | Hashes of the artwork the generated files came from. CI compares against it. |
-| `.githooks/` | Optional pre-commit and commit-msg hooks. |
-| `.gitidentity.example` | Template for the per-person commit identity and signing key. |
+| `.pre-commit-config.yaml` | The checks run before each commit, through [pre-commit](https://pre-commit.com). |
 | `.github/workflows/` | CI validation, run on every pull request and on `main`. |
 
 ## Layout

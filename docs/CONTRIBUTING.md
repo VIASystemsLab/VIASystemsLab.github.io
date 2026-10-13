@@ -6,28 +6,33 @@ is in [METADATA.md](METADATA.md).
 
 ## Set up once per clone
 
-Enable the hooks, which run the checks before each commit and check the
-message format:
+Install [pre-commit](https://pre-commit.com) and enable the hooks, which run
+the checks before each commit and check the message format:
 
 ```sh
-git config core.hooksPath .githooks
+uv tool install pre-commit
+pre-commit install
 ```
 
-Set up your commit identity. Entries in the history are attributed explicitly
-and signed, rather than picking up whatever global identity the machine has:
+`.pre-commit-config.yaml` lists what runs.
+
+Set up your commit identity in this clone's own config, so entries in the
+history are attributed explicitly and signed, rather than picking up whatever
+global identity the machine has:
 
 ```sh
-cp .gitidentity.example .gitidentity
-$EDITOR .gitidentity                              # your name, address, key id
-git config --local include.path ../.gitidentity
+git config --local user.name "Your Name"
+git config --local user.email "you@example.org"
+git config --local user.signingkey <your-key-id>
+git config --local commit.gpgsign true
 ```
 
-`.gitidentity` is a git config file that `.git/config` includes, so git reads
-it natively. It is gitignored because it is per person: cloning the repository
-must not hand you somebody else's address or signing key. Check that it took:
+If you have no signing key yet, GitHub's guide shows how to create one and add
+it to your account:
+<https://docs.github.com/en/authentication/managing-commit-signature-verification>.
+After your first commit, check that it took:
 
 ```sh
-git config --get user.email
 git log -1 --show-signature                       # expect "Good signature"
 ```
 
@@ -41,7 +46,7 @@ python3 tools/lint.py
 python3 tools/build_assets.py --check
 ```
 
-The `pre-commit` hook runs both. CI runs them again, plus the Nu Html Checker.
+The pre-commit hooks run both. CI runs them again, plus the Nu Html Checker.
 
 ## Rules for changes
 
