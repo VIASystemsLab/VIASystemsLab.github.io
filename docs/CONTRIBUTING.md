@@ -11,6 +11,7 @@ the checks before each commit and check the message format:
 
 ```sh
 uv tool install pre-commit
+git config --local --unset-all core.hooksPath 2>/dev/null || :
 pre-commit install
 ```
 
