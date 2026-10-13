@@ -217,8 +217,8 @@ points at the right paper.
 
 ### A person
 
-In `index.html`, in the People section, under **Principal investigator**,
-**Members**, **External members** or **Collaborators**. Follow
+In `index.html`, in the People section, under **Members**, **External
+members** or **Collaborators**. Follow
 [Add a person](docs/METADATA.md#add-a-person) in `docs/METADATA.md`: it says
 which group, and has the card and the structured data to copy.
 
