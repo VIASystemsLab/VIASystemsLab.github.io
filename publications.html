@@ -314,34 +314,39 @@
   <section id="papers" class="section" aria-labelledby="list-title">
     <div class="shell pure-g">
       <header class="section__head pure-u-1 pure-u-md-5-6 pure-u-lg-17-24">
-        <p class="eyebrow"><span class="eyebrow__num">01</span> Outputs</p>
+        <p class="eyebrow"><span class="eyebrow__num">01</span> Publications</p>
         <h2 id="list-title" class="section__title">Peer-reviewed papers</h2>
         <p class="section__standfirst">
           Peer-reviewed publications, grouped by the kind of contribution and
-          tagged with the type of publication, the venue, and the project that
+          tagged with the kind of venue, the venue, and the project that
           funded them. Every entry links its DOI.
         </p>
       </header>
 
+      <!-- The rows follow the order of the tags on an entry. -->
       <div class="legend pure-u-1">
         <p class="legend__row">
           <span class="legend__label">Type</span>
           <span class="tag tag--journal">Journal</span>
           <span class="tag tag--conference">Conference</span>
           <span class="tag tag--workshop">Workshop</span>
-          <span class="tag tag--demo">Demo</span>
-          <span class="tag tag--poster">Poster</span>
+        </p>
+        <p class="legend__row">
+          <span class="legend__label">Venue</span>
+          <span class="tag tag--venue">EDBT 2025</span>
         </p>
         <p class="legend__row">
           <span class="legend__label">Project</span>
           <span class="tag tag--armada">ARMADA</span>
           <span class="tag tag--datagems">DataGEMS</span>
         </p>
+        <!-- Uncomment when the first entry has a pub__artifacts row.
         <p class="legend__row">
-          <span class="legend__label">Carries</span>
+          <span class="legend__label">Artifacts</span>
           <span class="tag tag--dataset">Data</span>
           <span class="tag tag--software">Code</span>
         </p>
+        -->
       </div>
 
       <div class="pubgroup pure-u-1 pure-u-md-11-12 pure-u-lg-3-4">
@@ -385,19 +390,19 @@
         has no doi.org link, but it cannot tell you the DOI is the right one.
 
         Groups say what kind of contribution the paper makes. Put the entry in
-        the matching group, newest first, and create the heading if the group
-        does not exist yet; the set is:
+        the matching group, newest first. If the group does not exist yet,
+        create its heading in this order:
 
-          Journal articles                id="journal"
           Research papers                 id="research"
+          Surveys                         id="surveys"
           Vision and position papers      id="vision"
-          Demonstrations                  id="demo"
+          Demonstrations                  id="demos"
           Posters                         id="posters"
 
-        Tags say where it was published, not what it argues: one of Journal,
-        Conference, Workshop, Demo or Poster, then the venue, then the project
-        that funded it. A vision paper at a conference is tagged Conference and
-        filed under Vision; the two are not the same axis.
+        Tags say where it was published: one of Journal, Conference or
+        Workshop, then the venue, then the project that funded it. A vision
+        paper at a conference is filed under Vision and tagged Conference; the
+        two are not the same axis, and a tag never links to a group.
 
         A paper that has a dataset or a repository of its own gets a second
         row, <p class="pub__artifacts">, holding one tag-shaped link each. It

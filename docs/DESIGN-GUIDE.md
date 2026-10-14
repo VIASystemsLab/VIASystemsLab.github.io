@@ -40,12 +40,12 @@ Try a comma, a colon, parentheses, or two sentences first. One of them almost
 always works, and reads faster. The bar is not "a dash reads well here", it is
 "nothing else will do". An em dash invites a clause the sentence did not need.
 
-> Outputs are grouped by kind — vision, journal, conference — and each one
+> Publications are grouped by kind — research, survey, vision — and each one
 > carries the project that funded it.
 
 becomes
 
-> Outputs are grouped by kind (vision, journal, conference), and each one
+> Publications are grouped by kind (research, survey, vision), and each one
 > carries the project that funded it.
 
 ### Name the specific thing
@@ -467,8 +467,8 @@ value probably wants an existing one.
 | `.project` | A full project record: body plus rail. |
 | `.project__rail` | Logo, the three links, then the facts. |
 | `.person` | A roster card. `.person--lead` marks the PI with a solid accent rule over the dashed one of the other cards, not by size. |
-| `.pub` | One output, tagged by type of publication, venue and funding project. |
-| `.tag` | Type of publication, venue or project. Distinguished by **colour and border style**, so it survives greyscale and colour-vision deficiency. |
+| `.pub` | One publication, tagged by kind of venue, venue and funding project. |
+| `.tag` | Kind of venue, venue or project. Distinguished by **colour and border style**, so it survives greyscale and colour-vision deficiency. |
 | `.note` | Anything set aside from the argument of its section: a caveat, an invitation to work with the lab, a disclosure. One frame for all of them, with an optional `.note__title` and `.note__links`. |
 | `.statement-list` | A term and its rule, one per row. Used by the AI statement. |
 | `.graph` | The node-and-link figure on a dark band. See §7. |
