@@ -348,10 +348,8 @@ def check_jsonld(name: str, html_with_comments: str, site_ids: set[str]) -> None
         # "Shows" means the words a reader sees, not the markup. An RDFa
         # `resource` attribute carries the same ORCID URL as the graph, so
         # searching the markup accepted a card whose printed iD had been
-        # destroyed. An email address is shown as a mailto: link labelled
-        # "Email", which a reader can follow, so that counts for an address.
+        # destroyed.
         shown = visible_text(re.sub(r"<script\b.*?</script>", "", visible, flags=re.S))
-        mailto = set(re.findall(r'href="mailto:([^"?]+)', visible))
 
         orcid = re.compile(r"\b\d{4}-\d{4}-\d{4}-\d{3}[\dX]\b")
         email = re.compile(r"\b[\w.+-]+@[\w-]+\.[\w.-]+\b")
@@ -363,7 +361,7 @@ def check_jsonld(name: str, html_with_comments: str, site_ids: set[str]) -> None
         for literal in sorted(literals):
             for pattern, kind, hard, is_shown in (
                 (orcid, "ORCID iD", True, lambda v: v in shown),
-                (email, "email address", True, lambda v: v in shown or v in mailto),
+                (email, "email address", True, lambda v: v in shown),
                 (doi, "DOI", False, lambda v: v in visible),
             ):
                 found = pattern.search(literal)

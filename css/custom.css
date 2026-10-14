@@ -424,8 +424,6 @@ input, select, textarea, button { font-family: inherit; }
 .tag--conference { color: var(--accent-2); border-color: var(--accent-2); border-style: solid; border-width: 1px 1px 3px; }
 .tag--journal    { color: var(--accent-2); border-color: var(--accent-2); border-style: solid; border-width: 2px; }
 .tag--workshop   { color: var(--accent-2); border-color: var(--accent-2); border-style: solid; }
-.tag--demo       { color: var(--accent-2); border-color: var(--accent-2); border-style: dashed; }
-.tag--poster     { color: var(--ink-soft); border-style: dotted; border-color: var(--ink-soft); }
 .tag--dataset    { color: var(--ink-soft); border-style: double; border-width: 3px; }
 .tag--software   { color: var(--ink-soft); border-style: double; border-width: 3px; font-family: var(--font-mono); }
 
@@ -1008,6 +1006,10 @@ input, select, textarea, button { font-family: inherit; }
      In em, so it scales with the glyph and not on a second curve. */
   --quote-drop: 0.18em;
   --quote-gap:  0.4rem;
+  --quote-size: clamp(3.5rem, 7vw, 5.5rem);
+  /* How far the closing mark sits below the text's baseline, so a glyph this
+     large ends level with the last line instead of standing above it. */
+  --quote-sink: -0.45em;
 
   margin: 0;
   display: grid;
@@ -1022,8 +1024,21 @@ input, select, textarea, button { font-family: inherit; }
   align-self: start;
   margin-top: var(--quote-drop);
   font-family: var(--font-display);
-  font-size: clamp(3.5rem, 7vw, 5.5rem);
+  font-size: var(--quote-size);
   line-height: 0.75;
+  color: var(--rule);
+}
+
+/* The closing mark runs on after the last word, so it belongs to the verse
+   rather than to the grid. Line height 0 keeps it from opening up the line. */
+.pullquote blockquote p::after {
+  content: "\201D";
+  margin-left: 0.05em;
+  vertical-align: var(--quote-sink);
+  font-family: var(--font-display);
+  font-size: var(--quote-size);
+  font-style: normal;
+  line-height: 0;
   color: var(--rule);
 }
 
@@ -1319,11 +1334,11 @@ input, select, textarea, button { font-family: inherit; }
    ===================================================================== */
 
 /*
- * One legend, two rows: the kinds are a fixed set, the projects are not, so
- * they are listed separately. As two siblings in the shell they picked up the
- * shell's row-gap, which is sized to separate whole sections and put most of a
- * section's worth of space inside one legend. The rows now share a parent and
- * their own much smaller gap.
+ * One legend, one row per kind of tag, in the order the tags sit on an
+ * entry. The rows are children of .legend, not of the shell: as direct
+ * children of the shell they would pick up its row-gap, which is sized to
+ * separate whole sections and would put most of a section's worth of space
+ * inside one legend. The wrapper gives them their own much smaller gap.
  */
 .legend {
   display: grid;
@@ -1814,6 +1829,10 @@ a.tag:focus-visible {
   gap: 0.75rem;
   margin: 0;
 }
+
+/* Inside a section head the row follows the standfirst it acts on, so it
+   takes a paragraph's distance rather than the grid's row gap. */
+.section__head .cta-row { margin-top: 1.25rem; }
 
 /* On a light surface the hero button colours would be unreadable, so the
    two solid/outline variants below are the light-surface equivalents. */
