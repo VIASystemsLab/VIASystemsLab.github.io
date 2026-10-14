@@ -1008,6 +1008,10 @@ input, select, textarea, button { font-family: inherit; }
      In em, so it scales with the glyph and not on a second curve. */
   --quote-drop: 0.18em;
   --quote-gap:  0.4rem;
+  --quote-size: clamp(3.5rem, 7vw, 5.5rem);
+  /* How far the closing mark sits below the text's baseline, so a glyph this
+     large ends level with the last line instead of standing above it. */
+  --quote-sink: -0.45em;
 
   margin: 0;
   display: grid;
@@ -1022,8 +1026,21 @@ input, select, textarea, button { font-family: inherit; }
   align-self: start;
   margin-top: var(--quote-drop);
   font-family: var(--font-display);
-  font-size: clamp(3.5rem, 7vw, 5.5rem);
+  font-size: var(--quote-size);
   line-height: 0.75;
+  color: var(--rule);
+}
+
+/* The closing mark runs on after the last word, so it belongs to the verse
+   rather than to the grid. Line height 0 keeps it from opening up the line. */
+.pullquote blockquote p::after {
+  content: "\201D";
+  margin-left: 0.05em;
+  vertical-align: var(--quote-sink);
+  font-family: var(--font-display);
+  font-size: var(--quote-size);
+  font-style: normal;
+  line-height: 0;
   color: var(--rule);
 }
 
