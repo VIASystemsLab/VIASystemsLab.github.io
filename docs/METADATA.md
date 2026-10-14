@@ -445,7 +445,8 @@ Every date, grant number and figure comes from the project's CORDIS record.
    the article and a node for each artefact: a `Dataset`, or a
    `SoftwareSourceCode` with `codeRepository`. Add the matching
    `<p class="pub__artifacts">` row to the visible entry, so the page shows
-   what the graph claims.
+   what the graph claims. For the first entry with one, also uncomment the
+   Artifacts row of the legend.
 
 The venue is `publication`, not `isPartOf`. `publication` is the schema.org
 property whose range *is* `PublicationEvent`; `isPartOf` ranges over
