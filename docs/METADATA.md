@@ -235,7 +235,7 @@ example is a member at the University of Verona.
   <h4 class="person__name">
     <a property="url" href="https://example.org/"><span property="name">Ada Rossi</span></a>
   </h4>
-  <p class="person__title" property="jobTitle">Doctoral Candidate</p>
+  <p class="person__title" property="jobTitle">Doctoral Candidate in Computer Science</p>
   <p class="person__affil"
      property="affiliation" typeof="CollegeOrUniversity" resource="https://ror.org/039bp8j42">
     Department of Computer Science,
@@ -260,7 +260,10 @@ What each part does:
   of their `Person` node in step 3, or the graph holds two people.
 - **`property="url"`** on the name link is the person's own website.
 - **`property="jobTitle"`** goes on the title, with the same text as the
-  node's `jobTitle`.
+  node's `jobTitle`. A title is the role followed by the field, as in
+  "Postdoctoral Researcher in Computer Science". Someone working towards a
+  PhD is a "Doctoral Candidate", the term the site and MSCA doctoral
+  networks use, never "PhD Researcher" or "PhD Student".
 - **`resource` on `person__affil`** is the ROR URL of their institution.
 - **The bio carries no `property` attributes.** A link in the bio to a lab, a
   project or a group is a plain `<a href>`. With `property="url"` it would
@@ -286,7 +289,7 @@ Add it to the `@graph` array in the JSON-LD in `<head>`, after the last
   "name": "Ada Rossi",
   "givenName": "Ada",
   "familyName": "Rossi",
-  "jobTitle": "Doctoral Candidate",
+  "jobTitle": "Doctoral Candidate in Computer Science",
   "url": "https://example.org/",
   "email": "ada.rossi@univr.it",
   "affiliation": {
