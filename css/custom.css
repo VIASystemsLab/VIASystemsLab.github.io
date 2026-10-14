@@ -1830,6 +1830,10 @@ a.tag:focus-visible {
   margin: 0;
 }
 
+/* Inside a section head the row follows the standfirst it acts on, so it
+   takes a paragraph's distance rather than the grid's row gap. */
+.section__head .cta-row { margin-top: 1.25rem; }
+
 /* On a light surface the hero button colours would be unreadable, so the
    two solid/outline variants below are the light-surface equivalents. */
 .button--solid {

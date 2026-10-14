@@ -461,7 +461,7 @@ value probably wants an existing one.
 | --- | --- |
 | `.masthead` | Seal, wordmark, six-item nav. Sticky from `md`. |
 | `.hero` / `.pagehead` | Inverse band opening a page. |
-| `.section__head` | Eyebrow (number + label), title, standfirst. |
+| `.section__head` | Eyebrow (number + label), title, standfirst, and optionally a `.cta-row` of buttons that act on the standfirst. |
 | `.theme` | One research theme: rule, name, description, methods. |
 | `.highlight` | A project in brief, on the homepage. |
 | `.project` | A full project record: body plus rail. |
