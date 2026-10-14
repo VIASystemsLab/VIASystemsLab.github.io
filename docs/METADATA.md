@@ -249,7 +249,7 @@ example is a member at the University of Verona.
     <a property="sameAs" class="link-ext" href="https://orcid.org/0000-0002-1825-0097">ORCID 0000-0002-1825-0097</a>
     <a property="sameAs" class="link-ext" href="https://dblp.org/pid/000/0000.html">DBLP</a>
     <a property="sameAs" class="link-ext" href="https://scholar.google.com/citations?user=XXXXXXXXXXXX">Scholar</a>
-    <a property="email" href="mailto:ada.rossi@univr.it">Email</a>
+    <code property="email">ada.rossi@univr.it</code>
   </p>
 </li>
 ```
@@ -266,11 +266,13 @@ What each part does:
   project or a group is a plain `<a href>`. With `property="url"` it would
   claim that page as the person's own website.
 - **`person__ids`** lists their identity links, each with `property="sameAs"`,
-  and their email with `property="email"`. The ORCID iD must be printed here:
+  and, for a member, their email address as plain text in a
+  `<code property="email">`, not as a link. The ORCID iD must be printed here:
   the linter fails if the graph asserts an ORCID iD the page never shows.
 
-Leave out any link the person does not have. Leave out the email if they did
-not agree to publish it, and leave it out of the node as well.
+Leave out any link the person does not have. An external member's card and
+node carry no email address. Leave out a member's email if they did not agree
+to publish it, and leave it out of the node as well.
 
 #### 3. Add the `Person` node
 
@@ -566,8 +568,7 @@ checks, among other things:
   graph, or into a declared controlled vocabulary
 - the canonical URL is right and `og:url` agrees with it
 - no ORCID iD or email address is asserted that the page does not show: an
-  ORCID iD must be in the text a reader sees, an email address in the text or
-  as a `mailto:` link
+  ORCID iD or an email address must be in the text a reader sees
 - every `Person` node has a card with the same `resource`, and the two agree:
   the name link is the node's `url`, the title carries `property="jobTitle"`
   with the same text, every identity link in the card is in the node's
