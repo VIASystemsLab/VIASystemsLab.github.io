@@ -1335,10 +1335,10 @@ input, select, textarea, button { font-family: inherit; }
 
 /*
  * One legend, one row per kind of tag, in the order the tags sit on an
- * entry. As two siblings in the shell they picked up the
- * shell's row-gap, which is sized to separate whole sections and put most of a
- * section's worth of space inside one legend. The rows now share a parent and
- * their own much smaller gap.
+ * entry. The rows are children of .legend, not of the shell: as direct
+ * children of the shell they would pick up its row-gap, which is sized to
+ * separate whole sections and would put most of a section's worth of space
+ * inside one legend. The wrapper gives them their own much smaller gap.
  */
 .legend {
   display: grid;
