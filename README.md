@@ -175,20 +175,23 @@ end of the list — copy that.
 
 Groups and tags are two different axes, and it is worth keeping them apart:
 
-- **The group** says what kind of contribution the paper makes: a journal
-  article, a research paper, a vision or position paper, a demonstration, a
-  poster. Put the entry in the matching group, newest first.
-- **The tags** say where it was published and who paid for it: the type of
-  publication, then the venue, then the funding project.
+- **The group** says what kind of contribution the paper makes. The groups, in
+  page order, are **Research papers**, **Surveys**, **Vision and position
+  papers**, **Demonstrations** and **Posters**. Put the entry in its group,
+  newest first.
+- **The tags** say where it was published and who paid for it: the kind of
+  venue (Journal, Conference or Workshop), then the venue, then the funding
+  project.
 
 So a vision paper that appeared at a conference is filed under **Vision and
 position papers** and tagged **Conference**. The two do not have to agree
-because they are not answering the same question.
+because they are not answering the same question, and a tag never links to a
+group. The legend above the list follows the order of the tags.
 
 The tag classes are:
 
 ```
-tag--journal  tag--conference  tag--workshop  tag--demo  tag--poster
+tag--journal  tag--conference  tag--workshop (kind of venue)
 tag--armada   tag--datagems                 (funding project)
 tag--venue                                  (venue label)
 tag--dataset  tag--software                 (data or code the paper carries)
