@@ -197,26 +197,30 @@ tag--venue                                  (venue label)
 tag--dataset  tag--software                 (data or code the paper carries)
 ```
 
-The last two are links, not labels, and they sit in their own
-`<p class="pub__artifacts">` row rather than in `pub__tags`. That row says what
-the entry *is*, and a **Data** tag beside **Conference** reads as an answer to
-that question instead of a pointer. They are optional; most entries have
+The last two go at the end of `pub__tags`, so a reader can scan the list for
+entries with data or code. A tag is never a link: the links themselves, with
+the paper PDF hosted in `files/` (labelled Preprint) and the poster, go in a
+`<p class="pub__links">` row below the detail, each behind its own label. Both are optional; most entries have
 neither.
 
 Types are distinguished by border style as well as by colour, so they still
 read in greyscale and to a colour-blind reader. Keep that property if you add a
 new type.
 
-**Every entry has a resolving DOI.** No DOI, no entry: not a preprint, not a
-paper in preparation, not a placeholder. The page lists peer-reviewed
-publications only, so there is no forthcoming section. Data and software are
-published with the project that produced them.
+**Every entry has a resolving DOI, or a link to its record in the venue's
+official archive** where the venue issues no DOI. In practice that exception
+covers posters and workshop papers in proceedings series such as CEUR-WS.
+Without one or the other there is no entry: not a preprint, not a paper in
+preparation, not a placeholder. The page lists peer-reviewed publications only,
+so there is no forthcoming section. Data and software are published with the
+project that produced them.
 
-Resolve the DOI and check the title, authors, year and venue against what it
-resolves to before adding anything. `tools/lint.py` fails the build if a
-published entry has no `doi.org` link, and if the structured data asserts an
-ORCID iD or an email address the page never shows. It cannot tell you the DOI
-points at the right paper.
+Resolve the identifier and check the title, authors, year and venue against
+what it resolves to before adding anything. `tools/lint.py` fails the build if
+an entry's title does not link `doi.org` or an archive listed in its
+`PUBLICATION_IDENTIFIERS`, if the link after the author list is not that same
+link, and if the structured data asserts an ORCID iD or an email address the
+page never shows. It cannot tell you the link points at the right paper.
 
 ### A person
 

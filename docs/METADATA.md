@@ -39,7 +39,7 @@ Six kinds of thing, and one stable identifier each.
 | A person | their ORCID URL | `index.html` only |
 | A project | its CORDIS URL | `projects.html` only |
 | A research theme | `…/#theme-<slug>` | `index.html` only |
-| An output | its DOI URL | `publications.html` only |
+| An output | its DOI URL, or its official archive URL | `publications.html` only |
 
 Plus the site furniture: `#website`, each page's `#webpage`, the emblem
 (`#emblem`), and the source repository.
@@ -74,7 +74,8 @@ Prefer an identifier someone else maintains and that resolves:
 - a person → their **ORCID** URL
 - a project → its **CORDIS** URL
 - an institution → its **ROR** URL
-- a paper, dataset or software release → its **DOI** URL
+- a paper, dataset or software release → its **DOI** URL; a paper whose venue
+  issues no DOI → its URL in the venue's official archive (§6)
 - anything with no external identifier → a fragment on this site's canonical
   URL, e.g. `https://viasystemslab.github.io/#organization`
 
@@ -159,7 +160,8 @@ the organisation and the university by `@id`.
 ### `publications.html`
 
 A `CollectionPage` with a `BreadcrumbList` and an `ItemList`, plus a
-`ScholarlyArticle` for every listed publication, each with its DOI as `@id` and
+`ScholarlyArticle` for every listed publication, each with its DOI (or archive
+URL) as `@id` and
 a `funding` reference to the project that paid for it. See §6.
 
 ### `ai-statement.html`
@@ -220,9 +222,9 @@ Steps 3 and 4, and the Schema Markup Validator, do not apply.
 
 #### 2. Add the card
 
-For a collaborator, use the card in the commented-out Collaborators group in
-`index.html`, which carries no structured data: uncomment the group for the
-first one, and copy an existing collaborator's card for each one after.
+For a collaborator, copy an existing card in the Collaborators group in
+`index.html`, which carries no structured data. Add a title, a department or a
+link only once the person has confirmed it.
 
 For a member or an external member, copy this into the group's
 `<ul class="people">`, after the last card, and replace every value. The
@@ -426,7 +428,8 @@ Every date, grant number and figure comes from the project's CORDIS record.
 ### Add a publication
 
 1. Put the visible entry in the right group in `publications.html`.
-2. Add the output node, `@id` = the DOI URL:
+2. Add the output node, `@id` = the DOI URL (for an archive record, the
+   archive URL in `@id` and `url`, and no `identifier`):
 
    ```jsonc
    {
@@ -446,10 +449,10 @@ Every date, grant number and figure comes from the project's CORDIS record.
 3. Reference it from the page's `CollectionPage` via `mainEntity`.
 4. **Optionally**, point at the data or the code behind it. Add `isBasedOn` to
    the article and a node for each artefact: a `Dataset`, or a
-   `SoftwareSourceCode` with `codeRepository`. Add the matching
-   `<p class="pub__artifacts">` row to the visible entry, so the page shows
-   what the graph claims. For the first entry with one, also uncomment the
-   Artifacts row of the legend.
+   `SoftwareSourceCode` with `codeRepository`. Add the matching Data or Code
+   tag to the entry's `pub__tags` and the links to a
+   `<p class="pub__links">` row below the detail, so the page shows what
+   the graph claims.
 
 The venue is `publication`, not `isPartOf`. `publication` is the schema.org
 property whose range *is* `PublicationEvent`; `isPartOf` ranges over
@@ -489,13 +492,22 @@ that paid for it, which is the property EU reporting reads, so do not omit it.
 been checked against that DOI.** Not against a memory of it, not against a
 citation in another paper, not against a preprint's metadata.
 
-No DOI means no entry. The page lists peer-reviewed publications only: there is
-no forthcoming section, no work in preparation, and no placeholder marked
-pending. Data and software are published with the project that produced them.
+Where the venue issues no DOI, the record in the venue's official archive takes
+its place, checked the same way. In practice this covers posters and workshop
+papers in proceedings series such as CEUR-WS; it is not a route for a paper
+whose venue does assign DOIs. `tools/lint.py` checks that the title links a DOI
+or an archive listed in `PUBLICATION_IDENTIFIERS`, and that the link after the
+author list is the same one. It does not check the kind of paper, so that part
+is the reviewer's.
 
-A wrong DOI in structured data is copied into reference managers and aggregator
-databases within days, and is very hard to retract. Leaving a paper off the list
-until its DOI exists costs a reader nothing by comparison.
+No DOI or archive record means no entry. The page lists peer-reviewed
+publications only: there is no forthcoming section, no work in preparation, and
+no placeholder marked pending. Data and software are published with the project
+that produced them.
+
+A wrong identifier in structured data is copied into reference managers and
+aggregator databases within days, and is very hard to retract. Leaving a paper
+off the list until its record exists costs a reader nothing by comparison.
 
 The same applies to ORCID iDs, ROR IDs, grant numbers and affiliations.
 
