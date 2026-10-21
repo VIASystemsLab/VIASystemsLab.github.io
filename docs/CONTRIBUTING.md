@@ -58,10 +58,11 @@ The pre-commit hooks run both. CI runs them again, plus the Nu Html Checker.
 - **Never edit a generated file.** Images directly in `img/`, the PNG icons and
   `sitemap.xml` come from `tools/build_assets.py`. Change the source and
   rebuild.
-- **Every publication has a resolving DOI.** The page lists peer-reviewed work
-  only. Before adding an entry, confirm the title, authors, year and venue
-  against what the DOI resolves to. The linter checks that the link is there,
-  not that it points at the right paper.
+- **Every publication has a resolving DOI**, or, where the venue issues none, a
+  link to its record in the venue's official archive. The page lists
+  peer-reviewed work only. Before adding an entry, confirm the title, authors,
+  year and venue against what the link resolves to. The linter checks that the
+  link is there, not that it points at the right paper.
 - **Write copy by the Language section of
   [DESIGN-GUIDE.md](DESIGN-GUIDE.md#2-language).** It applies to commit
   messages and comments too.
@@ -107,7 +108,8 @@ size, so a reader knows before downloading:
 ```
 
 Host a PDF here only when it has no other public home. A paper is linked by its
-DOI, and a dataset or a deliverable by its Zenodo or CORDIS record.
+DOI or its official archive record, and a dataset or a deliverable by its
+Zenodo or CORDIS record.
 
 `tools/lint.py` fails on a file over the limit or of another type, and warns
 about a file that no page links to.

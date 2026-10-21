@@ -47,6 +47,14 @@ CONTROLLED_VOCABULARIES = (
     "https://schema.org/",
 )
 
+# A publication is identified by its DOI, or, where the venue issues none, by
+# its record in the venue's official archive. Add an archive here only when it
+# is the venue's own proceedings series, not a repository anyone can upload to.
+PUBLICATION_IDENTIFIERS = (
+    "https://doi.org/",
+    "https://ceur-ws.org/",
+)
+
 errors: list[str] = []
 warnings: list[str] = []
 
@@ -642,12 +650,13 @@ def check_language(names: list[str]) -> None:
 
 
 def check_publications() -> None:
-    """Every listed publication must carry a resolving DOI.
+    """Every title links a DOI or an official archive record, and the link
+    after the author list is the same one.
 
-    The page lists peer-reviewed publications only. A title without an
-    identifier is exactly the entry that gets copied into a reference manager
-    and never corrected, so the absence of a DOI fails the build. Whether the
-    DOI points at the right paper is a human's job.
+    A title without an identifier is exactly the entry that gets copied into a
+    reference manager and never corrected. The check reads the title link
+    itself, so a dataset DOI further down the entry cannot stand in for it.
+    Whether the identifier points at the right paper is a human's job.
     """
     path = os.path.join(ROOT, "publications.html")
     if not os.path.exists(path):
@@ -655,18 +664,23 @@ def check_publications() -> None:
     with open(path, encoding="utf-8") as fh:
         html = strip_comments(fh.read())
 
+    href = re.compile(r'<a\b[^>]*\bhref="([^"]+)"')
     for entry in re.findall(r'<li class="pub\b.*?</li>', html, re.S):
-        title = re.search(r"<h4[^>]*>(.*?)</h4>", entry, re.S)
+        title = re.search(r'<h4 class="pub__title"[^>]*>(.*?)</h4>', entry, re.S)
         label = " ".join(re.sub(r"<[^>]+>", " ", title.group(1)).split()) if title else "?"
-        if "doi.org/" not in entry:
-            fail("publications.html", f"publication entry without a DOI: {label!r}")
-        for marker in ("is-pending", "is-forthcoming"):
-            if marker in entry:
-                fail(
-                    "publications.html",
-                    f"entry {label!r} is marked {marker}; the page lists "
-                    "peer-reviewed publications with a DOI only",
-                )
+        record = href.search(title.group(1)) if title else None
+        if not record or not record.group(1).startswith(PUBLICATION_IDENTIFIERS):
+            fail(
+                "publications.html",
+                f"title does not link a DOI or an archive record: {label!r}",
+            )
+            continue
+        detail = re.search(r'<p class="pub__detail"[^>]*>(.*?)</p>', entry, re.S)
+        if not detail or record.group(1) not in href.findall(detail.group(1)):
+            fail(
+                "publications.html",
+                f"the link after the authors is not the title's {record.group(1)}: {label!r}",
+            )
 
 
 def check_humans() -> None:

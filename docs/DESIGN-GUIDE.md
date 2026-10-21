@@ -277,7 +277,6 @@ repository so the page makes no third-party request.
 
 - **Source Serif 4** — `--font-display` — headings and the wordmark.
 - **Source Sans 3** — `--font-text` — body, metadata, navigation, labels.
-- System monospace — `--font-mono` — repository and code labels only.
 
 ### Scale
 
@@ -295,6 +294,13 @@ write a font size.** Body is `--step-0` (1–1.1rem) at line height 1.62.
   block spans 17/24 of the shell, but its text stops around 56% — filling the
   column would give a ~95-character line. Long lines are a legibility bug, not
   a layout preference.
+- The cap is for running prose. An item in a list that is read in short
+  pieces, such as a publication entry (title, authors, venue, links), has no
+  text cap and spans its grid unit: the full row, 7/8 of it on wide screens
+  (`pure-u-1 pure-u-lg-7-8`). A text cap leaves an empty band beside every
+  entry. Its title and text sit one step
+  below their usual size, so the page reads as a listing rather than an
+  article.
 - Numbers in metadata use `font-variant-numeric: lining-nums tabular-nums` so
   columns of grant numbers and dates align.
 
