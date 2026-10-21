@@ -77,13 +77,34 @@
       },
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": 1,
+        "numberOfItems": 4,
         "itemListElement": [
           {
             "@type": "ListItem",
             "position": 1,
             "item": {
               "@id": "https://doi.org/10.48786/edbt.2025.78"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@id": "https://ceur-ws.org/Vol-XXXX/paper555.pdf"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@id": "https://ceur-ws.org/Vol-XXXX/paper566.pdf"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "item": {
+              "@id": "https://ceur-ws.org/Vol-XXXX/paper586.pdf"
             }
           }
         ]
@@ -187,6 +208,164 @@
           "name": "Yannis Velegrakis"
         }
       ]
+    },
+    {
+      "@id": "https://ceur-ws.org/Vol-XXXX/paper555.pdf",
+      "@type": "ScholarlyArticle",
+      "name": "RossijskijFeatrDB: Modeling Russian Imperial Opera Sources as Linked Data",
+      "datePublished": "2026",
+      "publication": {
+        "@type": "PublicationEvent",
+        "name": "ISWC 2026 Companion Volume"
+      },
+      "url": "https://ceur-ws.org/Vol-XXXX/paper555.pdf",
+      "creativeWorkStatus": "Published",
+      "isBasedOn": [
+        {
+          "@id": "https://github.com/VIASystemsLab/rfdb-curator"
+        }
+      ],
+      "author": [
+        {
+          "@type": "Person",
+          "name": "Anna Giust"
+        },
+        {
+          "@type": "Person",
+          "name": "Martina Pernigotto"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7922-5998"
+        }
+      ]
+    },
+    {
+      "@id": "https://ceur-ws.org/Vol-XXXX/paper566.pdf",
+      "@type": "ScholarlyArticle",
+      "name": "PROTON-QA 1.0: A Nucleus for Provenance-Aware Ontology-Grounded Nuclear QA Benchmark",
+      "datePublished": "2026",
+      "publication": {
+        "@type": "PublicationEvent",
+        "name": "ISWC 2026 Companion Volume"
+      },
+      "url": "https://ceur-ws.org/Vol-XXXX/paper566.pdf",
+      "creativeWorkStatus": "Published",
+      "funding": {
+        "@id": "https://cordis.europa.eu/project/id/101168951"
+      },
+      "isBasedOn": [
+        {
+          "@id": "https://doi.org/10.5281/zenodo.22543594"
+        },
+        {
+          "@id": "https://github.com/ARMADA-DN/Proton-QA"
+        }
+      ],
+      "author": [
+        {
+          "@type": "Person",
+          "name": "Thushari Pahalage Dona"
+        },
+        {
+          "@type": "Person",
+          "name": "Antonio Bulgheroni"
+        },
+        {
+          "@type": "Person",
+          "name": "Lorenzo Fongaro"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7922-5998"
+        }
+      ]
+    },
+    {
+      "@id": "https://ceur-ws.org/Vol-XXXX/paper586.pdf",
+      "@type": "ScholarlyArticle",
+      "name": "The FAULT framework for Failure Analysis and Understanding for Language-to-SPARQL Testing",
+      "datePublished": "2026",
+      "publication": {
+        "@type": "PublicationEvent",
+        "name": "ISWC 2026 Companion Volume"
+      },
+      "url": "https://ceur-ws.org/Vol-XXXX/paper586.pdf",
+      "creativeWorkStatus": "Published",
+      "funding": {
+        "@id": "https://cordis.europa.eu/project/id/101188416"
+      },
+      "isBasedOn": [
+        {
+          "@id": "https://doi.org/10.5281/zenodo.20074201"
+        },
+        {
+          "@id": "https://github.com/UniVR-DH/nl2sparql-benchmark"
+        }
+      ],
+      "author": [
+        {
+          "@type": "Person",
+          "name": "Indeewari Balasooriya"
+        },
+        {
+          "@type": "Person",
+          "name": "Bianca Benelli"
+        },
+        {
+          "@type": "Person",
+          "name": "Niccolò Marastoni"
+        },
+        {
+          "@type": "Person",
+          "name": "Elisa Quintarelli"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7922-5998"
+        }
+      ]
+    },
+    {
+      "@id": "https://github.com/VIASystemsLab/rfdb-curator",
+      "@type": "SoftwareSourceCode",
+      "name": "RFDB Curator",
+      "codeRepository": "https://github.com/VIASystemsLab/rfdb-curator"
+    },
+    {
+      "@id": "https://doi.org/10.5281/zenodo.22543594",
+      "@type": "Dataset",
+      "name": "PROTON-QA 1.0",
+      "identifier": "10.5281/zenodo.22543594",
+      "url": "https://doi.org/10.5281/zenodo.22543594",
+      "funding": {
+        "@id": "https://cordis.europa.eu/project/id/101168951"
+      }
+    },
+    {
+      "@id": "https://github.com/ARMADA-DN/Proton-QA",
+      "@type": "SoftwareSourceCode",
+      "name": "PROTON-QA",
+      "codeRepository": "https://github.com/ARMADA-DN/Proton-QA",
+      "funding": {
+        "@id": "https://cordis.europa.eu/project/id/101168951"
+      }
+    },
+    {
+      "@id": "https://doi.org/10.5281/zenodo.20074201",
+      "@type": "Dataset",
+      "name": "FAULT archived release",
+      "identifier": "10.5281/zenodo.20074201",
+      "url": "https://doi.org/10.5281/zenodo.20074201",
+      "funding": {
+        "@id": "https://cordis.europa.eu/project/id/101188416"
+      }
+    },
+    {
+      "@id": "https://github.com/UniVR-DH/nl2sparql-benchmark",
+      "@type": "SoftwareSourceCode",
+      "name": "FAULT data and scripts",
+      "codeRepository": "https://github.com/UniVR-DH/nl2sparql-benchmark",
+      "funding": {
+        "@id": "https://cordis.europa.eu/project/id/101188416"
+      }
     }
   ]
 }
@@ -195,8 +374,10 @@
   Adding a verified output to the graph
   =====================================
   No output object is published here until its record has been checked against
-  its DOI, because a wrong DOI in structured data is harder to notice and
-  harder to retract than a wrong line of prose. When you add the visible entry,
+  its DOI, or its official archive record where the venue issues no DOI,
+  because a wrong identifier in structured data is harder to notice and harder
+  to retract than a wrong line of prose. An archive record goes in @id and url,
+  with no identifier. When you add the visible entry,
   add the matching object to "@graph" above and reference it from the page's
   CollectionPage via "mainEntity".
 
@@ -319,7 +500,8 @@
         <p class="section__standfirst">
           Peer-reviewed publications, grouped by the kind of contribution and
           tagged with the kind of venue, the venue, and the project that
-          funded them. Every entry links its DOI.
+          funded them. Every article is peer reviewed and open access, with a
+          stable link in an open digital archive.
         </p>
       </header>
 
@@ -333,6 +515,7 @@
         </p>
         <p class="legend__row">
           <span class="legend__label">Venue</span>
+          <span class="tag tag--venue">ISWC 2026</span>
           <span class="tag tag--venue">EDBT 2025</span>
         </p>
         <p class="legend__row">
@@ -340,16 +523,14 @@
           <span class="tag tag--armada">ARMADA</span>
           <span class="tag tag--datagems">DataGEMS</span>
         </p>
-        <!-- Uncomment when the first entry has a pub__artifacts row.
         <p class="legend__row">
           <span class="legend__label">Artifacts</span>
           <span class="tag tag--dataset">Data</span>
           <span class="tag tag--software">Code</span>
         </p>
-        -->
       </div>
 
-      <div class="pubgroup pure-u-1 pure-u-md-11-12 pure-u-lg-3-4">
+      <div class="pubgroup pure-u-1 pure-u-lg-7-8">
         <h3 class="pubgroup__title" id="vision">Vision and position papers</h3>
         <ol class="pubs">
           <li class="pub">
@@ -376,18 +557,100 @@
         </ol>
       </div>
 
+      <div class="pubgroup pure-u-1 pure-u-lg-7-8">
+        <h3 class="pubgroup__title" id="posters">Posters</h3>
+        <ol class="pubs">
+          <li class="pub">
+            <p class="pub__tags">
+              <span class="tag tag--conference">Conference</span>
+              <span class="tag tag--venue">ISWC 2026</span>
+              <span class="tag tag--software">Code</span>
+            </p>
+            <h4 class="pub__title">
+              <a href="https://ceur-ws.org/Vol-XXXX/paper555.pdf">RossijskijFeatrDB: Modeling Russian Imperial Opera Sources as Linked Data</a>
+            </h4>
+            <p class="pub__detail">
+              <span class="pub__authors">Anna Giust, Martina Pernigotto, Matteo
+              Lissandrini</span>.
+              <span class="pub__venue">ISWC 2026 Companion Volume</span>,
+              <time datetime="2026">2026</time>.
+              <a class="link-ext" href="https://ceur-ws.org/Vol-XXXX/paper555.pdf">CEUR-WS Vol-XXXX</a>
+            </p>
+            <p class="pub__links">
+              <span><span class="pub__label">Preprint</span> <a href="files/ISWC26-Giust-paper555.pdf">PDF, 630 KB</a></span>
+              <span><span class="pub__label">Poster</span> <a href="files/ISWC26-Giust-poster555.pdf">PDF, 6.0 MB</a></span>
+              <span><span class="pub__label">Code</span> <a class="link-ext" href="https://github.com/VIASystemsLab/rfdb-curator">github.com/VIASystemsLab/rfdb-curator</a></span>
+            </p>
+          </li>
+          <li class="pub">
+            <p class="pub__tags">
+              <span class="tag tag--conference">Conference</span>
+              <span class="tag tag--venue">ISWC 2026</span>
+              <span class="tag tag--armada">ARMADA</span>
+              <span class="tag tag--dataset">Data</span>
+              <span class="tag tag--software">Code</span>
+            </p>
+            <h4 class="pub__title">
+              <a href="https://ceur-ws.org/Vol-XXXX/paper566.pdf">PROTON-QA 1.0: A Nucleus for Provenance-Aware Ontology-Grounded Nuclear QA Benchmark</a>
+            </h4>
+            <p class="pub__detail">
+              <span class="pub__authors">Thushari Pahalage Dona, Antonio Bulgheroni,
+              Lorenzo Fongaro, Matteo Lissandrini</span>.
+              <span class="pub__venue">ISWC 2026 Companion Volume</span>,
+              <time datetime="2026">2026</time>.
+              <a class="link-ext" href="https://ceur-ws.org/Vol-XXXX/paper566.pdf">CEUR-WS Vol-XXXX</a>
+            </p>
+            <p class="pub__links">
+              <span><span class="pub__label">Preprint</span> <a href="files/ISWC26-Dona-paper566.pdf">PDF, 957 KB</a></span>
+              <span><span class="pub__label">Poster</span> <a href="files/ISWC26-Dona-poster566.pdf">PDF, 1.1 MB</a></span>
+              <span><span class="pub__label">Data</span> <a class="link-ext" href="https://doi.org/10.5281/zenodo.22543594">doi:10.5281/zenodo.22543594</a></span>
+              <span><span class="pub__label">Code</span> <a class="link-ext" href="https://github.com/ARMADA-DN/Proton-QA">github.com/ARMADA-DN/Proton-QA</a></span>
+            </p>
+          </li>
+          <li class="pub">
+            <p class="pub__tags">
+              <span class="tag tag--conference">Conference</span>
+              <span class="tag tag--venue">ISWC 2026</span>
+              <span class="tag tag--datagems">DataGEMS</span>
+              <span class="tag tag--dataset">Data</span>
+              <span class="tag tag--software">Code</span>
+            </p>
+            <h4 class="pub__title">
+              <a href="https://ceur-ws.org/Vol-XXXX/paper586.pdf">The FAULT framework for Failure Analysis and Understanding for Language-to-SPARQL Testing</a>
+            </h4>
+            <p class="pub__detail">
+              <span class="pub__authors">Indeewari Balasooriya, Bianca Benelli,
+              Niccolò Marastoni, Elisa Quintarelli, Matteo Lissandrini</span>.
+              <span class="pub__venue">ISWC 2026 Companion Volume</span>,
+              <time datetime="2026">2026</time>.
+              <a class="link-ext" href="https://ceur-ws.org/Vol-XXXX/paper586.pdf">CEUR-WS Vol-XXXX</a>
+            </p>
+            <p class="pub__links">
+              <span><span class="pub__label">Preprint</span> <a href="files/ISWC26-Balasooriya-paper586.pdf">PDF, 845 KB</a></span>
+              <span><span class="pub__label">Poster</span> <a href="files/ISWC26-Balasooriya-poster586.pdf">PDF, 707 KB</a></span>
+              <span><span class="pub__label">Data</span> <a class="link-ext" href="https://doi.org/10.5281/zenodo.20074201">doi:10.5281/zenodo.20074201</a></span>
+              <span><span class="pub__label">Code</span> <a class="link-ext" href="https://github.com/UniVR-DH/nl2sparql-benchmark">github.com/UniVR-DH/nl2sparql-benchmark</a></span>
+            </p>
+          </li>
+        </ol>
+      </div>
+
       <!--
         Adding an entry
         ===============
-        This page lists peer-reviewed publications that have a resolving DOI.
-        Nothing else goes here: no preprints, no work in preparation, no entry
-        whose DOI is still to come. Data and software are published with the
-        project that produced them; each project record on projects.html links
-        the repository that holds them.
+        This page lists peer-reviewed publications that have a resolving DOI,
+        or, where the venue issues none, a record in the venue's official
+        archive such as CEUR-WS. In practice that exception is for posters and
+        workshop papers. Nothing else goes here: no preprints, no work in
+        preparation, no entry whose identifier is still to come. Data and
+        software are published with the project that produced them; each
+        project record on projects.html links the repository that holds them.
 
-        Resolve the DOI first and check the title, authors, year and venue
-        against what it resolves to. tools/lint.py fails the build if an entry
-        has no doi.org link, but it cannot tell you the DOI is the right one.
+        Resolve the identifier first and check the title, authors, year and
+        venue against what it resolves to. tools/lint.py fails the build if the
+        title does not link doi.org or an archive in PUBLICATION_IDENTIFIERS,
+        or if the link after the authors is not the same one, but it cannot
+        tell you the link is the right one.
 
         Groups say what kind of contribution the paper makes. Put the entry in
         the matching group, newest first. If the group does not exist yet,
@@ -404,20 +667,23 @@
         paper at a conference is filed under Vision and tagged Conference; the
         two are not the same axis, and a tag never links to a group.
 
-        A paper that has a dataset or a repository of its own gets a second
-        row, <p class="pub__artifacts">, holding one tag-shaped link each. It
-        is optional and most entries will not have it. Keep it out of
-        pub__tags: that row says what the entry is, and DATA beside CONFERENCE
-        reads as an answer to that question instead of a pointer.
+        A paper that has a dataset or a repository of its own gets a Data or
+        Code tag at the end of pub__tags. Every link other than the record
+        (the paper PDF in files/, labelled Preprint, the poster, data, code)
+        goes in a
+        <p class="pub__links"> row below the detail, each behind its own
+        pub__label. A tag is never a link. The row is optional.
 
-        Add the matching ScholarlyArticle to the JSON-LD graph, with the DOI as
-        @id and a funding reference to the project. See docs/METADATA.md.
+        Add the matching ScholarlyArticle to the JSON-LD graph, with the DOI
+        (or archive URL) as @id and a funding reference to the project. See docs/METADATA.md.
 
         <li class="pub">
           <p class="pub__tags">
             <span class="tag tag--workshop">Workshop</span>
             <span class="tag tag--venue">VLDB</span>
             <span class="tag tag--armada">ARMADA</span>
+            <span class="tag tag--dataset">Data</span>
+            <span class="tag tag--software">Code</span>
           </p>
           <h4 class="pub__title"><a href="https://doi.org/10.0000/xxxxx">Verified title of the paper</a></h4>
           <p class="pub__detail">
@@ -426,9 +692,10 @@
             <time datetime="2026">2026</time>.
             <a class="link-ext" href="https://doi.org/10.0000/xxxxx">doi:10.0000/xxxxx</a>
           </p>
-          <p class="pub__artifacts">
-            <a class="tag tag--dataset" href="https://doi.org/10.0000/data">Data</a>
-            <a class="tag tag--software" href="https://github.com/org/repo">Code</a>
+          <p class="pub__links">
+            <span><span class="pub__label">Poster</span> <a href="files/venue-surname-poster.pdf">PDF, 1.2 MB</a></span>
+            <span><span class="pub__label">Data</span> <a class="link-ext" href="https://doi.org/10.0000/data">doi:10.0000/data</a></span>
+            <span><span class="pub__label">Code</span> <a class="link-ext" href="https://github.com/org/repo">github.com/org/repo</a></span>
           </p>
         </li>
       -->
@@ -450,8 +717,8 @@
       <ul class="openlist pure-g">
         <li class="openitem pure-u-1 pure-u-md-1-3">
           <h3 class="openitem__title">Peer reviewed, and readable by anyone</h3>
-          <p>Every entry has been through review and carries a DOI that
-            resolves. We prefer venues that let the accepted version be read
+          <p>Every article has been through peer review, is open access, and
+            has a stable link in an open digital archive. We prefer venues that let the accepted version be read
             without payment, and where a venue does not, we deposit the
             accepted manuscript or preprint so the work stays reachable. A
             result nobody can reach is a result nobody can check.</p>
