@@ -77,7 +77,7 @@
       },
       "mainEntity": {
         "@type": "ItemList",
-        "numberOfItems": 4,
+        "numberOfItems": 5,
         "itemListElement": [
           {
             "@type": "ListItem",
@@ -97,12 +97,19 @@
             "@type": "ListItem",
             "position": 3,
             "item": {
-              "@id": "https://ceur-ws.org/Vol-XXXX/paper566.pdf"
+              "@id": "https://ceur-ws.org/Vol-XXXX/paper556.pdf"
             }
           },
           {
             "@type": "ListItem",
             "position": 4,
+            "item": {
+              "@id": "https://ceur-ws.org/Vol-XXXX/paper566.pdf"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
             "item": {
               "@id": "https://ceur-ws.org/Vol-XXXX/paper586.pdf"
             }
@@ -240,6 +247,37 @@
       ]
     },
     {
+      "@id": "https://ceur-ws.org/Vol-XXXX/paper556.pdf",
+      "@type": "ScholarlyArticle",
+      "name": "Building a Virtual Knowledge Graph for Data Lakes Using Croissant Metadata",
+      "datePublished": "2026",
+      "publication": {
+        "@type": "PublicationEvent",
+        "name": "ISWC 2026 Companion Volume"
+      },
+      "url": "https://ceur-ws.org/Vol-XXXX/paper556.pdf",
+      "creativeWorkStatus": "Published",
+      "funding": {
+        "@id": "https://cordis.europa.eu/project/id/101188416"
+      },
+      "isBasedOn": [
+        {
+          "@id": "https://github.com/VIASystemsLab/DataLake-VKG"
+        }
+      ],
+      "author": [
+        {
+          "@id": "https://orcid.org/0009-0009-5235-5923"
+        },
+        {
+          "@id": "https://orcid.org/0009-0001-1135-191X"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7922-5998"
+        }
+      ]
+    },
+    {
       "@id": "https://ceur-ws.org/Vol-XXXX/paper566.pdf",
       "@type": "ScholarlyArticle",
       "name": "PROTON-QA 1.0: A Nucleus for Provenance-Aware Ontology-Grounded Nuclear QA Benchmark",
@@ -263,8 +301,7 @@
       ],
       "author": [
         {
-          "@type": "Person",
-          "name": "Thushari Pahalage Dona"
+          "@id": "https://orcid.org/0000-0001-6563-9516"
         },
         {
           "@type": "Person",
@@ -307,8 +344,7 @@
           "name": "Indeewari Balasooriya"
         },
         {
-          "@type": "Person",
-          "name": "Bianca Benelli"
+          "@id": "https://orcid.org/0009-0001-1135-191X"
         },
         {
           "@type": "Person",
@@ -363,6 +399,15 @@
       "@type": "SoftwareSourceCode",
       "name": "FAULT data and scripts",
       "codeRepository": "https://github.com/UniVR-DH/nl2sparql-benchmark",
+      "funding": {
+        "@id": "https://cordis.europa.eu/project/id/101188416"
+      }
+    },
+    {
+      "@id": "https://github.com/VIASystemsLab/DataLake-VKG",
+      "@type": "SoftwareSourceCode",
+      "name": "DataLake-VKG",
+      "codeRepository": "https://github.com/VIASystemsLab/DataLake-VKG",
       "funding": {
         "@id": "https://cordis.europa.eu/project/id/101188416"
       }
@@ -586,6 +631,29 @@
             <p class="pub__tags">
               <span class="tag tag--conference">Conference</span>
               <span class="tag tag--venue">ISWC 2026</span>
+              <span class="tag tag--datagems">DataGEMS</span>
+              <span class="tag tag--software">Code</span>
+            </p>
+            <h4 class="pub__title">
+              <a href="https://ceur-ws.org/Vol-XXXX/paper556.pdf">Building a Virtual Knowledge Graph for Data Lakes Using Croissant Metadata</a>
+            </h4>
+            <p class="pub__detail">
+              <span class="pub__authors">Zoé Chevallier, Bianca Benelli, Matteo
+              Lissandrini</span>.
+              <span class="pub__venue">ISWC 2026 Companion Volume</span>,
+              <time datetime="2026">2026</time>.
+              <a class="link-ext" href="https://ceur-ws.org/Vol-XXXX/paper556.pdf">CEUR-WS Vol-XXXX</a>
+            </p>
+            <p class="pub__links">
+              <span><span class="pub__label">Preprint</span> <a href="files/ISWC26-Chevallier-paper556.pdf">PDF, 387 KB</a></span>
+              <span><span class="pub__label">Poster</span> <a href="files/ISWC26-DataLake-VKG-Poster.pdf">PDF, 1.3 MB</a></span>
+              <span><span class="pub__label">Code</span> <a class="link-ext" href="https://github.com/VIASystemsLab/DataLake-VKG">github.com/VIASystemsLab/DataLake-VKG</a></span>
+            </p>
+          </li>
+          <li class="pub">
+            <p class="pub__tags">
+              <span class="tag tag--conference">Conference</span>
+              <span class="tag tag--venue">ISWC 2026</span>
               <span class="tag tag--armada">ARMADA</span>
               <span class="tag tag--dataset">Data</span>
               <span class="tag tag--software">Code</span>
@@ -721,7 +789,8 @@
             has a stable link in an open digital archive. We prefer venues that let the accepted version be read
             without payment, and where a venue does not, we deposit the
             accepted manuscript or preprint so the work stays reachable. A
-            result nobody can reach is a result nobody can check.</p>
+            result nobody can access is a result nobody can check, and one
+            that ultimately benefits nobody.</p>
         </li>
         <li class="openitem pure-u-1 pure-u-md-1-3">
           <h3 class="openitem__title">FAIR data, open code, reproducible results</h3>
