@@ -1603,7 +1603,7 @@ input, select, textarea, button { font-family: inherit; }
 }
 
 .footer__plaque { width: min(11rem, 100%); }
-.footer__univr { width: min(13rem, 100%); filter: invert(1); }
+.footer__univr { width: min(20rem, 100%); filter: invert(1); }
 
 /*
  * The fine print: provenance, the funding disclaimer, the colophon and the
