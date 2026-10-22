@@ -26,7 +26,7 @@
 
 /* SITE */
 
-	Last update: 2026/09/17
+	Last update: 2026/10/22
 	Language: English
 	Doctype: HTML5
 	Standards: HTML5, CSS3, JSON-LD 1.1, RDFa 1.1, Schema.org,
@@ -47,6 +47,8 @@
 	the parts that were not made by hand.
 
 	Artwork
+	The emblem is based on an initial idea by Daniele Dell'Aglio.
+
 	Images created with OpenAI's ChatGPT image generation tool. The designs
 	were generated using AI based on prompts developed for the VIA Systems
 	Lab, drawing inspiration from traditional Verona street plaques, Roman

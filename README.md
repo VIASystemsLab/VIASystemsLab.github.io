@@ -350,8 +350,9 @@ It re-checks outbound links weekly.
 The site is explicit about what was machine-generated, in the footer of every
 page, in `humans.txt`, and in the page metadata.
 
-- **The lab emblem** was created with OpenAI's ChatGPT image generation tool
-  from prompts developed for the lab, then refined by hand. It is declared
+- **The lab emblem**, from an initial idea by Daniele Dell'Aglio, was created
+  with OpenAI's ChatGPT image generation tool from prompts developed for the
+  lab, then refined by hand. It is declared
   machine-readably with the IPTC digital source type
   `compositeWithTrainedAlgorithmicMedia`.
 - **The markup, styles, tooling and documentation** were drafted with Claude
