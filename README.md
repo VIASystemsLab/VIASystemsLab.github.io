@@ -31,7 +31,7 @@ Before you commit, run the checks listed in
 | `index.html` | The homepage, in navigation order: hero, about, research themes, project highlights, people, footer. |
 | `projects.html` | Every project, in full. The homepage carries highlights only. |
 | `publications.html` | Every peer-reviewed paper, grouped by the kind of contribution. Data and software are published with the project that produced them, not listed here. |
-| `ai-statement.html` | The lab's statement on AI and scientific research: principles, example guidelines, and the sources it adapts, including how the document itself was written. Linked from the About section, from the open-science pledge on the publications page, and from the footer of every page. |
+| `ai-statement.html` | The lab's statement on the use of AI in scientific research: principles, example guidelines, and the sources it adapts, including how the document itself was written. Linked from the About section, from the open-science pledge on the publications page, and from the footer of every page. |
 | `img/original/` | The lab's master artwork. Edited by hand. |
 | `img/content/` | Images used inside a page, served as committed. See [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md#adding-an-image-or-a-pdf). |
 | `files/` | PDFs the site links to that have no other public home. Same section of `docs/CONTRIBUTING.md`. |
