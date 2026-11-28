@@ -1011,6 +1011,7 @@ input, select, textarea, button { font-family: inherit; }
   /* How far the closing mark sits below the text's baseline, so a glyph this
      large ends level with the last line instead of standing above it. */
   --quote-sink: -0.45em;
+  --quote-text-size: var(--step-2);
 
   margin: 0;
   display: grid;
@@ -1048,7 +1049,7 @@ input, select, textarea, button { font-family: inherit; }
   grid-row: 1;
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--step-2);
+  font-size: var(--quote-text-size);
   line-height: 1.35;
   font-style: italic;
   text-wrap: pretty;
@@ -1831,6 +1832,35 @@ input, select, textarea, button { font-family: inherit; }
 /* Inside a section head the row follows the standfirst it acts on, so it
    takes a paragraph's distance rather than the grid's row gap. */
 .section__head .cta-row { margin-top: 1.25rem; }
+
+/* An epigraph to a section: a step smaller, and pushed to the right edge, so
+   it sits beside the reading line rather than interrupting it. Its width comes
+   from the grid unit on the markup, so it lines up with the columns below.
+
+   The text is set right, so the lines start at different points and a hanging
+   mark in its own column ends up far from the first word. Here the opening mark
+   runs inline before the first word instead, set exactly like the closing one,
+   and the figure drops the grid. */
+.pullquote--epigraph {
+  --quote-size: clamp(2.5rem, 5vw, 3.75rem);
+  --quote-text-size: var(--step-1);
+  display: block;
+  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem) auto;
+  text-align: right;
+}
+
+.pullquote--epigraph::before { content: none; }
+
+.pullquote--epigraph blockquote p::before {
+  content: "\201C";
+  margin-right: 0.05em;
+  vertical-align: var(--quote-sink);
+  font-family: var(--font-display);
+  font-size: var(--quote-size);
+  font-style: normal;
+  line-height: 0;
+  color: var(--rule);
+}
 
 /* On a light surface the hero button colours would be unreadable, so the
    two solid/outline variants below are the light-surface equivalents. */

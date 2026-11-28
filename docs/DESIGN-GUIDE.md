@@ -468,6 +468,7 @@ value probably wants an existing one.
 | `.masthead` | Seal, wordmark, six-item nav. Sticky from `md`. |
 | `.hero` / `.pagehead` | Inverse band opening a page. |
 | `.section__head` | Eyebrow (number + label), title, standfirst, and optionally a `.cta-row` of buttons that act on the standfirst. |
+| `.pullquote` | A quotation with a hanging opening mark and a closing mark after the last word, an optional `.pullquote__gloss` translation, and a `figcaption` for the attribution. The text size and the mark's size, drop, gap and sink are custom properties. `.pullquote--epigraph`, in its own row after a section head, sets it to the right edge, right-aligned and a step smaller, with both marks inline; its width is a grid unit on the markup, so it lines up with the columns below. |
 | `.theme` | One research theme: rule, name, description, methods. |
 | `.highlight` | A project in brief, on the homepage. |
 | `.project` | A full project record: body plus rail. |
